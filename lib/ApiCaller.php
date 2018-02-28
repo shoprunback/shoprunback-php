@@ -33,7 +33,7 @@ class ApiCaller
             case 'POST':
             case 'PUT':
                 if (! $json) {
-                    throw new Exception('Trying to do a ' . $type . ' with no json');
+                    throw new Exception('Trying to do a ' . $type . ' without json');
                 }
 
                 if (! is_string($json)) {
