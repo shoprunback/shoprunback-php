@@ -50,6 +50,6 @@ class Shoprunback
 
     public static function isSetup()
     {
-        return self::$apiToken !== '';
+        return self::$apiToken !== null;
     }
 }
