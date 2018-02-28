@@ -11,6 +11,7 @@ require dirname(__FILE__) . '/lib/Resources/Brand.php';
 require dirname(__FILE__) . '/lib/Resources/Item.php';
 require dirname(__FILE__) . '/lib/Resources/Order.php';
 require dirname(__FILE__) . '/lib/Resources/Product.php';
+require dirname(__FILE__) . '/lib/Resources/Shipback.php';
 require dirname(__FILE__) . '/lib/Resources/User.php';
 
 // Load Utils
