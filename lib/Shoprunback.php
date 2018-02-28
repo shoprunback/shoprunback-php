@@ -28,6 +28,12 @@ class Shoprunback
         return self::$apiToken;
     }
 
+    // Returns the 3 first and 3 last characters of the API token separated by "..."
+    public static function getApiTokenShortened()
+    {
+        return substr(self::$apiToken, 0, 3) . '...' . substr(self::$apiToken, -3);
+    }
+
     public static function setApiToken($token)
     {
         $oldApiToken = self::getApiToken();
@@ -39,7 +45,7 @@ class Shoprunback
             self::$apiToken = $oldApiToken;
         }
 
-        Logger::info('USER API TOKEN SET: "' . substr($token, 0, 3) . '...' . substr($token, -3) . '"');
+        Logger::info('USER API TOKEN SET: "' . self::getApiTokenShortened() . '"');
     }
 
     public static function isSetup()
