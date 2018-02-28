@@ -31,7 +31,7 @@ class Shoprunback
     // Returns the 3 first and 3 last characters of the API token separated by "..."
     public static function getApiTokenShortened()
     {
-        return substr(self::$apiToken, 0, 3) . '...' . substr(self::$apiToken, -3);
+        return substr(self::$apiToken, 0, 3) . '…' . substr(self::$apiToken, -3);
     }
 
     public static function setApiToken($token)
