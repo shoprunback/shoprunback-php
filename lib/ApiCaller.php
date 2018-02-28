@@ -57,9 +57,19 @@ class ApiCaller
         $httpStatusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         curl_close($curl);
 
-        $response = json_decode($response) ? json_decode($response) : $response;
+        $responseDecoded = json_decode($response);
 
-        return self::handleRequestResponse($response, $httpStatusCode, $json);
+        // If the response was a string and not a JSON, it means something went wrong
+        if (json_last_error() != JSON_ERROR_NONE) {
+            // The error is certainly due to an access denied, meaning an invalid token
+            if (is_string($response) && strpos($response, 'Access denied') >= 0) {
+                throw new \Shoprunback\Error\UnknownApiToken('No or invalid API Token: "' . Shoprunback::getApiToken() . '"');
+            }
+
+            throw new \Shoprunback\Error('An unknown error occured');
+        }
+
+        return self::handleRequestResponse($responseDecoded, $httpStatusCode, $json);
     }
 
     public static function get($apiUrlResource, $id = '')
@@ -89,10 +99,6 @@ class ApiCaller
 
     private static function handleRequestResponse($response, $httpStatusCode, $jsonUsed = '')
     {
-        if (is_string($response) && strpos($response, 'Access denied') >= 0) {
-            throw new \Shoprunback\Error\UnknownApiToken('No or invalid API Token: "' . Shoprunback::getApiToken() . '"');
-        }
-
         if (isset($response->errors)) {
             foreach ($response->errors as $error) {
                 $errorType = '\Shoprunback\Error\\';
