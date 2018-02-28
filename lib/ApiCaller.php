@@ -20,13 +20,14 @@ class ApiCaller
         }
 
         $opts = [
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 30,
-            CURLOPT_CONNECTTIMEOUT => 30,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST  => $type
+            CURLOPT_SSL_VERIFYPEER  => false,
+            CURLOPT_HTTPHEADER      => $headers,
+            CURLOPT_RETURNTRANSFER  => true,
+            CURLOPT_TIMEOUT         => 30,
+            CURLOPT_CONNECTTIMEOUT  => 30,
+            CURLOPT_RETURNTRANSFER  => true,
+            CURLOPT_CUSTOMREQUEST   => $type,
+            CURLOPT_URL             => $url
         ];
 
         switch ($type) {
@@ -48,8 +49,6 @@ class ApiCaller
             default:
                 throw new Exception('Incorrect HTTP type');
         }
-
-        $opts[CURLOPT_URL] = $url;
 
         $curl = curl_init();
         curl_setopt_array($curl, $opts);
