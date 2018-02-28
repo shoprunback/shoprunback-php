@@ -10,7 +10,7 @@ class Shoprunback
     const VERSION = '1.0.0';
 
     public static $apiBaseUrl = 'https://dashboard.shoprunback.com/api/v1/';
-    public static $apiToken = '';
+    public static $apiToken;
 
     public static function getApiBaseUrl()
     {
