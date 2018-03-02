@@ -65,7 +65,7 @@ class ApiCaller
                 throw new \Shoprunback\Error\UnknownApiToken('No or invalid API Token: "' . Shoprunback::getApiToken() . '"');
             }
 
-            throw new \Shoprunback\Error('An unknown error occured');
+            throw new Error('An unknown error occured');
         }
 
         return self::handleRequestResponse($responseDecoded, $httpStatusCode, $json);

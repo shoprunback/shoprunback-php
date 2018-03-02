@@ -5,7 +5,7 @@ namespace Shoprunback\Error;
 use Exception;
 use \Shoprunback\Util\Logger;
 
-abstract class Error extends Exception
+class Error extends Exception
 {
     public $message;
     public $httpStatus;
