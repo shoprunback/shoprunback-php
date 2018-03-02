@@ -16,6 +16,7 @@ class Logger
         // Create file if doesn't exist
         if (! file_exists($filePath)) {
             fopen($filePath, 'w');
+            chmod($filePath, 0777);
         }
 
         error_log(date('[Y-m-d H:i:s]: ') . $message . "\n", 3, $filePath);
