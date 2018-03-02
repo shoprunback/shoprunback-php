@@ -20,12 +20,12 @@ abstract class Converter
     public static function searchSRBObjectsInArrayOrObject($container)
     {
         // If it is neither an array nor an object, we simply return the value
-        if (! is_array($container) && ! is_object($container)) {
+        if (!is_array($container) && !is_object($container)) {
             return $container;
         }
 
         // We create the appropriate var
-        $checked = ! is_array($container) ? new \StdClass() : [];
+        $checked = !is_array($container) ? new \StdClass() : [];
 
         foreach ($container as $key => $value) {
             // We add the value to the container with the according syntax
@@ -49,7 +49,7 @@ abstract class Converter
         $valueToAdd;
 
         // If the trimed string is a class but not the not-trimed, it means it is an array of objects we have a class for
-        if (class_exists(self::RESSOURCES_NAMESPACE . $trimedKeyClassName) && ! class_exists(self::RESSOURCES_NAMESPACE . $keyAsClassName)) {
+        if (class_exists(self::RESSOURCES_NAMESPACE . $trimedKeyClassName) && !class_exists(self::RESSOURCES_NAMESPACE . $keyAsClassName)) {
             $valueToAdd = [];
 
             // Since it is an array only of objects we have a class for, we call the recursive function to convert each object

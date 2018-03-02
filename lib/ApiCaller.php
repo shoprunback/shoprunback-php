@@ -33,11 +33,11 @@ class ApiCaller
         switch ($type) {
             case 'POST':
             case 'PUT':
-                if (! $json) {
+                if (!$json) {
                     throw new Exception('Trying to do a ' . $type . ' without json');
                 }
 
-                if (! is_string($json)) {
+                if (!is_string($json)) {
                     $json = json_encode($json);
                 }
 

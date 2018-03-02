@@ -14,7 +14,7 @@ class Logger
         $filePath = LOG_PATH . date('Y-m-d') . '.txt';
 
         // Create file if doesn't exist
-        if (! file_exists($filePath)) {
+        if (!file_exists($filePath)) {
             fopen($filePath, 'w');
             chmod($filePath, 0777);
         }

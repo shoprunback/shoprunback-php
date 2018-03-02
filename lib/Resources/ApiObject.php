@@ -15,7 +15,7 @@ abstract class ApiObject extends Resource
 
     public static function fetch($id = '')
     {
-        if (! Shoprunback::isSetup()) throw new UnknownApiToken('Can\'t fetch if not setup');
+        if (!Shoprunback::isSetup()) throw new UnknownApiToken('Can\'t fetch if not setup');
 
         $item = self::convertToSelf(ApiCaller::get(static::getApiUrlResource(), $id));
 
@@ -26,7 +26,7 @@ abstract class ApiObject extends Resource
 
     public function save($noId = false)
     {
-        if (! Shoprunback::isSetup()) throw new UnknownApiToken('Can\'t save item if not setup');
+        if (!Shoprunback::isSetup()) throw new UnknownApiToken('Can\'t save item if not setup');
 
         try {
             $callResult = ApiCaller::save(static::getApiUrlResource(), $this, $noId);
@@ -36,7 +36,7 @@ abstract class ApiObject extends Resource
 
         static::logCurrentClass('"' . $this->display() . '" saved');
 
-        if (! isset($this->id)) {
+        if (!isset($this->id)) {
             $this->id = $callResult->id;
         }
     }
