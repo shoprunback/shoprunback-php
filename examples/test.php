@@ -60,9 +60,10 @@ Shoprunback::setApiToken(getenv('SHOPRUNBACK_API_TOKEN'));
 // $order = Order::fetch('poppytest');
 // var_dump($order->display(), $order->items[0]->product->display(), $order->items[0]->product->brand->display());
 
-$shipback = Shipback::fetch('166bc3f3-1a08-42b6-bc72-f731105f8785');
-var_dump($shipback->returned_items[0]);
-var_dump($shipback->order);
-var_dump($shipback->order->items[0]);
-var_dump($shipback->order->items[0]->product);
-var_dump($shipback->order->items[0]->product->brand);
+// Fetch a Shipback and display its content that must have the correct class name
+// $shipback = Shipback::fetch('166bc3f3-1a08-42b6-bc72-f731105f8785');
+// var_dump($shipback->returned_items[0]);
+// var_dump($shipback->order);
+// var_dump($shipback->order->items[0]);
+// var_dump($shipback->order->items[0]->product);
+// var_dump($shipback->order->items[0]->product->brand);
