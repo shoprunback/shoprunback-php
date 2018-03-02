@@ -7,7 +7,7 @@ use Shoprunback\Resources\User;
 
 class Shoprunback
 {
-    const VERSION = '1.0.0';
+    const VERSION = '0.1.0';
 
     public static $apiBaseUrl = 'https://dashboard.shoprunback.com/api/v1/';
     public static $apiToken;
@@ -28,7 +28,7 @@ class Shoprunback
         return self::$apiToken;
     }
 
-    // Returns the 3 first and 3 last characters of the API token separated by "..."
+    // Returns the 3 first and 3 last characters of the API token separated by "…"
     public static function getApiTokenShortened()
     {
         return substr(self::$apiToken, 0, 3) . '…' . substr(self::$apiToken, -3);
