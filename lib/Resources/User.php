@@ -14,9 +14,14 @@ class User extends ApiObject
     public $manager;
     public $auth_token;
 
-    static public function getApiUrlResource()
+    public static function getApiUrlResource()
     {
         return 'me';
+    }
+
+    public static function getApiUrlReference()
+    {
+        return 'id';
     }
 
     public function save($noId = true)

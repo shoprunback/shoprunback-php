@@ -4,18 +4,35 @@ declare(strict_types=1);
 
 namespace Tests\Resources;
 
-use PHPUnit\Framework\TestCase;
 use \Tests\BaseTest;
 
-use \Shoprunback\Resources\Brand;
+use \Shoprunback\Resources\Brand as Brand;
+use \Tests\Resources\ApiObjectTest;
 
-final class BrandTest extends BaseTest
+final class BrandTest extends ApiObjectTest
 {
-    public function testCanFetchBrand()
+    public static function getClass()
     {
-        $this->assertInstanceOf(
-            Brand::class,
-            Brand::fetch('Fashion-Manufacturer')
-        );
+        return 'Brand';
+    }
+
+    public static function getObjectSample()
+    {
+        $brand = new Brand();
+        $brand->name = 'Test Brand';
+        $brand->reference = 'test-brand-' . date('Y-m-d-h-i');
+
+        return $brand;
+    }
+
+    public static function updateForTest($brand)
+    {
+        $brand->name = 'Test Brand but it\'s even more original';
+        return $brand;
+    }
+
+    public static function getObjectToFetch()
+    {
+        return self::getObjectSample()->reference;
     }
 }

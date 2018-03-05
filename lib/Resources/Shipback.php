@@ -24,6 +24,11 @@ class Shipback extends ApiObject
         return 'shipbacks';
     }
 
+    static public function getApiUrlReference()
+    {
+        return 'id';
+    }
+
     public function display()
     {
         return $this->id;

@@ -1,11 +1,14 @@
-<phpunit bootstrap="tests/bootstrap.php">
-  <php>
-    <env name="DASHBOARD_URL" value="localhost:3000"/>
-    <env name="SHOPRUNBACK_API_TOKEN" value="UD3RW8zx7WKe75KWz96Z6YroCXeUrPzyPsZxfVsyLhRDM8xWoA"/>
-  </php>
-  <testsuites>
-    <testsuite name="Shoprunback API Wrapper Test Suite">
-      <directory suffix="Test.php">tests</directory>
-    </testsuite>
-  </testsuites>
+<phpunit
+    bootstrap="tests/bootstrap.php"
+    colors="auto"
+    >
+    <php>
+        <env name="DASHBOARD_URL" value="localhost:3000"/>
+        <env name="SHOPRUNBACK_API_TOKEN" value="UD3RW8zx7WKe75KWz96Z6YroCXeUrPzyPsZxfVsyLhRDM8xWoA"/>
+    </php>
+    <testsuites>
+        <testsuite name="Shoprunback API Wrapper Test Suite">
+            <directory suffix="Test.php">tests</directory>
+        </testsuite>
+    </testsuites>
 </phpunit>

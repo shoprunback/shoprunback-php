@@ -17,6 +17,11 @@ class Order extends ApiObject
         return 'orders';
     }
 
+    static public function getApiUrlReference()
+    {
+        return 'id';
+    }
+
     public function display()
     {
         return $this->order_number;

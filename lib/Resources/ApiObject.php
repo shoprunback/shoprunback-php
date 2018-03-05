@@ -11,6 +11,8 @@ abstract class ApiObject extends Resource
 {
     abstract public static function getApiUrlResource();
 
+    abstract public static function getApiUrlReference();
+
     abstract public function display();
 
     public static function fetch($id = '')

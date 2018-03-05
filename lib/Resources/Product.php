@@ -24,6 +24,11 @@ class Product extends ApiObject
         return 'products';
     }
 
+    static public function getApiUrlReference()
+    {
+        return 'id';
+    }
+
     public function display()
     {
         return $this->label;

@@ -12,6 +12,11 @@ class Brand extends ApiObject
         return 'brands';
     }
 
+    static public function getApiUrlReference()
+    {
+        return 'id';
+    }
+
     public function display()
     {
         return $this->name;

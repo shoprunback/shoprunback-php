@@ -10,18 +10,28 @@ use Shoprunback\Shoprunback;
 
 class BaseTest extends TestCase
 {
+    /** @test */
     public function __construct()
     {
         parent::__construct();
-        require_once dirname(__FILE__) . '/../init.php';
+        require_once dirname(dirname(__FILE__)) . '/init.php';
 
-        // TODO Set those var in env
-        // Shoprunback::setApiBaseUrl(getenv('DASHBOARD_URL') . '/api/v1/');
-        // Shoprunback::setApiToken(getenv('SHOPRUNBACK_API_TOKEN'));
+        if (Shoprunback::getApiBaseUrl() == 'https://dashboard.shoprunback.com/api/v1/' && is_null(Shoprunback::getApiToken())) {
+            $this->assertTrue(self::loadConfig());
+        } else {
+            $this->assertTrue(Shoprunback::isSetup());
+        }
     }
 
-    public function testConstructed()
+    public static function loadConfig()
     {
-        $this->assertEquals(0, 2-2);
+        if (getenv('DASHBOARD_URL') && getenv('SHOPRUNBACK_API_TOKEN')) {
+            Shoprunback::setApiBaseUrl(getenv('DASHBOARD_URL') . '/api/v1/');
+            Shoprunback::setApiToken(getenv('SHOPRUNBACK_API_TOKEN'));
+
+            return true;
+        }
+
+        return false;
     }
 }
