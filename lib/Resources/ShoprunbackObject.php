@@ -13,8 +13,7 @@ abstract class ShoprunbackObject extends Resource
     public function refresh()
     {
         $restClient = RestClient::getClient();
-        $response = $restClient->request($endpoint, \Shoprunback\RestClient::GET);
-        $this->id = $response->getBody()->id;
+        $response = $restClient->request($this->endpoint(), \Shoprunback\RestClient::GET);
     }
 
 
