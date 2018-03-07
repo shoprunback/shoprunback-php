@@ -8,6 +8,7 @@ use \Tests\BaseTest;
 
 use \Shoprunback\Resources\Brand as Brand;
 use \Tests\Resources\ApiObjectTest;
+use \Tests\Mocker;
 
 final class BrandTest extends ApiObjectTest
 {
@@ -16,23 +17,18 @@ final class BrandTest extends ApiObjectTest
         return 'Brand';
     }
 
-    public static function getObjectSample()
+    public static function getClassId()
     {
-        $brand = new Brand();
-        $brand->name = 'Test Brand';
-        $brand->reference = 'test-brand-' . date('Y-m-d-h-i');
-
-        return $brand;
+        return '1234';
     }
 
-    public static function updateForTest($brand)
+    public static function getClassReference()
     {
-        $brand->name = 'Test Brand but it\'s even more original';
-        return $brand;
+        return 'test-brand';
     }
 
-    public static function getObjectToFetch()
+    public static function getMockerJson()
     {
-        return self::getObjectSample()->reference;
+        return Mocker::getBrandJson();
     }
 }

@@ -9,9 +9,48 @@ use Shoprunback\Util\Logger;
 
 class ApiCaller
 {
-    public static function request($endUrl = '', $type = 'GET', $json = '')
+    private $apiBaseUrl;
+    private $token;
+
+    public function __construct($apiBaseUrl, $token)
     {
-        $url = Shoprunback::getApiBaseUrl() . $endUrl;
+        $this->setApiBaseUrl($apiBaseUrl);
+        $this->setToken($token);
+    }
+
+    public function __construct()
+    {
+        $this->setApiBaseUrl(getenv('DASHBOARD_URL'));
+        $this->setToken(getenv('SHOPRUNBACK_API_TOKEN'));
+    }
+
+    public function setApiBaseUrl($url)
+    {
+        $this->apiBaseUrl = $url;
+    }
+
+    public function setToken($token)
+    {
+        $this->token = $token;
+    }
+
+    public function isSetup()
+    {
+        return $this->apiBaseUrl !== null && $this->token !== null;
+    }
+
+    public function verifySetup()
+    {
+        if (!$this->isSetup()) {
+            throw new Exception('Missing required credentials');
+        }
+    }
+
+    public function request($endpoint, $type = 'GET', $json = '')
+    {
+        $this->verifySetup();
+
+        $url = Shoprunback::getApiBaseUrl() . $endpoint;
 
         $headers = ['Content-Type: application/json'];
 

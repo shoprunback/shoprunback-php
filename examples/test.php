@@ -24,7 +24,8 @@ Shoprunback::setApiToken(getenv('SHOPRUNBACK_API_TOKEN'));
 // Shoprunback::setApiToken('afalsetoken');
 
 // Fetch and update Brand
-// $brand = Brand::fetch('Fashion-Manufacturer');
+$brand = Brand::fetch('Fashion-Manufacturer');
+var_dump($brand);
 // $brand->name = 'Delfino place 2';
 // $brand->save();
 

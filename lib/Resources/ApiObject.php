@@ -15,11 +15,16 @@ abstract class ApiObject extends Resource
 
     abstract public function display();
 
+    private static function getCaller()
+    {
+        return 'Shoprunback\ApiCaller';
+    }
+
     public static function fetch($id = '')
     {
         if (!Shoprunback::isSetup()) throw new UnknownApiToken('Can\'t fetch if not setup');
 
-        $item = self::convertToSelf(ApiCaller::get(static::getApiUrlResource(), $id));
+        $item = self::convertToSelf(self::getCaller()::get(static::getApiUrlResource(), $id));
 
         static::logCurrentClass('"' . $item->display() . '" fetched');
 
@@ -43,7 +48,7 @@ abstract class ApiObject extends Resource
         }
     }
 
-    protected static function convertToSelf($object)
+    public static function convertToSelf($object)
     {
         return Converter::convertToSRBObject($object, get_called_class());
     }
