@@ -12,19 +12,20 @@ use Shoprunback\Resources\User      as User;
 use Shoprunback\Resources\Item      as Item;
 use Shoprunback\Resources\Order     as Order;
 use Shoprunback\Resources\Shipback  as Shipback;
-use Shoprunback\ApiCaller           as ApiCaller;
+use Shoprunback\RestClient           as RestClient;
 use Shoprunback\Util\Converter      as Converter;
 use Shoprunback\Util\Logger         as Logger;
 
 // Setup for test
-Shoprunback::setApiBaseUrl(getenv('DASHBOARD_URL') . '/api/v1/');
-Shoprunback::setApiToken(getenv('SHOPRUNBACK_API_TOKEN'));
+// Shoprunback::setApiBaseUrl(getenv('DASHBOARD_URL') . '/api/v1/');
+// Shoprunback::setApiToken(getenv('SHOPRUNBACK_API_TOKEN'));
 
 // Use this var to check if the exception is caught
 // Shoprunback::setApiToken('afalsetoken');
 
 // Fetch and update Brand
-$brand = Brand::fetch('Fashion-Manufacturer');
+RestClient::getClient()->disableTesting();
+$brand = Brand::retrieve("5d87e512-719b-44b2-8f5c-43cc6bb7b834");
 var_dump($brand);
 // $brand->name = 'Delfino place 2';
 // $brand->save();

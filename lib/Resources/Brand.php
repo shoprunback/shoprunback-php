@@ -2,8 +2,10 @@
 
 namespace Shoprunback\Resources;
 
-class Brand extends ApiObject
+class Brand extends ShoprunbackObject
 {
+    use Retrieve;
+
     public $name;
     public $reference;
 
