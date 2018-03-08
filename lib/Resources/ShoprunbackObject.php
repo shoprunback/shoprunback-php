@@ -14,6 +14,21 @@ abstract class ShoprunbackObject extends Resource
     {
         $restClient = RestClient::getClient();
         $response = $restClient->request($this->endpoint(), \Shoprunback\RestClient::GET);
+        $this->convertResponseToSelf($response);
+    }
+
+    public static function convertObjectToSelf($object)
+    {
+        return Converter::convertToSRBObject($object, get_called_class());
+    }
+
+    public function convertResponseToSelf($response)
+    {
+        $result = self::convertObjectToSelf($response->getBody());
+
+        foreach ($result as $key => $value) {
+            $this->$key = $value;
+        }
     }
 
 
@@ -60,10 +75,5 @@ abstract class ShoprunbackObject extends Resource
     //     if (!isset($this->id)) {
     //         $this->id = $callResult->id;
     //     }
-    // }
-
-    // public static function convertToSelf($object)
-    // {
-    //     return Converter::convertToSRBObject($object, get_called_class());
     // }
 }
