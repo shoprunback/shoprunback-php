@@ -53,4 +53,18 @@ final class BrandTest extends BaseTest
         $brand = Brand::update($brand);
         $this->assertSame($brand->name, 'A');
     }
+
+    public function testCanCreateOneMocked()
+    {
+        RestClient::getClient()->enableTesting();
+
+        $brand = new Brand();
+        $brand->name = 'final fantasy';
+        $brand->reference = 'final-fantasy';
+        $createdBrand = Brand::create($brand);
+
+        $this->assertNotNull($createdBrand->id);
+        $this->assertNotNull($createdBrand->name);
+        $this->assertNotNull($createdBrand->reference);
+    }
 }

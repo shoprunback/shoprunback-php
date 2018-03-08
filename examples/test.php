@@ -32,11 +32,16 @@ RestClient::getClient()->enableTesting();
 // $brand = Brand::retrieve('5d87e512-719b-44b2-8f5c-43cc6bb7b834'); // JULIEN
 
 // RestClient::getClient()->disableTesting();
-$brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
-$brand->name = 'AH';
-Brand::update($brand);
-var_dump($brand);
+// $brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
+// $brand->name = 'AH';
+// Brand::update($brand);
+// var_dump($brand);
 
+$brand = new Brand();
+$brand->name = 'final fantasy';
+$brand->reference = 'final-fantasy';
+$createdBrand = Brand::create($brand);
+var_dump($createdBrand);
 
 
 

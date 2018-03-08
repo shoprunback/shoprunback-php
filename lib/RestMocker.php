@@ -48,6 +48,29 @@ class RestMocker
         return $response;
     }
 
+    private static function post($endpoint, $body)
+    {
+        $responseBody = self::getBody($endpoint, RestClient::POST)[0];
+
+        foreach ($responseBody as $key => $value) {
+            $responseBody->$key = null;
+        }
+
+        foreach ($body as $key => $value) {
+            if (property_exists($responseBody, $key)) {
+                $responseBody->$key = $value;
+            }
+        }
+
+        $responseBody->id = rand();
+
+        $response = new RestResponse();
+        $response->setCode(200);
+        $response->setBody($responseBody);
+
+        return $response;
+    }
+
     // private static function post($endpoint, $body)
     // {
     //     list($filePath, $fileContent) = self::getFilePathAndContent($endpoint);

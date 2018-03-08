@@ -44,10 +44,17 @@ abstract class Resource
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
 
-    public function put($body)
+    public function put()
     {
         $restClient = RestClient::getClient();
-        $response = $restClient->request(self::updateEndpoint($this->id), \Shoprunback\RestClient::PUT, $body);
+        $response = $restClient->request(self::updateEndpoint($this->id), \Shoprunback\RestClient::PUT, $this);
+        $this->copyValues($this->newFromMixed($response->getBody()));
+    }
+
+    public function post()
+    {
+        $restClient = RestClient::getClient();
+        $response = $restClient->request(self::createEndpoint(), \Shoprunback\RestClient::POST, $this);
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
 
