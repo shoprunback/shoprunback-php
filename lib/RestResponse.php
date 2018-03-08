@@ -15,17 +15,15 @@ class RestResponse
 
     public function __construct($curl)
     {
-        $this->code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $response = json_decode(curl_exec($curl));
+        $this->code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        var_dump($response);die;
 
-        if ($this->success())
-        {
+        if ($this->success()) {
             $this->body = $response;
         } else {
             $this->errors = $response;
         }
-
-        $this->setToken($token);
     }
 
     public function getBody()

@@ -46,9 +46,19 @@ class RestClient
         $this->testing = false;
     }
 
+    public function getApiBaseUrl()
+    {
+        return $this->apiBaseUrl;
+    }
+
     public function setApiBaseUrl($url)
     {
         $this->apiBaseUrl = $url;
+    }
+
+    public function getToken()
+    {
+        return $this->token;
     }
 
     public function setToken($token)
@@ -56,9 +66,14 @@ class RestClient
         $this->token = $token;
     }
 
+    public function getApiFullUrl()
+    {
+        return $this->getApiBaseUrl() . '/api/v1/';
+    }
+
     public function isSetup()
     {
-        return $this->apiBaseUrl !== null && $this->token !== null;
+        return $this->getApiBaseUrl() !== null && $this->getToken() !== null;
     }
 
     public function verifySetup()
@@ -69,12 +84,12 @@ class RestClient
     }
 
     private function getEndpointURL($endpoint) {
-        return $this->apiBaseUrl . $endpoint;
+        return $this->getApiFullUrl() . $endpoint;
     }
 
     private function getHeaders() {
         $headers = ['Content-Type: application/json'];
-        $headers[] = 'Authorization: Token token=' . $this->token;
+        $headers[] = 'Authorization: Token token=' . $this->getToken();
         return $headers;
     }
 
@@ -127,15 +142,16 @@ class RestClient
     {
         $this->verifySetup();
 
-        if ($this->testing)
-        {
-            $response = RestMocker::request($endpoint, $method, $body);
+        $url = $this->getEndpointURL($endpoint);
+
+        if ($this->testing) {
+            $response = RestMocker::request($url, $method, json_encode($body));
         } else {
-            $response = $this->executeQuery($this->getEndpointURL($endpoint), $method, json_encode($body));
+            $response = $this->executeQuery($url, $method, json_encode($body));
         }
 
         if (!$response->success()) {
-            throw new Exception('Request Error'); #TODO return the RestResponse object (or its errors)
+            throw new \Exception('Request Error'); #TODO return the RestResponse object (or its errors)
         }
 
         return $response;
