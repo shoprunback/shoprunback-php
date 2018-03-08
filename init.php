@@ -17,7 +17,7 @@ require dirname(__FILE__) . '/lib/Resources/Brand.php';
 // require dirname(__FILE__) . '/lib/Resources/User.php';
 
 // Load Utils
-require dirname(__FILE__) . '/lib/Util/Converter.php';
+require dirname(__FILE__) . '/lib/Util/Inflector.php';
 require dirname(__FILE__) . '/lib/Util/Logger.php';
 
 // Load Errors

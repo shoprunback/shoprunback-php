@@ -4,7 +4,7 @@ namespace Shoprunback\Resources;
 
 use Shoprunback\Shoprunback;
 use Shoprunback\ApiCaller;
-use Shoprunback\Util\Converter;
+use Shoprunback\Util\Inflector;
 use Shoprunback\Error\UnknownApiToken;
 use Shoprunback\RestClient;
 
@@ -14,24 +14,20 @@ abstract class ShoprunbackObject extends Resource
     {
         $restClient = RestClient::getClient();
         $response = $restClient->request($this->endpoint(), \Shoprunback\RestClient::GET);
-        $this->convertResponseToSelf($response);
+        $this->copyValues($this->newFromMixed($response->getBody()));
     }
 
-    public static function convertObjectToSelf($object)
+    public static function newFromMixed($mixed)
     {
-        return Converter::convertToSRBObject($object, get_called_class());
+        return Inflector::constantize($mixed, get_called_class());
     }
 
-    public function convertResponseToSelf($response)
+    public function copyValues($object)
     {
-        $result = self::convertObjectToSelf($response->getBody());
-
-        foreach ($result as $key => $value) {
+        foreach ($object as $key => $value) {
             $this->$key = $value;
         }
     }
-
-
 
 
 

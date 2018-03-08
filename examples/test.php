@@ -15,6 +15,7 @@ use Shoprunback\Resources\Shipback  as Shipback;
 use Shoprunback\RestClient           as RestClient;
 use Shoprunback\Util\Converter      as Converter;
 use Shoprunback\Util\Logger         as Logger;
+use Shoprunback\Util\Inflector         as Inflector;
 
 // Setup for test
 // Shoprunback::setApiBaseUrl(getenv('DASHBOARD_URL') . '/api/v1/');
@@ -25,9 +26,18 @@ use Shoprunback\Util\Logger         as Logger;
 
 // Fetch and update Brand
 RestClient::getClient()->disableTesting();
-$brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
+//$brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
 // $brand = Brand::retrieve('5d87e512-719b-44b2-8f5c-43cc6bb7b834'); // JULIEN
-var_dump($brand);
+// var_dump($brand);
+echo Inflector::classify('brand');
+echo Inflector::classify('brands');
+echo Inflector::classify('country');
+echo Inflector::classify('countries');
+
+echo Inflector::pluralize('brand');
+echo Inflector::pluralize('brands');#TODO
+echo Inflector::pluralize('country');
+echo Inflector::pluralize('countries');#TODO
 // $brand->name = 'Delfino place 2';
 // $brand->save();
 

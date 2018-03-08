@@ -6,9 +6,6 @@ class Brand extends ShoprunbackObject
 {
     use Retrieve;
 
-    public $name;
-    public $reference;
-
     static public function getApiUrlResource()
     {
         return 'brands';
