@@ -64,7 +64,7 @@ final class BrandTest extends BaseTest
         $createdBrand = Brand::create($brand);
 
         $this->assertNotNull($createdBrand->id);
-        $this->assertNotNull($createdBrand->name);
-        $this->assertNotNull($createdBrand->reference);
+        $this->assertSame($createdBrand->name, 'final fantasy');
+        $this->assertSame($createdBrand->reference, 'final-fantasy');
     }
 }
