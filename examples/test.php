@@ -43,9 +43,6 @@ RestClient::getClient()->enableTesting();
 // $createdBrand = Brand::create($brand);
 // var_dump($createdBrand);
 
-
-RestClient::getClient()->setApiBaseUrl('http://localhost:3000');
-RestClient::getClient()->setToken('UD3RW8zx7WKe75KWz96Z6YroCXeUrPzyPsZxfVsyLhRDM8xWoA');
 $result = Brand::delete('05f044d4-e385-496c-a242-aae58e19df87');
 var_dump($result);
 

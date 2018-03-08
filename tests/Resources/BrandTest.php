@@ -48,9 +48,10 @@ final class BrandTest extends BaseTest
 
         $brand = Brand::retrieve(rand());
 
-        $brand->name = $brand->name . 'A';
+        $name = $brand->name . 'A';
+        $brand->name = $name;
         $brand = Brand::update($brand);
-        $this->assertSame($brand->name, $brand->name . 'A');
+        $this->assertSame($brand->name, $name);
     }
 
     public function testCanCreateMocked()
@@ -72,5 +73,39 @@ final class BrandTest extends BaseTest
         RestClient::getClient()->enableTesting();
 
         $this->assertNull(Brand::delete(rand()));
+    }
+
+    /**
+     * @expectedException \Exception
+     */
+    public function testAllApi()
+    {
+        RestClient::getClient()->disableTesting();
+
+        $name = rand();
+        $reference = $name + 1;
+
+        // Test Create
+        $brand = new Brand();
+        $brand->name = $name;
+        $brand->reference = $reference;
+        $createdBrand = Brand::create($brand);
+
+        $this->assertNotNull($createdBrand->id);
+        $this->assertSame($createdBrand->name, $name);
+        $this->assertSame($createdBrand->reference, $reference);
+
+        // Test Retrieve
+        $fetchedBrand = Brand::retrieve($createdBrand->id);
+        $this->assertSame($createdBrand, $fetchedBrand);
+
+        // Test Update
+        $fetchedBrand->name = $name + 2;
+        $updatedBrand = Brand::update($fetchedBrand);
+        $this->assertNotSame($fetchedBrand, $updatedBrand);
+
+        // Test Delete, must throw an Exception
+        Brand::delete($updatedBrand->id);
+        Brand::retrieve($updatedBrand->id);
     }
 }
