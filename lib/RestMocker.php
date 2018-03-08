@@ -67,6 +67,15 @@ class RestMocker
         return $response;
     }
 
+    private static function delete($endpoint, $body)
+    {
+        $response = new RestResponse();
+        $response->setCode(200);
+        $response->setBody('');
+
+        return $response;
+    }
+
     private static function filePath($endpoint, $method)
     {
         if ($method == RestClient::POST) {

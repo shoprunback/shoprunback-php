@@ -30,7 +30,7 @@ abstract class Resource
     }
 
     public static function updateEndpoint($id) {
-        return self::indexEndpoint() . '/' . $id;
+        return self::showEndpoint($id);
     }
 
     public static function deleteEndpoint($id) {
@@ -56,6 +56,12 @@ abstract class Resource
         $restClient = RestClient::getClient();
         $response = $restClient->request(self::createEndpoint(), \Shoprunback\RestClient::POST, $this);
         $this->copyValues($this->newFromMixed($response->getBody()));
+    }
+
+    public function remove()
+    {
+        $restClient = RestClient::getClient();
+        $response = $restClient->request(self::deleteEndpoint($this->id), \Shoprunback\RestClient::DELETE);
     }
 
     public static function newFromMixed($mixed)

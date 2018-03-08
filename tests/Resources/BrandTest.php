@@ -54,7 +54,7 @@ final class BrandTest extends BaseTest
         $this->assertSame($brand->name, 'A');
     }
 
-    public function testCanCreateOneMocked()
+    public function testCanCreateMocked()
     {
         RestClient::getClient()->enableTesting();
 
@@ -66,5 +66,12 @@ final class BrandTest extends BaseTest
         $this->assertNotNull($createdBrand->id);
         $this->assertSame($createdBrand->name, 'final fantasy');
         $this->assertSame($createdBrand->reference, 'final-fantasy');
+    }
+
+    public function testCanDeleteMocked()
+    {
+        RestClient::getClient()->enableTesting();
+
+        $this->assertNull(Brand::delete(rand()));
     }
 }

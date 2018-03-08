@@ -11,6 +11,7 @@ require dirname(__FILE__) . '/lib/Resources/traits/Retrieve.php';
 require dirname(__FILE__) . '/lib/Resources/traits/All.php';
 require dirname(__FILE__) . '/lib/Resources/traits/Update.php';
 require dirname(__FILE__) . '/lib/Resources/traits/Create.php';
+require dirname(__FILE__) . '/lib/Resources/traits/Delete.php';
 require dirname(__FILE__) . '/lib/Resources/Resource.php';
 // require dirname(__FILE__) . '/lib/Resources/ShoprunbackObject.php';
 require dirname(__FILE__) . '/lib/Resources/Brand.php';
