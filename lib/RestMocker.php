@@ -36,7 +36,7 @@ class RestMocker
         $responseBody = self::getBody($endpoint, RestClient::PUT);
 
         foreach ($body as $key => $value) {
-            if (isset($responseBody->$key)) {
+            if (property_exists($responseBody, $key)) {
                 $responseBody->$key = $value;
             }
         }
@@ -52,10 +52,6 @@ class RestMocker
     {
         $responseBody = self::getBody($endpoint, RestClient::POST);
 
-        foreach ($responseBody as $key => $value) {
-            $responseBody->$key = null;
-        }
-
         foreach ($body as $key => $value) {
             if (property_exists($responseBody, $key)) {
                 $responseBody->$key = $value;
@@ -70,71 +66,6 @@ class RestMocker
 
         return $response;
     }
-
-    // private static function post($endpoint, $body)
-    // {
-    //     list($filePath, $fileContent) = self::getFilePathAndContent($endpoint);
-
-    //     if (self::returnKeyOfObjectWithId($fileContent, $idToUpdate)) {
-    //         $fileContent[] = $body;
-
-    //         file_put_contents($filePath, $fileContent);
-
-    //         http_response_code(201);
-    //         return $body;
-    //     }
-
-    //     http_response_code(400);
-    //     return false;
-    // }
-
-    // private static function put($endpoint, $body)
-    // {
-    //     list($filePath, $fileContent) = self::getFilePathAndContent($endpoint);
-
-    //     $idToUpdate = self::getIdFromEndpoint($endpoint);
-    //     if (!$idToUpdate) {
-    //         http_response_code(400);
-    //         return false;
-    //     }
-
-    //     if ([$key, $resource] = self::returnKeyOfObjectWithId($fileContent, $idToUpdate)) {
-    //         foreach ($body as $k => $value) {
-    //             $fileContent[$key][$k] = $value;
-    //         }
-
-    //         file_put_contents($filePath, $fileContent);
-
-    //         http_response_code(200);
-    //         return $fileContent[$key];
-    //     }
-
-    //     http_response_code(400);
-    //     return false;
-    // }
-
-    // private static function delete($endpoint, $body)
-    // {
-    //     list($filePath, $fileContent) = self::getFilePathAndContent($endpoint);
-
-    //     $idToUpdate = self::getIdFromEndpoint($endpoint);
-    //     if (!$idToUpdate) {
-    //         http_response_code(400);
-    //         return false;
-    //     }
-
-    //     if ([$key, $resource] = self::returnKeyOfObjectWithId($fileContent, $idToUpdate)) {
-    //         unset($fileContent[$key]);
-
-    //         file_put_contents($filePath, $fileContent);
-
-    //         http_response_code(200);
-    //         return '{}';
-    //     }
-
-    //     http_response_code(400);
-    //     return false;
-    // }
 
     private static function filePath($endpoint, $method)
     {
