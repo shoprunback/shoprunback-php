@@ -47,11 +47,10 @@ final class BrandTest extends BaseTest
         RestClient::getClient()->enableTesting();
 
         $brand = Brand::retrieve(rand());
-        $this->assertNotSame($brand->name, 'A');
 
-        $brand->name = 'A';
+        $brand->name = $brand->name . 'A';
         $brand = Brand::update($brand);
-        $this->assertSame($brand->name, 'A');
+        $this->assertSame($brand->name, $brand->name . 'A');
     }
 
     public function testCanCreateMocked()
