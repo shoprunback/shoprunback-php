@@ -26,18 +26,17 @@ use Shoprunback\Util\Inflector      as Inflector;
 
 // Fetch and update Brand
 RestClient::getClient()->enableTesting();
+// RestClient::getClient()->disableTesting();
 // $brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
 // var_dump($brand);
 // $brand = Brand::retrieve('5d87e512-719b-44b2-8f5c-43cc6bb7b834'); // JULIEN
 
 // RestClient::getClient()->disableTesting();
-$brand = Brand::retrieve('5d87e512-719b-44b2-8f5c-43cc6bb7b834'); // PAUL
+$brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
+$brand->name = 'AH';
+Brand::update($brand);
 var_dump($brand);
 
-
-$brands = Brand::all();
-
-var_dump($brands);
 
 
 

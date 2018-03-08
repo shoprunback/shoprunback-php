@@ -131,6 +131,7 @@ class RestClient
             CURLOPT_POSTFIELDS      => $json
         ];
 
+        var_dump($opts);
         $curl = curl_init();
         curl_setopt_array($curl, $opts);
         $response = new RestResponse($curl);

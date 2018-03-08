@@ -31,6 +31,17 @@ class RestMocker
         return $response;
     }
 
+    private static function put($endpoint, $body)
+    {
+        $responseBody = self::getBody($endpoint, RestClient::PUT);
+
+        $response = new RestResponse();
+        $response->setCode(200);
+        $response->setBody($responseBody);
+
+        return $response;
+    }
+
     // private static function post($endpoint, $body)
     // {
     //     list($filePath, $fileContent) = self::getFilePathAndContent($endpoint);
@@ -114,7 +125,22 @@ class RestMocker
     {
         $filePath = self::filePath($endpoint, $method);
 
-        return json_decode(file_get_contents($filePath,  FILE_USE_INCLUDE_PATH));
+        $fileBody = json_decode(file_get_contents($filePath,  FILE_USE_INCLUDE_PATH));
+
+        switch ($method) {
+            case RestClient::PUT:
+                foreach ($body as $key => $value) {
+                    if (isset($fileBody[$key])) {
+                        $fileBody[$key] = $value;
+                    }
+                }
+
+                return $fileBody;
+                break;
+        }
+
+        // Case GET
+        return $fileBody;
     }
 
     // private static function getIdFromEndpoint($endpoint){
