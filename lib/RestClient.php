@@ -131,7 +131,6 @@ class RestClient
             CURLOPT_POSTFIELDS      => $json
         ];
 
-        var_dump($opts);
         $curl = curl_init();
         curl_setopt_array($curl, $opts);
         $response = new RestResponse($curl);
@@ -145,7 +144,7 @@ class RestClient
         $this->verifySetup();
 
         if ($this->testing) {
-            $response = RestMocker::request($endpoint, $method, json_encode($body));
+            $response = RestMocker::request($endpoint, $method, $body);
         } else {
             $response = $this->executeQuery($this->getEndpointURL($endpoint), $method, json_encode($body));
         }
