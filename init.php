@@ -7,9 +7,10 @@ require dirname(__FILE__) . '/lib/RestResponse.php';
 require dirname(__FILE__) . '/lib/RestMocker.php';
 
 // Load resources
-require dirname(__FILE__) . '/lib/Resources/Retrieve.php';
+require dirname(__FILE__) . '/lib/Resources/traits/Retrieve.php';
+require dirname(__FILE__) . '/lib/Resources/traits/All.php';
 require dirname(__FILE__) . '/lib/Resources/Resource.php';
-require dirname(__FILE__) . '/lib/Resources/ShoprunbackObject.php';
+// require dirname(__FILE__) . '/lib/Resources/ShoprunbackObject.php';
 require dirname(__FILE__) . '/lib/Resources/Brand.php';
 // require dirname(__FILE__) . '/lib/Resources/Item.php';
 // require dirname(__FILE__) . '/lib/Resources/Order.php';

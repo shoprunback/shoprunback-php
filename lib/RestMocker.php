@@ -102,11 +102,12 @@ class RestMocker
 
         if (count($pathParts) % 2 == 0) {
             $resourceId = $pathParts[count($pathParts) - 1];
-            $filename = $pathParts[count($pathParts) - 2];
+            $filename = Inflector::classify($pathParts[count($pathParts) - 2]);
         } else {
             $filename = $pathParts[count($pathParts) - 1];
         }
-        return dirname(__FILE__) . '/data/' . strtolower(Inflector::classify($filename)) . '.json';
+
+        return dirname(__FILE__) . '/data/' . strtolower($filename) . '.json';
     }
 
     private static function getBody($endpoint, $method, $body = [])
