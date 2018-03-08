@@ -7,6 +7,7 @@ use Shoprunback\Error\ReferenceTaken;
 use Shoprunback\Error\UnknownApiToken;
 use Shoprunback\Util\Logger;
 use Shoprunback\RestResponse;
+use Shoprunback\RestMocker;
 
 class RestClient
 {
@@ -93,7 +94,7 @@ class RestClient
         return $headers;
     }
 
-    private function validMethod($method)
+    private static function validMethod($method)
     {
         switch ($method) {
             case 'POST':
@@ -107,16 +108,16 @@ class RestClient
         }
     }
 
-    private function verifyMethod($method)
+    public static function verifyMethod($method)
     {
-        if (!$this->validMethod($method)) {
+        if (!self::validMethod($method)) {
             throw new Exception('Incorrect HTTP type');
         }
     }
 
     private function executeQuery($url, $method, $json)
     {
-        $this->verifyMethod($method);
+        self::verifyMethod($method);
 
         $opts = [
             CURLOPT_SSL_VERIFYPEER  => false,
@@ -142,12 +143,10 @@ class RestClient
     {
         $this->verifySetup();
 
-        $url = $this->getEndpointURL($endpoint);
-
         if ($this->testing) {
-            $response = RestMocker::request($url, $method, json_encode($body));
+            $response = RestMocker::request($endpoint, $method, json_encode($body));
         } else {
-            $response = $this->executeQuery($url, $method, json_encode($body));
+            $response = $this->executeQuery($this->getEndpointURL($endpoint), $method, json_encode($body));
         }
 
         if (!$response->success()) {

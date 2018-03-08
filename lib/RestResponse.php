@@ -13,16 +13,23 @@ class RestResponse
     private $body;
     private $errors;
 
-    public function __construct($curl)
+    public function __construct($curl = null)
     {
-        $response = json_decode(curl_exec($curl));
-        $this->code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        if ($curl) {
+            $response = json_decode(curl_exec($curl));
+            $this->code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 
-        if ($this->success()) {
-            $this->body = $response;
-        } else {
-            $this->errors = $response;
+            if ($this->success()) {
+                $this->body = $response;
+            } else {
+                $this->errors = $response;
+            }
         }
+    }
+
+    public function setBody($body)
+    {
+        $this->body = $body;
     }
 
     public function getBody()
@@ -35,9 +42,19 @@ class RestResponse
         return $this->errors;
     }
 
+    public function setErrors($errors)
+    {
+        $this->errors = $errors;
+    }
+
     public function getCode()
     {
         return $this->code;
+    }
+
+    public function setCode($code)
+    {
+        $this->code = $code;
     }
 
     public function success()

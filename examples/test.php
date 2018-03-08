@@ -25,19 +25,23 @@ use Shoprunback\Util\Inflector         as Inflector;
 // Shoprunback::setApiToken('afalsetoken');
 
 // Fetch and update Brand
-RestClient::getClient()->disableTesting();
-//$brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
+RestClient::getClient()->enableTesting();
+$brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
+var_dump($brand);
 // $brand = Brand::retrieve('5d87e512-719b-44b2-8f5c-43cc6bb7b834'); // JULIEN
-// var_dump($brand);
-echo Inflector::classify('brand');
-echo Inflector::classify('brands');
-echo Inflector::classify('country');
-echo Inflector::classify('countries');
 
-echo Inflector::pluralize('brand');
-echo Inflector::pluralize('brands');#TODO
-echo Inflector::pluralize('country');
-echo Inflector::pluralize('countries');#TODO
+RestClient::getClient()->disableTesting();
+$brand = Brand::retrieve('5d87e512-719b-44b2-8f5c-43cc6bb7b834');
+ var_dump($brand);
+// echo Inflector::classify('brand');
+// echo Inflector::classify('brands');
+// echo Inflector::classify('country');
+// echo Inflector::classify('countries');
+
+// echo Inflector::pluralize('brand');
+// echo Inflector::pluralize('brands');#TODO
+// echo Inflector::pluralize('country');
+// echo Inflector::pluralize('countries');#TODO
 // $brand->name = 'Delfino place 2';
 // $brand->save();
 
