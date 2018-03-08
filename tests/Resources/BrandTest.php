@@ -6,13 +6,25 @@ namespace Tests\Resources;
 
 use \Tests\BaseTest;
 
+use \Tests\Resources\ShoprunbackObjectTest;
 use \Shoprunback\Resources\Brand as Brand;
-use \Tests\Resources\ApiObjectTest;
 
-final class BrandTest extends ApiObjectTest
+final class BrandTest //extends ShoprunbackObjectTest
 {
-    public static function getClass()
+    const CLASS_NAME = 'Brand';
+
+    public function testCanFetchMocked()
     {
-        return 'Brand';
+        RestClient::getClient()->enableTesting();
+
+        $brand = Brand::retrieve(rand());
+        $this->assertInstanceOf(
+            self::CLASS_NAME,
+            $brand
+        );
+
+        $this->assertNotNull($brand->id);
+        $this->assertNotNull($brand->name);
+        $this->assertNotNull($brand->reference);
     }
 }
