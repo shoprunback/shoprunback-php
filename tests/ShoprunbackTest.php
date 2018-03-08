@@ -15,8 +15,8 @@ final class ShoprunbackTest extends BaseTest
         parent::__construct();
     }
 
-    public function testIsSetup()
+    public function testIsTesting()
     {
-        $this->assertTrue(Shoprunback::isSetup());
+        $this->assertTrue(Shoprunback::isTesting());
     }
 }

@@ -106,7 +106,7 @@ class RestMocker
         } else {
             $filename = $pathParts[count($pathParts) - 1];
         }
-        return getcwd() . '/lib/data/' . strtolower(Inflector::classify($filename)) . '.json';
+        return dirname(__FILE__) . '/data/' . strtolower(Inflector::classify($filename)) . '.json';
     }
 
     private static function getBody($endpoint, $method, $body = [])
