@@ -17,7 +17,6 @@ class RestResponse
     {
         $response = json_decode(curl_exec($curl));
         $this->code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        var_dump($response);die;
 
         if ($this->success()) {
             $this->body = $response;
