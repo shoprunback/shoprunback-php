@@ -50,7 +50,7 @@ class RestMocker
 
     private static function post($endpoint, $body)
     {
-        $responseBody = self::getBody($endpoint, RestClient::POST)[0];
+        $responseBody = self::getBody($endpoint, RestClient::POST);
 
         foreach ($responseBody as $key => $value) {
             $responseBody->$key = null;
@@ -138,13 +138,17 @@ class RestMocker
 
     private static function filePath($endpoint, $method)
     {
-        $pathParts = explode('/', $endpoint);
-
-        if (count($pathParts) % 2 == 0) {
-            $resourceId = $pathParts[count($pathParts) - 1];
-            $filename = Inflector::classify($pathParts[count($pathParts) - 2]);
+        if ($method == RestClient::POST) {
+            $filename = Inflector::classify($endpoint);
         } else {
-            $filename = $pathParts[count($pathParts) - 1];
+            $pathParts = explode('/', $endpoint);
+
+            if (count($pathParts) % 2 == 0) {
+                $resourceId = $pathParts[count($pathParts) - 1];
+                $filename = Inflector::classify($pathParts[count($pathParts) - 2]);
+            } else {
+                $filename = $pathParts[count($pathParts) - 1];
+            }
         }
 
         return dirname(__FILE__) . '/data/' . strtolower($filename) . '.json';
