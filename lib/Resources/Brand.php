@@ -8,6 +8,7 @@ class Brand extends Resource
     use All;
     use Update;
     use Create;
+    use Delete;
 
     public function display()
     {

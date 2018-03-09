@@ -14,6 +14,7 @@ abstract class Resource
     public function __construct($id = '')
     {
         $this->id = $id;
+        $this->_origValues = new \stdClass();
     }
 
     public static function indexEndpoint() {
@@ -30,7 +31,7 @@ abstract class Resource
     }
 
     public static function updateEndpoint($id) {
-        return self::indexEndpoint() . '/' . $id;
+        return self::showEndpoint($id);
     }
 
     public static function deleteEndpoint($id) {
@@ -47,7 +48,17 @@ abstract class Resource
     public function put()
     {
         $restClient = RestClient::getClient();
-        $response = $restClient->request(self::updateEndpoint($this->id), \Shoprunback\RestClient::PUT, $this);
+
+        $dataToUpdate = new \stdClass();
+        foreach ($this as $key => $value) {
+            if (!isset($this->_origValues->$key) || $this->_origValues->$key != $value) {
+                $dataToUpdate->$key = $value;
+            }
+        }
+
+        unset($dataToUpdate->_origValues);
+
+        $response = $restClient->request(self::updateEndpoint($this->id), \Shoprunback\RestClient::PUT, $dataToUpdate);
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
 
@@ -58,6 +69,14 @@ abstract class Resource
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
 
+    public function remove()
+    {
+        $restClient = RestClient::getClient();
+        $this->refresh();
+        self::logCurrentClass('Log of the object before its removal: ' . json_encode($this->_origValues));
+        $response = $restClient->request(self::deleteEndpoint($this->id), \Shoprunback\RestClient::DELETE);
+    }
+
     public static function newFromMixed($mixed)
     {
         return Inflector::constantize($mixed, get_called_class());
@@ -66,13 +85,23 @@ abstract class Resource
     public function copyValues($object)
     {
         foreach ($object as $key => $value) {
-            $this->$key = $value;
+            if ($key != '_origValues') {
+                $this->$key = $value;
+            }
         }
+
+        unset($this->_origValues);
+        $this->_origValues = clone $this;
     }
 
     protected static function logCurrentClass($message)
     {
         $calledClassNameExploded = explode('\\', get_called_class());
-        Logger::info(end($calledClassNameExploded) . ' ' . $message);
+        Logger::info(end($calledClassNameExploded) . ': ' . $message);
+    }
+
+    public function getOriginalValues()
+    {
+        return $this->_origValues;
     }
 }
