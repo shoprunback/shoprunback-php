@@ -15,4 +15,9 @@ class BaseTest extends TestCase
         parent::__construct();
         require_once dirname(__FILE__, 2) . '/init.php';
     }
+
+    public function testNothing()
+    {
+      $this->assertEquals(0, 0);
+    }
 }
