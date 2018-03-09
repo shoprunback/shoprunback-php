@@ -29,3 +29,5 @@ require dirname(__FILE__) . '/lib/Util/Logger.php';
 require dirname(__FILE__) . '/lib/Error/Error.php';
 require dirname(__FILE__) . '/lib/Error/ReferenceTaken.php';
 require dirname(__FILE__) . '/lib/Error/UnknownApiToken.php';
+require dirname(__FILE__) . '/lib/Error/NotFoundError.php';
+require dirname(__FILE__) . '/lib/Error/RestClientError.php';

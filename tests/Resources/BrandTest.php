@@ -8,6 +8,7 @@ use \Tests\BaseTest;
 
 use \Shoprunback\Resources\Brand;
 use \Shoprunback\RestClient;
+use \Shoprunback\Error\NotFoundError;
 
 final class BrandTest extends BaseTest
 {
@@ -23,6 +24,41 @@ final class BrandTest extends BaseTest
         $this->assertNotNull($brand->id);
         $this->assertNotNull($brand->name);
         $this->assertNotNull($brand->reference);
+    }
+
+    public function testBrandFromApiIsPersisted()
+    {
+        RestClient::getClient()->disableTesting();
+
+        $reference = strval(rand());
+        $brand = new Brand();
+        $brand->name = $reference;
+        $brand->reference = $reference;
+        $this->assertFalse($brand->isPersisted());
+
+        $brand->save();
+        $this->assertTrue($brand->isPersisted());
+    }
+
+    public function testNewBrandIsPersisted()
+    {
+        $brand = new Brand();
+        $this->assertFalse($brand->isPersisted());
+    }
+
+    public function testNewBrandWithIdIsPersisted()
+    {
+        $brand = new Brand();
+        $brand->id = rand();
+        $this->assertFalse($brand->isPersisted());
+    }
+
+    public function testBrandFromMockerIsPersisted()
+    {
+        RestClient::getClient()->enableTesting();
+
+        $brand = Brand::retrieve(rand());
+        $this->assertTrue($brand->isPersisted());
     }
 
     public function testCanFetchOneMocked()
@@ -94,38 +130,83 @@ final class BrandTest extends BaseTest
         $this->assertNull(Brand::delete(rand()));
     }
 
-    /**
-     * @expectedException \Exception
-     */
-    public function testAllApi()
+    public function testCanSaveNewBrand()
     {
         RestClient::getClient()->disableTesting();
 
-        $name = rand();
-        $reference = $name + 1;
+        $name = "name".get_called_class().rand();
+        $reference = "reference".get_called_class().rand();
 
-        // Test Create
         $brand = new Brand();
         $brand->name = $name;
         $brand->reference = $reference;
-        $createdBrand = Brand::create($brand);
+        $brand->save();
 
-        $this->assertNotNull($createdBrand->id);
-        $this->assertSame($createdBrand->name, $name);
-        $this->assertSame($createdBrand->reference, $reference);
+        $this->assertNotNull($brand->id);
+        $this->assertSame($brand->name, $name);
+        $this->assertSame($brand->reference, $reference);
+    }
 
-        // Test Retrieve
-        $fetchedBrand = Brand::retrieve($createdBrand->id);
-        $this->assertSame($createdBrand, $fetchedBrand);
+    public function testCanFetchAll()
+    {
+        RestClient::getClient()->disableTesting();
 
-        // Test Update
-        $fetchedBrand->name = $name + 2;
-        $updatedBrand = Brand::update($fetchedBrand);
-        $this->assertNotSame($fetchedBrand, $updatedBrand);
+        $brands = Brand::all();
+        $this->assertGreaterThan(0, count($brands));
+    }
 
-        // Test Delete
-        Brand::delete($updatedBrand->id);
-        // Must throw an Exception
-        Brand::retrieve($updatedBrand->id);
+    public function testCanRetrieve()
+    {
+        RestClient::getClient()->disableTesting();
+
+        $brand = Brand::all()[0];
+
+        $retrievedBrand = Brand::retrieve($brand->id);
+
+        $this->assertSame($brand->id, $retrievedBrand->id);
+        $this->assertSame($brand->name, $retrievedBrand->name);
+    }
+
+    public function testCanUpdate()
+    {
+        RestClient::getClient()->disableTesting();
+
+        $brand = Brand::all()[0];
+        $brandId = $brand->id;
+        $name = "name".get_called_class().rand();
+        $brand->name = $name;
+        $brand->save();
+
+        $retrievedBrand = Brand::retrieve($brandId);
+
+        $this->assertSame($retrievedBrand->name, $name);
+    }
+
+    /**
+     * @expectedException \Shoprunback\Error\NotFoundError
+     */
+    public function testCanRetrieveUnknown()
+    {
+        Brand::retrieve("name".get_called_class().rand());
+    }
+
+    /**
+     * @expectedException \Shoprunback\Error\NotFoundError
+     */
+    public function testCanDelete()
+    {
+        RestClient::getClient()->disableTesting();
+
+        $name = "name".get_called_class().rand();
+        $reference = "reference".get_called_class().rand();
+
+        $brand = new Brand();
+        $brand->name = $name;
+        $brand->reference = $reference;
+        $brand->save();
+
+        $brand->remove();
+
+        $retrievedBrand = Brand::retrieve($brand->id);
     }
 }

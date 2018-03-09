@@ -61,7 +61,7 @@ abstract class Inflector
         }
     }
 
-    private static function isPluralClassName($className, $string) {
+    public static function isPluralClassName($className, $string) {
         return self::pluralize($className) == $string;
     }
 
@@ -74,7 +74,7 @@ abstract class Inflector
         }
     }
 
-    private static function isKnownResource($className) {
+    public static function isKnownResource($className) {
         return class_exists(self::RESSOURCES_NAMESPACE . $className);
     }
 

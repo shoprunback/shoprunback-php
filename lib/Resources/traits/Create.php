@@ -6,7 +6,7 @@ trait Create
 {
     public static function create($resource)
     {
-        $resource->post();
+        $resource->save();
         return $resource;
     }
 }

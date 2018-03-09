@@ -10,9 +10,8 @@ use Shoprunback\Shoprunback;
 
 class BaseTest extends TestCase
 {
-    public function __construct()
+    public function setUp()
     {
-        parent::__construct();
         require_once dirname(__FILE__, 2) . '/init.php';
     }
 

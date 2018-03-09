@@ -5,6 +5,7 @@ namespace Shoprunback;
 use Shoprunback\Error\Error;
 use Shoprunback\Error\ReferenceTaken;
 use Shoprunback\Error\UnknownApiToken;
+use Shoprunback\Error\RestClientError;
 use Shoprunback\Util\Logger;
 use Shoprunback\RestResponse;
 use Shoprunback\RestMocker;
@@ -150,7 +151,7 @@ class RestClient
         }
 
         if (!$response->success()) {
-            throw new \Exception('Request Error'); #TODO return the RestResponse object (or its errors)
+            throw new RestClientError($response); #TODO return the RestResponse object (or its errors)
         }
 
         return $response;
