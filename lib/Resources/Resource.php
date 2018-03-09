@@ -99,4 +99,9 @@ abstract class Resource
         $calledClassNameExploded = explode('\\', get_called_class());
         Logger::info(end($calledClassNameExploded) . ': ' . $message);
     }
+
+    public function getOriginalValues()
+    {
+        return $this->_origValues;
+    }
 }
