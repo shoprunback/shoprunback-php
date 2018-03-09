@@ -37,7 +37,8 @@ RestClient::getClient()->enableTesting();
 // var_dump($updatedBrand);
 // var_dump($updatedBrand->_origValues);
 // $brand = Brand::retrieve('5d87e512-719b-44b2-8f5c-43cc6bb7b834'); // JULIEN
-Brand::delete('2a9f7ec0-2fa7-4758-be9c-5aa0abd8ed38');
+// Brand::delete('2a9f7ec0-2fa7-4758-be9c-5aa0abd8ed38');
+
 
 // RestClient::getClient()->disableTesting();
 // $brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
@@ -55,7 +56,6 @@ Brand::delete('2a9f7ec0-2fa7-4758-be9c-5aa0abd8ed38');
 // var_dump($result);
 
 
-
 // echo Inflector::classify('brand');
 // echo Inflector::classify('brands');
 // echo Inflector::classify('country');
@@ -67,6 +67,30 @@ Brand::delete('2a9f7ec0-2fa7-4758-be9c-5aa0abd8ed38');
 // echo Inflector::pluralize('countries');#TODO
 // $brand->name = 'Delfino place 2';
 // $brand->save();
+
+
+
+// $products = Product::all();
+// var_dump($products);die;
+
+// $product = new Product();
+// $product->label = 'lebeau';
+// $product->reference = 'blague-de-merde';
+// $product->weight_grams = 10000000;
+// $createdProduct = Product::create($product);
+// var_dump($createdProduct);
+
+// $product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
+// var_dump($product);
+
+// $product->ean = '789456123';
+// $updatedProduct = Product::update($product);
+// var_dump($updatedProduct);
+
+// Product::delete(1234);
+
+
+
 
 // Fetch and update User
 // $user = User::fetch();

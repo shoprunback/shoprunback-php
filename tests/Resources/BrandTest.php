@@ -6,19 +6,15 @@ namespace Tests\Resources;
 
 use \Tests\BaseTest;
 
-use \Tests\Resources\ShoprunbackObjectTest;
-use \Shoprunback\Resources\Brand as Brand;
+use \Shoprunback\Resources\Brand;
 use \Shoprunback\RestClient;
 
 final class BrandTest extends BaseTest
 {
     const CLASS_NAME = 'Shoprunback\Resources\Brand';
 
-    public function testCanFetchOneMocked()
+    private function checkIfHasNeededValues($brand)
     {
-        RestClient::getClient()->enableTesting();
-
-        $brand = Brand::retrieve(rand());
         $this->assertInstanceOf(
             self::CLASS_NAME,
             $brand
@@ -29,6 +25,15 @@ final class BrandTest extends BaseTest
         $this->assertNotNull($brand->reference);
     }
 
+    public function testCanFetchOneMocked()
+    {
+        RestClient::getClient()->enableTesting();
+
+        $brand = Brand::retrieve(rand());
+
+        $this->checkIfHasNeededValues($brand);
+    }
+
     public function testCanFetchAllMocked()
     {
         RestClient::getClient()->enableTesting();
@@ -37,9 +42,7 @@ final class BrandTest extends BaseTest
         $this->assertEquals(count($brands), 2);
 
         $brand = $brands[0];
-        $this->assertNotNull($brand->id);
-        $this->assertNotNull($brand->name);
-        $this->assertNotNull($brand->reference);
+        $this->checkIfHasNeededValues($brand);
     }
 
     public function testCanUpdateOneMocked()
@@ -120,8 +123,9 @@ final class BrandTest extends BaseTest
         $updatedBrand = Brand::update($fetchedBrand);
         $this->assertNotSame($fetchedBrand, $updatedBrand);
 
-        // Test Delete, must throw an Exception
+        // Test Delete
         Brand::delete($updatedBrand->id);
+        // Must throw an Exception
         Brand::retrieve($updatedBrand->id);
     }
 }
