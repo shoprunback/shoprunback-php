@@ -85,9 +85,11 @@ abstract class Resource
         foreach ($object as $key => $value) {
             if ($key != '_origValues') {
                 $this->$key = $value;
-                $this->_origValues->$key = $value;
             }
         }
+
+        unset($this->_origValues);
+        $this->_origValues = clone $this;
     }
 
     protected static function logCurrentClass($message)
