@@ -13,6 +13,6 @@ class BaseTest extends TestCase
     public function __construct()
     {
         parent::__construct();
-        require_once dirname(dirname(__FILE__)) . '/init.php';
+        require_once dirname(__FILE__, 2) . '/init.php';
     }
 }
