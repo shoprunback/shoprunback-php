@@ -3,7 +3,6 @@
 namespace Shoprunback;
 
 use Shoprunback\Error\Error;
-use Shoprunback\Error\ReferenceTaken;
 use Shoprunback\Error\UnknownApiToken;
 use Shoprunback\Error\RestClientError;
 use Shoprunback\Util\Logger;
