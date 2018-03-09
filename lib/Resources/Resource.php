@@ -18,6 +18,7 @@ abstract class Resource
         $this->id = $id;
         $this->_origValues = new \stdClass();
     }
+
     public static function indexEndpoint() {
         $className = explode('\\', get_called_class());
         return Inflector::pluralize(end($className));
@@ -79,7 +80,7 @@ abstract class Resource
     public function post()
     {
         $restClient = RestClient::getClient();
-        $data = $this->getDataForApi();
+        $data = $this->formatResourceForApi();
         $response = $restClient->request(self::createEndpoint(), \Shoprunback\RestClient::POST, $data);
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
@@ -92,31 +93,36 @@ abstract class Resource
         $response = $restClient->request(self::deleteEndpoint($this->id), \Shoprunback\RestClient::DELETE);
     }
 
-    public function getDataForApi()
+    public function formatResourceForApi()
     {
         $data = new \stdClass();
         foreach ($this as $key => $value) {
-            // If we need to take the value
+            // Check if we need to take the value
             if (!isset($this->_origValues->$key) || $this->_origValues->$key != $value) {
-                if (Inflector::isKnownResource($key)) { // If it is a resource
-                    $data->$key = $value->getDataForApi();
-                } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) { // If it is an array of resources
-                    $arrayOfResources = [];
-
-                    foreach ($value as $k => $resource) {
-                        $arrayOfResources[] = $resource->getDataForApi();
-                    }
-
-                    $data->$key = $arrayOfResources;
-                } else {
-                    $data->$key = $value;
-                }
+                $data->$key = self::getChildren($key, $value);
             }
         }
 
         unset($data->_origValues);
 
         return $data;
+    }
+
+    private function getChildren($key, $value)
+    {
+        if (Inflector::isKnownResource($key)) { // If it is a resource
+            return $value->formatResourceForApi();
+        } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) { // If it is an array of resources
+            $arrayOfResources = [];
+
+            foreach ($value as $k => $resource) {
+                $arrayOfResources[] = $resource->formatResourceForApi();
+            }
+
+            return $arrayOfResources;
+        } else {
+            return $value;
+        }
     }
 
     public static function newFromMixed($mixed)
