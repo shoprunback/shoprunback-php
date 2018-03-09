@@ -14,6 +14,7 @@ abstract class Resource
     public function __construct($id = '')
     {
         $this->id = $id;
+        $this->_origValues = new \stdClass();
     }
 
     public static function indexEndpoint() {
@@ -47,7 +48,17 @@ abstract class Resource
     public function put()
     {
         $restClient = RestClient::getClient();
-        $response = $restClient->request(self::updateEndpoint($this->id), \Shoprunback\RestClient::PUT, $this);
+
+        $dataToUpdate = new \stdClass();
+        foreach ($this as $key => $value) {
+            if (!isset($this->_origValues->$key) || $this->_origValues->$key != $value) {
+                $dataToUpdate->$key = $value;
+            }
+        }
+
+        unset($dataToUpdate->_origValues);
+
+        $response = $restClient->request(self::updateEndpoint($this->id), \Shoprunback\RestClient::PUT, $dataToUpdate);
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
 
@@ -72,7 +83,10 @@ abstract class Resource
     public function copyValues($object)
     {
         foreach ($object as $key => $value) {
-            $this->$key = $value;
+            if ($key != '_origValues') {
+                $this->$key = $value;
+                $this->_origValues->$key = $value;
+            }
         }
     }
 
