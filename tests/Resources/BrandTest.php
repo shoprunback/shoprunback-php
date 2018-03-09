@@ -48,10 +48,26 @@ final class BrandTest extends BaseTest
 
         $brand = Brand::retrieve(rand());
 
+        // Check if _origValues has the same values as the base object since the object hasn't been changed
+        $brandWithoutOrigValues = clone $brand;
+        unset($brandWithoutOrigValues->_origValues);
+        $this->assertSame($brand->_origValues->id, $brandWithoutOrigValues->id);
+        $this->assertSame($brand->_origValues->name, $brandWithoutOrigValues->name);
+        $this->assertSame($brand->_origValues->reference, $brandWithoutOrigValues->reference);
+
         $name = $brand->name . 'A';
         $brand->name = $name;
+        $this->assertNotSame($brand->name, $brandWithoutOrigValues->name);
+
         $brand = Brand::update($brand);
         $this->assertSame($brand->name, $name);
+
+        // Check if _origValues has correctly been changed
+        $brandWithoutOrigValues = clone $brand;
+        unset($brandWithoutOrigValues->_origValues);
+        $this->assertSame($brand->_origValues->id, $brandWithoutOrigValues->id);
+        $this->assertSame($brand->_origValues->name, $brandWithoutOrigValues->name);
+        $this->assertSame($brand->_origValues->reference, $brandWithoutOrigValues->reference);
     }
 
     public function testCanCreateMocked()
