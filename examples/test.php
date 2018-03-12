@@ -71,19 +71,19 @@ RestClient::getClient()->disableTesting();
 // $products = Product::all();
 // var_dump($products);die;
 
-$product = new Product();
-$product->label = 'lebeau';
-$product->reference = rand();
-$product->weight_grams = 10000000;
-$product->brand = $brand;
-$createdProduct = Product::create($product);
+// $product = new Product();
+// $product->label = 'lebeau';
+// $product->reference = rand();
+// $product->weight_grams = 10000000;
+// $product->brand = $brand;
+// $createdProduct = Product::create($product);
 
-$product = new Product();
-$product->label = 'lebeau';
-$product->reference = rand();
-$product->weight_grams = 10000000;
-$product->brand = $brand;
-$createdProduct = Product::create($product);
+// $product = new Product();
+// $product->label = 'lebeau';
+// $product->reference = rand();
+// $product->weight_grams = 10000000;
+// $product->brand = $brand;
+// $createdProduct = Product::create($product);
 // var_dump($createdProduct);
 
 // $product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
