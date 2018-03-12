@@ -47,6 +47,11 @@ class RestClient
         $this->testing = false;
     }
 
+    public function isTesting()
+    {
+        return $this->testing;
+    }
+
     public function getApiBaseUrl()
     {
         return $this->apiBaseUrl;

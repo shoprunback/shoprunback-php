@@ -13,13 +13,16 @@ trait All
         $restClient = RestClient::getClient();
         $response = $restClient->request(self::indexEndpoint(), \Shoprunback\RestClient::GET);
 
+        $responseBody = $response->getBody();
+        if (isset($responseBody->pagination)) {
+            $responseBody = $responseBody->products;
+        }
+
         $instances = [];
-        foreach ($response->getBody() as $resource) {
+        foreach ($responseBody as $resource) {
             $instances[] = self::newFromMixed($resource);
         }
 
         return $instances;
     }
 }
-
-?>

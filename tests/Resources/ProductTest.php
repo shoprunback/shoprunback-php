@@ -4,21 +4,46 @@ declare(strict_types=1);
 
 namespace Tests\Resources;
 
+require_once('BrandTest.php');
+
 use \Tests\BaseTest;
 use \Tests\Resources\BrandTest;
 
 use \Shoprunback\Resources\Product;
 use \Shoprunback\Resources\Brand;
 use \Shoprunback\RestClient;
+use \Shoprunback\Error\NotFoundError;
 
 final class ProductTest extends BaseTest
 {
-    const CLASS_NAME = 'Shoprunback\Resources\Product';
+    public static function getResourceClass()
+    {
+        return 'Shoprunback\Resources\Product';
+    }
 
-    private function checkIfHasNeededValues($product)
+    protected static function createDefault()
+    {
+        $label = self::randomString();
+        $reference = self::randomString();
+
+        $product = new Product();
+        $product->label = $label;
+        $product->reference = $reference;
+        $product->weight_grams = 1000;
+
+        if (RestClient::getClient()->isTesting()) {
+            $product->brand = Brand::retrieve(1);
+        } else {
+            $product->brand = Brand::all()[0];
+        }
+
+        return $product;
+    }
+
+    protected function checkIfHasNeededValues($product)
     {
         $this->assertInstanceOf(
-            self::CLASS_NAME,
+            self::getResourceClass(),
             $product
         );
 
@@ -39,111 +64,103 @@ final class ProductTest extends BaseTest
 
         $this->assertSame($product->brand_id, $product->brand->id);
         $this->assertInstanceOf(
-            BrandTest::CLASS_NAME,
+            BrandTest::getResourceClass(),
             $product->brand
         );
     }
 
-    // public function testCanFetchOneMocked()
-    // {
-    //     RestClient::getClient()->enableTesting();
+    public function testCanFetchOneMocked()
+    {
+        RestClient::getClient()->enableTesting();
+        $this->checkIfHasNeededValues(Product::retrieve(1));
+    }
 
-    //     $product = Product::retrieve(rand());
+    public function testCanFetchAllMocked()
+    {
+        RestClient::getClient()->enableTesting();
 
-    //     $this->checkIfHasNeededValues($product);
-    // }
+        $products = Product::all();
+        $this->assertEquals(count($products), 2);
 
-    // public function testCanFetchAllMocked()
-    // {
-    //     RestClient::getClient()->enableTesting();
+        $this->checkIfHasNeededValues($products[0]);
+    }
 
-    //     $products = Product::all();
-    //     $this->assertEquals(count($products), 2);
+    public function testBrandFromApiIsPersisted()
+    {
+        RestClient::getClient()->disableTesting();
 
-    //     $this->checkIfHasNeededValues($products[0]);
-    // }
+        $reference = strval(rand());
+        $product = self::createDefault();
+        $this->assertFalse($product->isPersisted());
 
-    // public function testCanUpdateOneMocked()
-    // {
-    //     RestClient::getClient()->enableTesting();
+        $product->save();
+        $this->assertTrue($product->isPersisted());
+    }
 
-    //     $product = Product::retrieve(rand());
+    public function testCanSaveMocked()
+    {
+        RestClient::getClient()->enableTesting();
 
-    //     // Check if _origValues has the same values as the base object since the object hasn't been changed
-    //     $productWithoutOrigValues = clone $product;
-    //     unset($productWithoutOrigValues->_origValues);
-    //     $this->assertSame($product->_origValues->id, $productWithoutOrigValues->id);
-    //     $this->assertSame($product->_origValues->label, $productWithoutOrigValues->label);
-    //     $this->assertSame($product->_origValues->reference, $productWithoutOrigValues->reference);
+        $product = self::createDefault();
+        $product->save();
 
-    //     $label = $product->label . 'A';
-    //     $product->label = $label;
-    //     $this->assertNotSame($product->label, $productWithoutOrigValues->label);
+        $this->assertNotNull($product->id);
+    }
 
-    //     $product = Product::update($product);
-    //     $this->assertSame($product->label, $label);
+    public function testCanUpdateOneMocked()
+    {
+        $product = Product::retrieve(1);
+        $product->label = self::randomString();
+        $product->save();
 
-    //     // Check if _origValues has correctly been changed
-    //     $productWithoutOrigValues = clone $product;
-    //     unset($productWithoutOrigValues->_origValues);
-    //     $this->assertSame($product->_origValues->id, $productWithoutOrigValues->id);
-    //     $this->assertSame($product->_origValues->label, $productWithoutOrigValues->label);
-    //     $this->assertSame($product->_origValues->reference, $productWithoutOrigValues->reference);
-    // }
+        $retrievedProduct = Product::retrieve(1);
 
-    // public function testCanCreateMocked()
-    // {
-    //     RestClient::getClient()->enableTesting();
+        $this->assertNotSame($retrievedProduct->label, $product->label);
+    }
 
-    //     $product = new Product();
-    //     $product->label = 'final fantasy';
-    //     $product->reference = 'final-fantasy';
-    //     $createdProduct = Product::create($product);
+    public function testCanSaveNewProduct()
+    {
+        RestClient::getClient()->disableTesting();
 
-    //     $this->assertNotNull($createdProduct->id);
-    //     $this->assertSame($createdProduct->label, 'final fantasy');
-    //     $this->assertSame($createdProduct->reference, 'final-fantasy');
-    // }
+        $product = self::createDefault();
 
-    // public function testCanDeleteMocked()
-    // {
-    //     RestClient::getClient()->enableTesting();
+        $label = $product->label;
+        $reference = $product->reference;
 
-    //     $this->assertNull(Product::delete(rand()));
-    // }
+        $product->save();
 
-    // /**
-    //  * @expectedException \Exception
-    //  */
-    // public function testAllApi()
-    // {
-    //     RestClient::getClient()->disableTesting();
+        $this->assertNotNull($product->id);
+        $this->assertSame($product->label, $label);
+        $this->assertSame($product->reference, $reference);
+    }
 
-    //     $label = rand();
-    //     $reference = $label + 1;
+    public function testCanUpdate()
+    {
+        RestClient::getClient()->disableTesting();
 
-    //     // Test Create
-    //     $product = new Product();
-    //     $product->label = $label;
-    //     $product->reference = $reference;
-    //     $createdProduct = Product::create($product);
+        $product = Product::all()[0];
+        $productId = $product->id;
+        $label = self::randomString();
+        $product->label = $label;
+        $product->save();
 
-    //     $this->assertNotNull($createdProduct->id);
-    //     $this->assertSame($createdProduct->label, $label);
-    //     $this->assertSame($createdProduct->reference, $reference);
+        $retrievedProduct = Product::retrieve($productId);
 
-    //     // Test Retrieve
-    //     $fetchedProduct = Product::retrieve($createdProduct->id);
-    //     $this->assertSame($createdProduct, $fetchedProduct);
+        $this->assertSame($retrievedProduct->label, $label);
+    }
 
-    //     // Test Update
-    //     $fetchedProduct->label = $label + 2;
-    //     $updatedProduct = Product::update($fetchedProduct);
-    //     $this->assertNotSame($fetchedProduct, $updatedProduct);
+    /**
+     * @expectedException \Shoprunback\Error\NotFoundError
+     */
+    public function testCanDelete()
+    {
+        RestClient::getClient()->disableTesting();
 
-    //     // Test Delete
-    //     Product::delete($updatedProduct->id);
-    //     // Must throw an Exception
-    //     Product::retrieve($updatedProduct->id);
-    // }
+        $product = self::createDefault();
+        $product->save();
+
+        $product->remove();
+
+        Product::retrieve($product->id);
+    }
 }
