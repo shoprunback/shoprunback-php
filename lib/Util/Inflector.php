@@ -6,6 +6,48 @@ abstract class Inflector
 {
     const RESSOURCES_NAMESPACE = 'Shoprunback\Resources\\';
 
+    public static function classify($string)
+    {
+        if (substr($string, -3) == 'ies') {
+            return rtrim(ucfirst($string), 'ies') . 'y';
+        } else {
+            return rtrim(ucfirst($string), 's');
+        }
+    }
+
+    public static function pluralize($className)
+    {
+        if (substr($className, -1) == 'y') {
+            return strtolower(rtrim($className, 'y') . 'ies');
+        } else if (substr($className, -1) == 's') {
+            return strtolower($className);
+        } else {
+            return strtolower($className . 's');
+        }
+    }
+
+    public static function isPluralClassName($className, $string) {
+        return self::pluralize($className) == $string;
+    }
+
+    public static function isKnownResource($className) {
+        return class_exists(self::RESSOURCES_NAMESPACE . $className);
+    }
+
+    public static function addValueToMixed(&$mixed, $key, $value)
+    {
+        if (is_array($mixed)) {
+            $mixed[$key] = $value;
+        } else {
+            $mixed->$key = $value;
+        }
+    }
+
+    public static function isContainer($object)
+    {
+        return is_array($object) || is_object($object);
+    }
+
     public static function constantize($mixed, $inflectedClassName)
     {
         $inflectedClassName = self::RESSOURCES_NAMESPACE . str_replace(self::RESSOURCES_NAMESPACE, '', $inflectedClassName);
@@ -16,20 +58,6 @@ abstract class Inflector
         }
 
         return $object;
-    }
-
-    private static function addValueToMixed(&$mixed, $key, $value)
-    {
-        if (is_array($mixed)) {
-            $mixed[$key] = $value;
-        } else {
-            $mixed->$key = $value;
-        }
-    }
-
-    private static function isContainer($object)
-    {
-        return is_array($object) || is_object($object);
     }
 
     private static function inflectContainer($container)
@@ -50,32 +78,6 @@ abstract class Inflector
         }
 
         return $container;
-    }
-
-    public static function classify($string)
-    {
-        if (substr($string, -3) == 'ies') {
-            return rtrim(ucfirst($string), 'ies') . 'y';
-        } else {
-            return rtrim(ucfirst($string), 's');
-        }
-    }
-
-    public static function isPluralClassName($className, $string) {
-        return self::pluralize($className) == $string;
-    }
-
-    public static function pluralize($className)
-    {
-        if (substr($className, -1) == 'y') {
-            return strtolower(rtrim($className, 'y') . 'ies');
-        } else {
-            return strtolower($className . 's');
-        }
-    }
-
-    public static function isKnownResource($className) {
-        return class_exists(self::RESSOURCES_NAMESPACE . $className);
     }
 
     private static function getContent($key, $value)
