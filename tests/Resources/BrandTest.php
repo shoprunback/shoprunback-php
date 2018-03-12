@@ -115,8 +115,8 @@ final class BrandTest extends BaseTest
     {
         RestClient::getClient()->disableTesting();
 
-        $name = "name".get_called_class().rand();
-        $reference = "reference".get_called_class().rand();
+        $name = self::randomString();
+        $reference = self::randomString();
 
         $brand = new Brand();
         $brand->name = $name;
