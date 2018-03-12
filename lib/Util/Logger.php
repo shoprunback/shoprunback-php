@@ -15,7 +15,7 @@ class Logger
 
     static public function getFullPathToFile($dateToFormat = '')
     {
-        $date = $dateToFormat ? date($dateToFormat, self::FILENAME_DATE_FORMAT) : date(self::FILENAME_DATE_FORMAT);
+        $date = $dateToFormat ? date(self::FILENAME_DATE_FORMAT, $dateToFormat) : date(self::FILENAME_DATE_FORMAT);
         return LOG_PATH . $date . self::FILE_EXTENSION;
     }
 
@@ -43,14 +43,14 @@ class Logger
         self::log($message, self::ERROR);
     }
 
-    static public function getContent($dateToFormat = '')
+    static public function getLogsOfDate($dateToFormat = '')
     {
         return file_get_contents(self::getFullPathToFile($dateToFormat));
     }
 
-    static public function getLastLine($dateToFormat = '')
+    static public function getLastMessageOfDate($dateToFormat = '')
     {
-        $allLines = explode("\n", self::getContent($dateToFormat));
+        $allLines = explode("\n", self::getLogsOfDate($dateToFormat));
         return $allLines[count($allLines) - 2];
     }
 }
