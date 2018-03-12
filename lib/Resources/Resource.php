@@ -58,16 +58,6 @@ abstract class Resource
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
 
-    public function put()
-    {
-        $restClient = RestClient::getClient();
-
-        $data = $this->getDataForApi();
-
-        $response = $restClient->request(self::updateEndpoint($this->id), \Shoprunback\RestClient::PUT, $data);
-        $this->copyValues($this->newFromMixed($response->getBody()));
-    }
-
     public function save()
     {
         if ($this->isPersisted()) {
@@ -77,11 +67,19 @@ abstract class Resource
         }
     }
 
-    public function post()
+    private function post()
     {
         $restClient = RestClient::getClient();
         $data = $this->formatResourceForApi();
         $response = $restClient->request(self::createEndpoint(), \Shoprunback\RestClient::POST, $data);
+        $this->copyValues($this->newFromMixed($response->getBody()));
+    }
+
+    private function put()
+    {
+        $restClient = RestClient::getClient();
+        $data = $this->formatResourceForApi();
+        $response = $restClient->request(self::updateEndpoint($this->id), \Shoprunback\RestClient::PUT, $data);
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
 
