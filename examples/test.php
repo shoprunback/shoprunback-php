@@ -26,7 +26,7 @@ use Shoprunback\Util\Inflector      as Inflector;
 
 // Fetch and update Brand
 RestClient::getClient()->enableTesting();
-RestClient::getClient()->disableTesting();
+// RestClient::getClient()->disableTesting();
 // $brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
 // var_dump($brand);
 // var_dump($brand->_origValues);
