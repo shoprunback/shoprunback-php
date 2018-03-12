@@ -40,16 +40,16 @@ final class BrandTest extends BaseTest
         $this->assertTrue($brand->isPersisted());
     }
 
-    public function testNewBrandIsPersisted()
+    public function testNewBrandIsNotPersisted()
     {
         $brand = new Brand();
         $this->assertFalse($brand->isPersisted());
     }
 
-    public function testNewBrandWithIdIsPersisted()
+    public function testNewBrandWithIdIsNotPersisted()
     {
         $brand = new Brand();
-        $brand->id = rand();
+        $brand->id = 1;
         $this->assertFalse($brand->isPersisted());
     }
 
@@ -57,7 +57,7 @@ final class BrandTest extends BaseTest
     {
         RestClient::getClient()->enableTesting();
 
-        $brand = Brand::retrieve(rand());
+        $brand = Brand::retrieve(1);
         $this->assertTrue($brand->isPersisted());
     }
 
@@ -65,7 +65,7 @@ final class BrandTest extends BaseTest
     {
         RestClient::getClient()->enableTesting();
 
-        $brand = Brand::retrieve(rand());
+        $brand = Brand::retrieve(1);
 
         $this->checkIfHasNeededValues($brand);
     }
@@ -81,53 +81,34 @@ final class BrandTest extends BaseTest
         $this->checkIfHasNeededValues($brand);
     }
 
-    public function testCanUpdateOneMocked()
-    {
-        RestClient::getClient()->enableTesting();
-
-        $brand = Brand::retrieve(rand());
-
-        // Check if _origValues has the same values as the base object since the object hasn't been changed
-        $brandWithoutOrigValues = clone $brand;
-        unset($brandWithoutOrigValues->_origValues);
-        $this->assertSame($brand->_origValues->id, $brandWithoutOrigValues->id);
-        $this->assertSame($brand->_origValues->name, $brandWithoutOrigValues->name);
-        $this->assertSame($brand->_origValues->reference, $brandWithoutOrigValues->reference);
-
-        $name = $brand->name . 'A';
-        $brand->name = $name;
-        $this->assertNotSame($brand->name, $brandWithoutOrigValues->name);
-
-        $brand = Brand::update($brand);
-        $this->assertSame($brand->name, $name);
-
-        // Check if _origValues has correctly been changed
-        $brandWithoutOrigValues = clone $brand;
-        unset($brandWithoutOrigValues->_origValues);
-        $this->assertSame($brand->_origValues->id, $brandWithoutOrigValues->id);
-        $this->assertSame($brand->_origValues->name, $brandWithoutOrigValues->name);
-        $this->assertSame($brand->_origValues->reference, $brandWithoutOrigValues->reference);
-    }
-
-    public function testCanCreateMocked()
+    public function testCanSaveMocked()
     {
         RestClient::getClient()->enableTesting();
 
         $brand = new Brand();
-        $brand->name = 'final fantasy';
-        $brand->reference = 'final-fantasy';
-        $createdBrand = Brand::create($brand);
+        $brand->name = self::randomString();
+        $brand->reference = self::randomString();
+        $brand->save();
 
-        $this->assertNotNull($createdBrand->id);
-        $this->assertSame($createdBrand->name, 'final fantasy');
-        $this->assertSame($createdBrand->reference, 'final-fantasy');
+        $this->assertNotNull($brand->id);
+    }
+
+    public function testCanUpdateOneMocked()
+    {
+        $brand = Brand::retrieve(1);
+        $brand->name = self::randomString();
+        $brand->save();
+
+        $retrievedBrand = Brand::retrieve(1);
+
+        $this->assertNotSame($retrievedBrand->name, $brand->name);
     }
 
     public function testCanDeleteMocked()
     {
         RestClient::getClient()->enableTesting();
 
-        $this->assertNull(Brand::delete(rand()));
+        $this->assertNull(Brand::delete(1));
     }
 
     public function testCanSaveNewBrand()
@@ -155,6 +136,14 @@ final class BrandTest extends BaseTest
         $this->assertGreaterThan(0, count($brands));
     }
 
+    /**
+     * @expectedException \Shoprunback\Error\NotFoundError
+     */
+    public function testCanRetrieveUnknown()
+    {
+        Brand::retrieve(self::randomString());
+    }
+
     public function testCanRetrieve()
     {
         RestClient::getClient()->disableTesting();
@@ -173,7 +162,7 @@ final class BrandTest extends BaseTest
 
         $brand = Brand::all()[0];
         $brandId = $brand->id;
-        $name = "name".get_called_class().rand();
+        $name = self::randomString();
         $brand->name = $name;
         $brand->save();
 
@@ -185,20 +174,12 @@ final class BrandTest extends BaseTest
     /**
      * @expectedException \Shoprunback\Error\NotFoundError
      */
-    public function testCanRetrieveUnknown()
-    {
-        Brand::retrieve("name".get_called_class().rand());
-    }
-
-    /**
-     * @expectedException \Shoprunback\Error\NotFoundError
-     */
     public function testCanDelete()
     {
         RestClient::getClient()->disableTesting();
 
-        $name = "name".get_called_class().rand();
-        $reference = "reference".get_called_class().rand();
+        $name = self::randomString();
+        $reference = self::randomString();
 
         $brand = new Brand();
         $brand->name = $name;

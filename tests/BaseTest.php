@@ -19,4 +19,9 @@ class BaseTest extends TestCase
     {
       $this->assertEquals(0, 0);
     }
+
+    protected function randomString()
+    {
+        return get_called_class() . '-' . uniqid();
+    }
 }
