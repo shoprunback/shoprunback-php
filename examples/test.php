@@ -39,7 +39,6 @@ RestClient::getClient()->enableTesting();
 // $brand = Brand::retrieve('5d87e512-719b-44b2-8f5c-43cc6bb7b834'); // JULIEN
 // Brand::delete('2a9f7ec0-2fa7-4758-be9c-5aa0abd8ed38');
 
-
 // RestClient::getClient()->disableTesting();
 // $brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
 // $brand->name = 'AH';
@@ -47,9 +46,10 @@ RestClient::getClient()->enableTesting();
 // var_dump($brand);
 
 // $brand = new Brand();
+// $brand->id = 'toto';
 // $brand->name = 'final fantasy';
 // $brand->reference = 'final-fantasy';
-// $createdBrand = Brand::create($brand);
+// $brand->save();
 // var_dump($createdBrand);
 
 // $result = Brand::delete('05f044d4-e385-496c-a242-aae58e19df87');
@@ -68,15 +68,21 @@ RestClient::getClient()->enableTesting();
 // $brand->name = 'Delfino place 2';
 // $brand->save();
 
-
-
 // $products = Product::all();
 // var_dump($products);die;
 
 // $product = new Product();
 // $product->label = 'lebeau';
-// $product->reference = 'blague-de-merde';
+// $product->reference = rand();
 // $product->weight_grams = 10000000;
+// $product->brand = $brand;
+// $createdProduct = Product::create($product);
+
+// $product = new Product();
+// $product->label = 'lebeau';
+// $product->reference = rand();
+// $product->weight_grams = 10000000;
+// $product->brand = $brand;
 // $createdProduct = Product::create($product);
 // var_dump($createdProduct);
 

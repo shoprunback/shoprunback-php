@@ -3,8 +3,8 @@
 namespace Shoprunback;
 
 use Shoprunback\Error\Error;
-use Shoprunback\Error\ReferenceTaken;
 use Shoprunback\Error\UnknownApiToken;
+use Shoprunback\Error\RestClientError;
 use Shoprunback\Util\Logger;
 use Shoprunback\RestResponse;
 use Shoprunback\RestMocker;
@@ -150,34 +150,9 @@ class RestClient
         }
 
         if (!$response->success()) {
-            throw new \Exception('Request Error'); #TODO return the RestResponse object (or its errors)
+            throw new RestClientError($response); #TODO return the RestResponse object (or its errors)
         }
 
         return $response;
     }
-
-    // public static function get($apiUrlResource, $id = '')
-    // {
-    //     if ($id) {
-    //         return self::request($apiUrlResource . '/' . $id, 'GET');
-    //     }
-
-    //     return self::request($apiUrlResource, 'GET');
-    // }
-
-    // public static function save($apiUrlResource, $object, $noId = false)
-    // {
-    //     $json = json_encode($object);
-
-    //     if (isset($object->id)) {
-    //         // If the object exists in SRB DB
-    //         $getResult = $noId ? Shoprunback::isSetup() : self::get($apiUrlResource, $object->id);
-    //         if ($getResult) {
-    //             return $noId ? self::request($apiUrlResource, 'PUT', $json) : self::request($apiUrlResource . '/' . $object->id, 'PUT', $json);
-    //         }
-    //     }
-
-    //     // If no object->id and no getResult
-    //     return self::request($apiUrlResource, 'POST', $json);
-    // }
 }

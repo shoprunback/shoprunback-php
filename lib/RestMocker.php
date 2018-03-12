@@ -3,7 +3,6 @@
 namespace Shoprunback;
 
 use Shoprunback\Error\Error;
-use Shoprunback\Error\ReferenceTaken;
 use Shoprunback\Error\UnknownApiToken;
 use Shoprunback\Util\Logger;
 use Shoprunback\RestClient;
@@ -100,33 +99,4 @@ class RestMocker
 
         return json_decode(file_get_contents($filePath,  FILE_USE_INCLUDE_PATH));
     }
-
-    // private static function getIdFromEndpoint($endpoint){
-    //     $explodedEndpoint = explode('/', $endpoint);
-    //     if (count($explodedEndpoint) <= 1) {
-    //         return false;
-    //     }
-
-    //     return $explodedEndpoint[1];
-    // }
-
-    // private static function returnKeyOfObjectWithId($array, $idToFind)
-    // {
-    //     if ([$key, $resource] => self::returnKeyAndValueOfObjectWithId($array, $idToFind)) {
-    //         return $key;
-    //     }
-
-    //     return false;
-    // }
-
-    // private static function returnKeyAndValueOfObjectWithId($array, $idToFind)
-    // {
-    //     foreach ($array as $key => $value) {
-    //         if ($value->id == $idToFind) {
-    //             return [$key, $value];
-    //         }
-    //     }
-
-    //     return false;
-    // }
 }

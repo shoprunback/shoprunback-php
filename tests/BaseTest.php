@@ -10,14 +10,18 @@ use Shoprunback\Shoprunback;
 
 class BaseTest extends TestCase
 {
-    public function __construct()
+    public function setUp()
     {
-        parent::__construct();
         require_once dirname(__FILE__, 2) . '/init.php';
     }
 
     public function testNothing()
     {
       $this->assertEquals(0, 0);
+    }
+
+    protected function randomString()
+    {
+        return get_called_class() . '-' . uniqid();
     }
 }
