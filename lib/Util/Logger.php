@@ -13,17 +13,24 @@ class Logger
     const INFO = 0;
     const ERROR = 1;
 
-    static private function log($message = '', $logType = self::INFO)
+    static public function getFullPathToFile($dateToFormat = '')
     {
-        $filePath = LOG_PATH . date(self::FILENAME_DATE_FORMAT) . self::FILE_EXTENSION;
+        $date = $dateToFormat ? date($dateToFormat, self::FILENAME_DATE_FORMAT) : date(self::FILENAME_DATE_FORMAT);
+        return LOG_PATH . $date . self::FILE_EXTENSION;
+    }
 
-        // Create file if doesn't exist
-        if (!file_exists($filePath)) {
+    static private function createFile()
+    {
+        if (!file_exists(self::getFullPathToFile())) {
             fopen($filePath, 'w');
             chmod($filePath, 0777);
         }
+    }
 
-        error_log(date(self::LINE_PREFIX_DATE_FORMAT) . $message . "\n", 3, $filePath);
+    static private function log($message = '', $logType = self::INFO)
+    {
+        self::createFile();
+        error_log(date(self::LINE_PREFIX_DATE_FORMAT) . $message . "\n", 3, self::getFullPathToFile());
     }
 
     static public function info($message = '')
@@ -36,10 +43,14 @@ class Logger
         self::log($message, self::ERROR);
     }
 
+    static public function getContent($dateToFormat = '')
+    {
+        return file_get_contents(self::getFullPathToFile($dateToFormat));
+    }
+
     static public function getLastLine($dateToFormat = '')
     {
-        $date = $dateToFormat ? date($dateToFormat, self::FILENAME_DATE_FORMAT) : date(self::FILENAME_DATE_FORMAT);
-        $allLines = explode("\n", file_get_contents(LOG_PATH . $date . self::FILE_EXTENSION));
+        $allLines = explode("\n", self::getContent($dateToFormat));
         return $allLines[count($allLines) - 2];
     }
 }

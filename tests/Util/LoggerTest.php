@@ -10,18 +10,12 @@ use \Shoprunback\RestClient;
 use \Shoprunback\Resources\Brand;
 use \Shoprunback\Util\Logger;
 
-define('LOG_FILENAME', date('Y-m-d') . '.txt');
-define('TESTS_LOG_PATH', dirname(__FILE__, 3) . '/logs/');
-
 final class LoggerTest extends BaseTest
 {
-    const CLASS_NAME = 'Shoprunback\Util\Logger';
-    const PATH_TO_LOG_FILE = TESTS_LOG_PATH . LOG_FILENAME;
-
     public function testCanCreateFile()
     {
         Logger::info('Test');
-        $this->assertTrue(file_exists(self::PATH_TO_LOG_FILE));
+        $this->assertTrue(file_exists(Logger::getFullPathToFile()));
     }
 
     public function testCanLogError()
