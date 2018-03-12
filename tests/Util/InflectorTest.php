@@ -9,6 +9,7 @@ use \Tests\BaseTest;
 use \Shoprunback\RestClient;
 use \Shoprunback\Resources\Brand;
 use \Shoprunback\Util\Inflector;
+use \Shoprunback\Util\Container;
 
 final class InflectorTest extends BaseTest
 {
@@ -43,29 +44,6 @@ final class InflectorTest extends BaseTest
         $this->assertTrue(Inflector::isPluralClassName('Countries', 'countries'));
     }
 
-    public function testAddToMixed()
-    {
-        $array = [];
-        $key = 'key';
-        $value = 'value';
-        Inflector::addValueToMixed($array, $key, $value);
-        $this->assertSame($array[$key], $value);
-
-        $object = new \stdClass();
-        Inflector::addValueToMixed($object, $key, $value);
-        $this->assertSame($object->$key, $value);
-
-        $this->assertSame($array[$key], $object->$key);
-    }
-
-    public function testIsContainer()
-    {
-        $this->assertTrue(Inflector::isContainer([1]));
-        $this->assertTrue(Inflector::isContainer(new \stdClass()));
-        $this->assertFalse(Inflector::isContainer('a'));
-        $this->assertFalse(Inflector::isContainer(1));
-    }
-
     public function testConstantizeOne()
     {
         RestClient::getClient()->enableTesting();
@@ -76,10 +54,10 @@ final class InflectorTest extends BaseTest
         $arrayBrand = ['name' => $name, 'reference' => $reference];
         $objectBrand = new \stdClass();
         $objectBrand->name = $name;
-        $objectBrand->reference = $name;
+        $objectBrand->reference = $reference;
 
-        $inflectedArrayBrand = Inflector::($arrayBrand, 'Brand');
-        $inflectedObjectBrand = Inflector::($objectBrand, 'Brand');
+        $inflectedArrayBrand = Inflector::constantize($arrayBrand, 'Brand');
+        $inflectedObjectBrand = Inflector::constantize($objectBrand, 'Brand');
 
         $this->assertSame($inflectedArrayBrand->name, $name);
         $this->assertSame($inflectedObjectBrand->name, $name);
@@ -87,6 +65,6 @@ final class InflectorTest extends BaseTest
         $this->assertSame($inflectedArrayBrand->reference, $reference);
         $this->assertSame($inflectedObjectBrand->reference, $reference);
 
-        $this->assertSame($inflectedArrayBrand->_origValues, $inflectedObjectBrand->_origValues);
+        $this->assertEquals($inflectedArrayBrand->_origValues, $inflectedObjectBrand->_origValues);
     }
 }

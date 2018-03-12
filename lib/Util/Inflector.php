@@ -2,6 +2,8 @@
 
 namespace Shoprunback\Util;
 
+use Shoprunback\Util\Container;
+
 abstract class Inflector
 {
     const RESSOURCES_NAMESPACE = 'Shoprunback\Resources\\';
@@ -34,20 +36,6 @@ abstract class Inflector
         return class_exists(self::RESSOURCES_NAMESPACE . $className);
     }
 
-    public static function addValueToMixed(&$mixed, $key, $value)
-    {
-        if (is_array($mixed)) {
-            $mixed[$key] = $value;
-        } else {
-            $mixed->$key = $value;
-        }
-    }
-
-    public static function isContainer($object)
-    {
-        return is_array($object) || is_object($object);
-    }
-
     public static function constantize($mixed, $inflectedClassName)
     {
         $inflectedClassName = self::RESSOURCES_NAMESPACE . str_replace(self::RESSOURCES_NAMESPACE, '', $inflectedClassName);
@@ -65,7 +53,7 @@ abstract class Inflector
         $inflectedContainer = !is_array($container) ? new \StdClass() : [];
 
         foreach ($container as $key => $value) {
-            self::addValueToMixed($inflectedContainer, $key, self::getContent($key, $value));
+            Container::addValueToContainer($inflectedContainer, $key, self::getContent($key, $value));
         }
 
         return $inflectedContainer;
@@ -73,7 +61,7 @@ abstract class Inflector
 
     private static function searchSRBObjectsInArrayOrObject($container) #TODO rename
     {
-        if (self::isContainer($container)) {
+        if (Container::isContainer($container)) {
             return self::inflectContainer($container);
         }
 
