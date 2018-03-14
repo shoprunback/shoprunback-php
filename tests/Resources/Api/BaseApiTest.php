@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Resources;
+namespace Tests\Resources\Api;
 
 use Tests\Resources\BaseResourceTest;
 

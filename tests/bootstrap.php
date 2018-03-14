@@ -12,9 +12,9 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 // Load root class
 require_once __DIR__ . '/BaseTest.php';
 
-// Load Resources classes and traits
+// Load Base classes and traits
 require_once __DIR__ . '/Resources/BaseResourceTest.php';
-require_once __DIR__ . '/Resources/BaseMockerTest.php';
-require_once __DIR__ . '/Resources/BaseApiTest.php';
 require_once __DIR__ . '/Resources/BrandTrait.php';
 require_once __DIR__ . '/Resources/ProductTrait.php';
+require_once __DIR__ . '/Resources/Mocker/BaseMockerTest.php';
+require_once __DIR__ . '/Resources/Api/BaseApiTest.php';

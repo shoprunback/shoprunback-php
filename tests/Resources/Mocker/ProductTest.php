@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Resources\Mocker;
 
-use \Tests\Resources\BaseMockerTest;
+use \Tests\Resources\Mocker\BaseMockerTest;
 
 use \Shoprunback\Resources\Product;
 use \Shoprunback\RestClient;
 
-final class ProductMockerTest extends BaseMockerTest
+final class ProductTest extends BaseMockerTest
 {
     use \Tests\Resources\ProductTrait;
 

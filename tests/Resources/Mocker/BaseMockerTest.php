@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Resources;
+namespace Tests\Resources\Mocker;
 
 use Tests\Resources\BaseResourceTest;
 

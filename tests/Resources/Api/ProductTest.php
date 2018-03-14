@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Tests\Resources\Api;
 
-use \Tests\Resources\BaseApiTest;
+use \Tests\Resources\Api\BaseApiTest;
 
 use \Shoprunback\Resources\Product;
 use \Shoprunback\RestClient;
 use \Shoprunback\Error\NotFoundError;
 
-final class ProductApiTest extends BaseApiTest
+final class ProductTest extends BaseApiTest
 {
     use \Tests\Resources\ProductTrait;
 
