@@ -10,7 +10,7 @@ abstract class BaseResourceTest extends BaseTest
 {
     abstract public static function getResourceClass();
 
-    abstract protected function checkIfHasNeededValues($object);
+    abstract protected static function createDefault();
 
-    abstract static protected function createDefault();
+    abstract protected function checkIfHasNeededValues($object);
 }
