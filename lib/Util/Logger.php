@@ -22,8 +22,8 @@ class Logger
     static private function createFile()
     {
         if (!file_exists(self::getFullPathToFile())) {
-            fopen($filePath, 'w');
-            chmod($filePath, 0777);
+            fopen(self::getFullPathToFile(), 'w');
+            chmod(self::getFullPathToFile(), 0777);
         }
     }
 
