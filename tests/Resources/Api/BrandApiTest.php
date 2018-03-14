@@ -2,44 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Tests\Resources;
+namespace Tests\Resources\Api;
 
-use \Tests\BaseTest;
+use \Tests\Resources\BaseApiTest;
 
 use \Shoprunback\Resources\Brand;
 use \Shoprunback\RestClient;
 use \Shoprunback\Error\NotFoundError;
 
-final class BrandTest extends BaseTest
+final class BrandApiTest extends BaseApiTest
 {
-    public static function getResourceClass()
-    {
-        return 'Shoprunback\Resources\Brand';
-    }
-
-    protected static function createDefault()
-    {
-        $name = self::randomString();
-        $reference = self::randomString();
-
-        $brand = new Brand();
-        $brand->name = $name;
-        $brand->reference = $reference;
-
-        return $brand;
-    }
-
-    protected function checkIfHasNeededValues($brand)
-    {
-        $this->assertInstanceOf(
-            self::getResourceClass(),
-            $brand
-        );
-
-        $this->assertNotNull($brand->id);
-        $this->assertNotNull($brand->name);
-        $this->assertNotNull($brand->reference);
-    }
+    use \Tests\Resources\BrandTrait;
 
     public function testBrandFromApiIsPersisted()
     {
@@ -50,27 +23,6 @@ final class BrandTest extends BaseTest
 
         $brand->save();
         $this->assertTrue($brand->isPersisted());
-    }
-
-    public function testCanSaveMocked()
-    {
-        RestClient::getClient()->enableTesting();
-
-        $brand = self::createDefault();
-        $brand->save();
-
-        $this->assertNotNull($brand->id);
-    }
-
-    public function testCanUpdateOneMocked()
-    {
-        $brand = Brand::retrieve(1);
-        $brand->name = self::randomString();
-        $brand->save();
-
-        $retrievedBrand = Brand::retrieve(1);
-
-        $this->assertNotSame($retrievedBrand->name, $brand->name);
     }
 
     public function testCanSaveNewBrand()

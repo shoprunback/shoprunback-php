@@ -7,8 +7,14 @@
         <env name="SHOPRUNBACK_TOKEN" value="1yHRJJFgzU4McVsuicLNbtm5sPpYeEW2eCpt5-awiWRx7218wg"/>
     </php>
     <testsuites>
-        <testsuite name="Shoprunback API Wrapper Test Suite">
-            <directory suffix="Test.php">tests</directory>
+        <testsuite name="shoprunback">
+            <directory>tests/ShoprunbackTest.php</directory>
+        </testsuite>
+        <testsuite name="mocker">
+            <directory suffix="Test.php">tests/Resources/Mocker</directory>
+        </testsuite>
+        <testsuite name="api">
+            <directory suffix="Test.php">tests/Resources/Api</directory>
         </testsuite>
     </testsuites>
 </phpunit>

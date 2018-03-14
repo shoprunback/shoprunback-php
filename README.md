@@ -8,4 +8,7 @@ Next, you can call all the objects by calling the objects with their namespace (
 
 To run tests, go in your command line, then go to the root folder and execute this line:
 ```phpunit```
-Because of the way it is coded (for the moment), you must wait a minute before relaunching a test.
+If you want to run a precise test:
+```phpunit path/to/FileTest.php```
+If you want to run your tests on a local environment, copy the ```phpunit.xml``` into a new file, set your custom vars and run:
+```phpunit -c my_phpunit_file.xml```
