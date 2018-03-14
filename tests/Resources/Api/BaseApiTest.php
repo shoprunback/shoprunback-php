@@ -25,6 +25,17 @@ abstract class BaseApiTest extends BaseResourceTest
         $this->assertFalse($object->isPersisted());
     }
 
+    public function testObjectFromApiIsPersisted()
+    {
+        RestClient::getClient()->disableTesting();
+
+        $object = self::createDefault();
+        $this->assertFalse($object->isPersisted());
+
+        $object->save();
+        $this->assertTrue($object->isPersisted());
+    }
+
     public function testCanFetchAll()
     {
         RestClient::getClient()->disableTesting();
@@ -48,5 +59,20 @@ abstract class BaseApiTest extends BaseResourceTest
         $retrievedObject = static::getResourceClass()::retrieve($object->id);
 
         $this->assertSame($object->id, $retrievedObject->id);
+    }
+
+    /**
+     * @expectedException \Shoprunback\Error\NotFoundError
+     */
+    public function testCanDelete()
+    {
+        RestClient::getClient()->disableTesting();
+
+        $object = self::createDefault();
+        $object->save();
+
+        $object->remove();
+
+        self::getResourceClass()::retrieve($object->id);
     }
 }

@@ -33,6 +33,16 @@ abstract class BaseMockerTest extends BaseResourceTest
         $this->checkIfHasNeededValues($object);
     }
 
+    public function testCanSaveMocked()
+    {
+        RestClient::getClient()->enableTesting();
+
+        $object = self::createDefault();
+        $object->save();
+
+        $this->assertNotNull($object->id);
+    }
+
     public function testCanDeleteMocked()
     {
         RestClient::getClient()->enableTesting();

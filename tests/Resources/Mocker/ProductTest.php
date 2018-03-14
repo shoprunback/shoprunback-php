@@ -13,16 +13,6 @@ final class ProductTest extends BaseMockerTest
 {
     use \Tests\Resources\ProductTrait;
 
-    public function testCanSaveMocked()
-    {
-        RestClient::getClient()->enableTesting();
-
-        $product = self::createDefault();
-        $product->save();
-
-        $this->assertNotNull($product->id);
-    }
-
     public function testCanUpdateOneMocked()
     {
         $product = Product::retrieve(1);

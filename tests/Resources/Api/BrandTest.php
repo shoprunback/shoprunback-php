@@ -14,17 +14,6 @@ final class BrandTest extends BaseApiTest
 {
     use \Tests\Resources\BrandTrait;
 
-    public function testBrandFromApiIsPersisted()
-    {
-        RestClient::getClient()->disableTesting();
-
-        $brand = self::createDefault();
-        $this->assertFalse($brand->isPersisted());
-
-        $brand->save();
-        $this->assertTrue($brand->isPersisted());
-    }
-
     public function testCanSaveNewBrand()
     {
         RestClient::getClient()->disableTesting();
@@ -54,20 +43,5 @@ final class BrandTest extends BaseApiTest
         $retrievedBrand = Brand::retrieve($brandId);
 
         $this->assertSame($retrievedBrand->name, $name);
-    }
-
-    /**
-     * @expectedException \Shoprunback\Error\NotFoundError
-     */
-    public function testCanDelete()
-    {
-        RestClient::getClient()->disableTesting();
-
-        $brand = self::createDefault();
-        $brand->save();
-
-        $brand->remove();
-
-        Brand::retrieve($brand->id);
     }
 }
