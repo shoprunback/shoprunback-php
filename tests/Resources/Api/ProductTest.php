@@ -56,6 +56,21 @@ final class ProductTest extends BaseApiTest
         $this->assertEquals($product->brand->getDirtyKeys(), []);
     }
 
+    public function testExistingProductNewBrand()
+    {
+        RestClient::getClient()->disableTesting();
+
+        $product = Product::all()[0];
+        $brand = new Brand();
+        $brand->name = BrandTest::randomString();
+        $brand->reference = BrandTest::randomString();
+
+        $product->brand = $brand;
+
+        $this->assertEquals($product->getDirtyKeys(), ['brand']);
+        $this->assertEquals($product->brand->getDirtyKeys(), ['name', 'reference'], "\$canonicalize = true", $delta = 0.0, $maxDepth = 10, $canonicalize = true);
+    }
+
     public function testExistingProductExistingUpdatedBrand()
     {
         RestClient::getClient()->disableTesting();

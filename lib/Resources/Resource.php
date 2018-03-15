@@ -138,19 +138,21 @@ abstract class Resource
             } elseif (!Inflector::isKnownResource($key)) {
                 $keyPreged = preg_replace('/_id$/', '', $key);
 
-                if ($keyPreged != $key
-                    && Inflector::isKnownResource($keyPreged)
-                    && $this->$keyPreged->id != $value
-                ) {
-                    $dirtyKeys[] = $key;
+                if ($keyPreged != $key && Inflector::isKnownResource($keyPreged) && $this->$keyPreged->id != $value) {
+                    if (!empty($this->$keyPreged->id) && $this->$keyPreged->id != $this->_origValues->$key) {
+                        $dirtyKeys[] = $key;
+                    }
 
-                    if (isset($dirtyKeys[$keyPreged]) && !$this->$keyPreged->isDirty()) {
-                        unset($dirtyKeys[$keyPreged]);
+                    $keyToUnset = array_search($keyPreged, $dirtyKeys);
+                    if ($keyToUnset && !$this->$keyPreged->isDirty()) {
+                        unset($dirtyKeys[$keyToUnset]);
                     }
                 }
             }
 
-            if ($keyToUnset = array_search($key, $dirtyKeys) && Inflector::isKnownResource($key) && !$value->isDirty()) {
+            // If nested resource is a different one, but an unchanged one
+            $keyToUnset = array_search($key, $dirtyKeys);
+            if ($keyToUnset && Inflector::isKnownResource($key) && !$value->isDirty()) {
                 unset($dirtyKeys[$keyToUnset]);
             }
         }

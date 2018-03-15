@@ -43,7 +43,7 @@ final class ProductTest extends BaseMockerTest
 
         $product->brand = $brand;
 
-        $this->assertEquals($product->getDirtyKeys(), ['label', 'reference', 'weight_grams', 'brand_id'], "\$canonicalize = true", $delta = 0.0, $maxDepth = 10, $canonicalize = true);
+        $this->assertEquals($product->getDirtyKeys(), ['label', 'reference', 'weight_grams', 'brand', 'brand_id'], "\$canonicalize = true", $delta = 0.0, $maxDepth = 10, $canonicalize = true);
         $this->assertEquals($product->brand->getDirtyKeys(), ['name', 'reference'], "\$canonicalize = true", $delta = 0.0, $maxDepth = 10, $canonicalize = true);
     }
 
@@ -61,21 +61,6 @@ final class ProductTest extends BaseMockerTest
         $this->assertEquals($product->brand->getDirtyKeys(), []);
     }
 
-    public function testExistingProductNewBrand()
-    {
-        RestClient::getClient()->enableTesting();
-
-        $product = Product::retrieve(1);
-        $brand = new Brand();
-        $brand->name = BrandTest::randomString();
-        $brand->reference = BrandTest::randomString();
-
-        $product->brand = $brand;
-
-        $this->assertEquals($product->getDirtyKeys(), ['brand']);
-        $this->assertEquals($product->brand->getDirtyKeys(), ['name', 'reference'], "\$canonicalize = true", $delta = 0.0, $maxDepth = 10, $canonicalize = true);
-    }
-
     public function testExistingProductUpdatedBrand()
     {
         RestClient::getClient()->enableTesting();
@@ -83,7 +68,7 @@ final class ProductTest extends BaseMockerTest
         $product = Product::retrieve(1);
         $product->brand->name = BrandTest::randomString();
 
-        $this->assertEquals($product->getDirtyKeys(), []);
+        $this->assertEquals($product->getDirtyKeys(), ['brand']);
         $this->assertEquals($product->brand->getDirtyKeys(), ['name']);
     }
 }
