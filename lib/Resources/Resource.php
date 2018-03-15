@@ -19,9 +19,34 @@ abstract class Resource
         $this->_origValues = new \stdClass();
     }
 
+    public function __set($key, $value)
+    {
+        if ($this->belongsTo($key)) {
+            $attributeId = $key . '_id';
+            $this->$attributeId = $value->id;
+        }
+
+        $this->$key = $value;
+    }
+
     abstract static function getBelongsTo();
 
     abstract static function getAcceptNestedAttributes();
+
+    public function belongsTo($key)
+    {
+        return in_array($key, static::getBelongsTo());
+    }
+
+    public function acceptNestedAttribute($key)
+    {
+        return in_array($key, static::getAcceptNestedAttributes());
+    }
+
+    public function display($resourceString)
+    {
+        return $resourceString . ' (' . $this->id . ')';
+    }
 
     public static function indexEndpoint() {
         $className = explode('\\', get_called_class());
@@ -74,7 +99,7 @@ abstract class Resource
     private function post()
     {
         $restClient = RestClient::getClient();
-        $data = $this->formatResourceForApi();
+        $data = $this->getResourceBody();
         $response = $restClient->request(self::createEndpoint(), \Shoprunback\RestClient::POST, $data);
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
@@ -82,7 +107,7 @@ abstract class Resource
     private function put()
     {
         $restClient = RestClient::getClient();
-        $data = $this->formatResourceForApi();
+        $data = $this->getResourceBody();
         $response = $restClient->request(self::updateEndpoint($this->id), \Shoprunback\RestClient::PUT, $data);
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
@@ -95,35 +120,123 @@ abstract class Resource
         $response = $restClient->request(self::deleteEndpoint($this->id), \Shoprunback\RestClient::DELETE);
     }
 
-    public function formatResourceForApi()
+    public function printResourceBody()
     {
+        echo $this . ': ' . json_encode($this->getResourceBody(false)) . "\n";
+    }
+
+    public function getDirtyKeys()
+    {
+        $dirtyKeys = [];
+        foreach ($this as $key => $value) {
+            if (
+                $key != '_origValues'
+                && $key != 'id'
+                && $this->isKeyDirty($key)
+            ) {
+                $dirtyKeys[] = $key;
+            } elseif (!Inflector::isKnownResource($key)) {
+                $keyPreged = preg_replace('/_id$/', '', $key);
+
+                if ($keyPreged != $key
+                    && Inflector::isKnownResource($keyPreged)
+                    && $this->$keyPreged->id != $value
+                ) {
+                    $dirtyKeys[] = $key;
+
+                    if (isset($dirtyKeys[$keyPreged]) && !$this->$keyPreged->isDirty()) {
+                        unset($dirtyKeys[$keyPreged]);
+                    }
+                }
+            }
+
+            if ($keyToUnset = array_search($key, $dirtyKeys) && Inflector::isKnownResource($key) && !$value->isDirty()) {
+                unset($dirtyKeys[$keyToUnset]);
+            }
+        }
+
+        return $dirtyKeys;
+    }
+
+    public function isDirty()
+    {
+        foreach ($this as $key => $value) {
+            if ($key != '_origValues' && $this->isKeyDirty($key)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function isKeyDirty($key)
+    {
+        if (Inflector::isKnownResource($key)) {
+            return $this->$key->isDirty() || $this->checkIfDirty($this->{$key . '_id'});
+        } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) {
+            foreach ($this->$key as $value) {
+                if ($value->isDirty()) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        return $this->checkIfDirty($key);
+    }
+
+    public function checkIfDirty($key)
+    {
+        return !property_exists($this->_origValues, $key) || $this->$key != $this->_origValues->$key;
+    }
+
+    public function getResourceBody($save = true)
+    {
+        // #TODO manage belongsTo and belongsToOptional
         foreach (static::getBelongsTo() as $parent) {
+            if (!property_exists($this, $parent)) {
+                continue;
+            }
+
             $parentId = $parent . '_id';
+
+            if (property_exists($this->$parent, 'id')) {
+                $this->$parentId = $this->$parent->id;
+            }
 
             if (!$this->$parent->isPersisted()) {
                 if (!in_array($parent, static::getAcceptNestedAttributes())) {
+                    if ($save) {
+                        $this->$parent->save();
+                    }
+                }
+            } elseif ($this->$parent->isDirty()) {
+                if ($save) {
                     $this->$parent->save();
-                    $this->$parentId = $this->$parent->id;
-                    unset($this->$parent);
                 }
-            } else {
-                if (!isset($this->$parentId) || empty($this->$parentId)) {
-                    $this->$parentId = $this->$parent->id;
-                }
-
-                unset($this->$parent);
             }
         }
 
         $data = new \stdClass();
         foreach ($this as $key => $value) {
-            // Check if we need to take the value
-            if (!isset($this->_origValues->$key) || $this->_origValues->$key != $value) {
+            if (
+                $key != '_origValues'
+                && $this->isKeyDirty($key)
+                && (
+                    !isset($this->{$key . '_id'})
+                    || (
+                        !$save
+                        && $value->isDirty()
+                    )
+                )
+            ) {
                 $data->$key = self::getChildren($key, $value);
             }
         }
 
-        unset($data->_origValues);
+        unset($data->id);
+        unset($data->_origValues);;
 
         return $data;
     }
@@ -131,12 +244,12 @@ abstract class Resource
     private function getChildren($key, $value)
     {
         if (Inflector::isKnownResource($key)) { // If it is a resource
-            return $value->formatResourceForApi();
+            return $value->getResourceBody();
         } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) { // If it is an array of resources
             $arrayOfResources = [];
 
             foreach ($value as $k => $resource) {
-                $arrayOfResources[] = $resource->formatResourceForApi();
+                $arrayOfResources[] = $resource->getResourceBody();
             }
 
             return $arrayOfResources;
@@ -148,6 +261,12 @@ abstract class Resource
     public static function newFromMixed($mixed)
     {
         $resource = Inflector::constantize($mixed, get_called_class());
+        foreach ($resource as $key => $value) {
+            if (is_object($value) && Inflector::isKnownResource($key)) {
+                $class = get_class($value);
+                $resource->$key = $class::newFromMixed($value);
+            }
+        }
         $resource->copyValues($resource);
         return $resource;
     }

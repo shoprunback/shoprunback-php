@@ -6,9 +6,9 @@ namespace Tests\Resources\Api;
 
 use \Tests\Resources\Api\BaseApiTest;
 
+use \Shoprunback\Resources\Brand;
 use \Shoprunback\Resources\Product;
 use \Shoprunback\RestClient;
-use \Shoprunback\Error\NotFoundError;
 
 final class ProductTest extends BaseApiTest
 {
@@ -43,5 +43,28 @@ final class ProductTest extends BaseApiTest
         $retrievedProduct = Product::retrieve($productId);
 
         $this->assertSame($retrievedProduct->label, $label);
+    }
+
+    public function testExistingProductExistingBrand()
+    {
+        RestClient::getClient()->disableTesting();
+
+        $product = Product::all()[0];
+        $product->brand = Brand::all()[1];
+
+        $this->assertEquals($product->getDirtyKeys(), ['brand_id']);
+        $this->assertEquals($product->brand->getDirtyKeys(), []);
+    }
+
+    public function testExistingProductExistingUpdatedBrand()
+    {
+        RestClient::getClient()->disableTesting();
+
+        $product = Product::all()[0];
+        $product->brand = Brand::all()[1];
+        $product->brand->name = BrandTest::randomString();
+
+        $this->assertEquals($product->getDirtyKeys(), ['brand_id', 'brand']);
+        $this->assertEquals($product->brand->getDirtyKeys(), ['name']);
     }
 }

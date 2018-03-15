@@ -26,7 +26,103 @@ use Shoprunback\Util\Inflector      as Inflector;
 
 // Fetch and update Brand
 RestClient::getClient()->enableTesting();
-// RestClient::getClient()->disableTesting();
+RestClient::getClient()->disableTesting();
+
+// $brand = Brand::retrieve(1);
+// $brand->printResourceBody();
+// $brand->name = 'toto';
+// $brand->printResourceBody();
+
+
+// $product = Product::retrieve(1);
+// $product->brand = Brand::retrieve(1);
+// $product->printResourceBody();
+
+// $product = Product::retrieve(1);
+// $product->brand = Brand::retrieve(1);
+// $product->brand->name = 'mario';
+// $product->printResourceBody();
+
+// $product = Product::retrieve(1);
+// $brand = new Brand();
+// $brand->name = 'toto';
+// $brand->reference = 'toto';
+// $product->brand = $brand;
+// $product->printResourceBody();
+
+// $product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
+// $product->brand = Brand::retrieve('5c07f77f-6db7-41cc-95d2-5bbfdb10ddb6');
+// var_dump($product->_origValues);
+// var_dump($product->brand);
+// $product->printResourceBody();
+
+
+
+// $brand = new Brand();
+// $brand->name = 'lol';
+// $brand->reference = 'lol';
+// $brand->printResourceBody();
+// var_dump($brand->getDirtyKeys());
+
+// echo '<br>____________________________________________________________________________________<br>';
+
+// $product = new Product();
+// $product->label = 'lol';
+// $product->reference = 'lol';
+// $product->brand = new Brand();
+// $product->brand->name = 'nana';
+// $product->brand->reference = 'nana';
+// $product->printResourceBody();
+// var_dump($product->getDirtyKeys());
+
+// echo '<br>____________________________________________________________________________________<br>';
+
+// $product = new Product();
+// $product->label = 'lol';
+// $product->reference = 'lol';
+// $product->brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454');
+// $product->printResourceBody();
+// var_dump($product->getDirtyKeys());
+
+// echo '<br>____________________________________________________________________________________<br>';
+
+// $product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
+// $product->brand->name = 'lol';
+// $product->printResourceBody();
+// var_dump($product->getDirtyKeys());
+
+// echo '<br>____________________________________________________________________________________<br>';
+
+
+// $product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
+// $product->brand = Brand::retrieve('fe8e3e93-be16-46af-8a42-f80ec91ea7fe');
+// $product->printResourceBody();
+// var_dump($product->getDirtyKeys());
+
+// echo '<br>____________________________________________________________________________________<br>';
+
+$product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
+$product->brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454');
+$product->brand->name = 'adad';
+$product->printResourceBody();
+var_dump($product->getDirtyKeys());
+// var_dump($product);
+
+// echo '<br>____________________________________________________________________________________<br>';
+
+
+
+
+
+
+
+// $product = new Product();
+// fejfie
+// $product->brand = Brand::retrieve(...);
+// $product->brand->name = 'newname';
+// $product->save();
+
+
 // $brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
 // var_dump($brand);
 // var_dump($brand->_origValues);
@@ -128,7 +224,6 @@ RestClient::getClient()->enableTesting();
 
 // Fetch an order and display it with its first item and brand
 // $order = Order::fetch('poppytest');
-// var_dump($order->display(), $order->items[0]->product->display(), $order->items[0]->product->brand->display());
 
 // Fetch a Shipback and display its content that must have the correct class name
 // $shipback = Shipback::fetch('166bc3f3-1a08-42b6-bc72-f731105f8785');

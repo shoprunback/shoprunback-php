@@ -10,9 +10,9 @@ class Brand extends Resource
     use Create;
     use Delete;
 
-    public function display()
+    public function __toString()
     {
-        return $this->name;
+        return $this->display($this->name);
     }
 
     public static function getBelongsTo()

@@ -29,7 +29,7 @@ abstract class BaseApiTest extends BaseResourceTest
     {
         RestClient::getClient()->disableTesting();
 
-        $object = self::createDefault();
+        $object = static::createDefault();
         $this->assertFalse($object->isPersisted());
 
         $object->save();
@@ -68,11 +68,11 @@ abstract class BaseApiTest extends BaseResourceTest
     {
         RestClient::getClient()->disableTesting();
 
-        $object = self::createDefault();
+        $object = static::createDefault();
         $object->save();
 
         $object->remove();
 
-        self::getResourceClass()::retrieve($object->id);
+        static::getResourceClass()::retrieve($object->id);
     }
 }

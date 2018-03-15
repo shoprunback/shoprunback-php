@@ -37,7 +37,7 @@ abstract class BaseMockerTest extends BaseResourceTest
     {
         RestClient::getClient()->enableTesting();
 
-        $object = self::createDefault();
+        $object = static::createDefault();
         $object->save();
 
         $this->assertNotNull($object->id);

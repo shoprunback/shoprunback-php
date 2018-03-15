@@ -18,3 +18,7 @@ require_once __DIR__ . '/Resources/BrandTrait.php';
 require_once __DIR__ . '/Resources/ProductTrait.php';
 require_once __DIR__ . '/Resources/Mocker/BaseMockerTest.php';
 require_once __DIR__ . '/Resources/Api/BaseApiTest.php';
+
+// Load tests
+require_once __DIR__ . '/Resources/Mocker/BrandTest.php';
+require_once __DIR__ . '/Resources/Api/BrandTest.php';

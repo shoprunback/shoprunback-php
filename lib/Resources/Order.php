@@ -4,8 +4,8 @@ namespace Shoprunback\Resources;
 
 class Order extends Resource
 {
-    public function display()
+    public function __toString()
     {
-        return $this->order_number;
+        return $this->display($this->order_number);
     }
 }
