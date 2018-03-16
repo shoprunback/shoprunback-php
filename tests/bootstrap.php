@@ -19,6 +19,11 @@ require_once __DIR__ . '/Resources/ProductTrait.php';
 require_once __DIR__ . '/Resources/Mocker/BaseMockerTest.php';
 require_once __DIR__ . '/Resources/Api/BaseApiTest.php';
 
-// Load tests
-require_once __DIR__ . '/Resources/Mocker/BrandTest.php';
-require_once __DIR__ . '/Resources/Api/BrandTest.php';
+// ------------------------------------------------------------------------------
+// FOR THE FOLOWWING, SOME LOADS ARE REQUIRED FOR SOME TESTS BUT WILL FAIL OTHERS
+// ------------------------------------------------------------------------------
+
+// Needed to test ProductTest
+// Will fail BrandTest
+// require_once __DIR__ . '/Resources/Mocker/BrandTest.php';
+// require_once __DIR__ . '/Resources/Api/BrandTest.php';

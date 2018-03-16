@@ -60,4 +60,20 @@ trait ProductTrait
             $product->brand
         );
     }
+
+    public function testPrintProductBody()
+    {
+        $label = static::randomString();
+        $reference = static::randomString();
+
+        $product = new Product();
+        $product->label = $label;
+        $product->reference = $reference;
+
+        $label = json_encode($label);
+        $reference = json_encode($reference);
+
+        $this->expectOutputString($product . ': {"label":' . $label . ',"reference":' . $reference . '}' . "\n");
+        $product->printResourceBody();
+    }
 }

@@ -49,4 +49,12 @@ abstract class BaseMockerTest extends BaseResourceTest
 
         $this->assertNull(static::getResourceClass()::delete(1));
     }
+
+    public function testGetUnchangedResourceBody()
+    {
+        RestClient::getClient()->enableTesting();
+
+        $resource = static::getResourceClass()::retrieve(1);
+        $this->assertEquals(count(get_object_vars($resource->getResourceBody(false))), 0);
+    }
 }

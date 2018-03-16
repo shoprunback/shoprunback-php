@@ -45,7 +45,7 @@ final class ProductTest extends BaseApiTest
         $this->assertSame($retrievedProduct->label, $label);
     }
 
-    public function testExistingProductExistingBrand()
+    public function testGetExistingProductExistingBrandDirtyKeys()
     {
         RestClient::getClient()->disableTesting();
 
@@ -56,7 +56,7 @@ final class ProductTest extends BaseApiTest
         $this->assertEquals($product->brand->getDirtyKeys(), []);
     }
 
-    public function testExistingProductNewBrand()
+    public function testGetExistingProductNewBrandDirtyKeys()
     {
         RestClient::getClient()->disableTesting();
 
@@ -71,7 +71,7 @@ final class ProductTest extends BaseApiTest
         $this->assertEquals($product->brand->getDirtyKeys(), ['name', 'reference'], "\$canonicalize = true", $delta = 0.0, $maxDepth = 10, $canonicalize = true);
     }
 
-    public function testExistingProductExistingUpdatedBrand()
+    public function testGetExistingProductExistingUpdatedBrandDirtyKeys()
     {
         RestClient::getClient()->disableTesting();
 
@@ -81,5 +81,35 @@ final class ProductTest extends BaseApiTest
 
         $this->assertEquals($product->getDirtyKeys(), ['brand_id', 'brand']);
         $this->assertEquals($product->brand->getDirtyKeys(), ['name']);
+    }
+
+    public function testGetRetrievedProductRetrievedBrandBody()
+    {
+        RestClient::getClient()->enableTesting();
+
+        $product = Product::all()[0];
+        $product->brand = Brand::all()[1];
+
+        $resourceBody = $product->getResourceBody(false);
+        $this->assertEquals(count(get_object_vars($resourceBody)), 1);
+        $this->assertTrue(property_exists($resourceBody, 'brand_id'));
+    }
+
+    public function testGetRetrievedProductChangeRetrievedBrandBody()
+    {
+        RestClient::getClient()->enableTesting();
+
+        $product = Product::all()[0];
+        $product->brand = Brand::all()[1];
+        $product->brand->name = BrandTest::randomString();
+
+        $resourceBody = $product->getResourceBody(false);
+        $this->assertEquals(count(get_object_vars($resourceBody)), 2);
+        $this->assertTrue(property_exists($resourceBody, 'brand'));
+        $this->assertTrue(property_exists($resourceBody, 'brand_id'));
+
+        $resourceBody = $product->brand->getResourceBody(false);
+        $this->assertEquals(count(get_object_vars($resourceBody)), 1);
+        $this->assertTrue(property_exists($resourceBody, 'name'));
     }
 }

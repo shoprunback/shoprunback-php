@@ -203,25 +203,23 @@ abstract class Resource
 
             $parentId = $parent . '_id';
 
-            if (property_exists($this->$parent, 'id')) {
+            if (property_exists($this->$parent, 'id') && !empty($this->$parent->id)) {
                 $this->$parentId = $this->$parent->id;
             }
 
             if (!$this->$parent->isPersisted()) {
-                if (!in_array($parent, static::getAcceptNestedAttributes())) {
-                    if ($save) {
-                        $this->$parent->save();
-                    }
-                }
-            } elseif ($this->$parent->isDirty()) {
-                if ($save) {
+                if (!in_array($parent, static::getAcceptNestedAttributes()) && $save) {
                     $this->$parent->save();
                 }
+            } elseif ($this->$parent->isDirty() && $save) {
+                $this->$parent->save();
             }
         }
 
         $data = new \stdClass();
         foreach ($this as $key => $value) {
+            $keyPreged = preg_replace('/_id$/', '', $key);
+
             if (
                 $key != '_origValues'
                 && $this->isKeyDirty($key)
@@ -232,13 +230,21 @@ abstract class Resource
                         && $value->isDirty()
                     )
                 )
+                && (
+                    $keyPreged == $key
+                    || (
+                        Inflector::isKnownResource($keyPreged)
+                        && property_exists($this->$keyPreged, 'id')
+                        && !empty($this->$keyPreged->id)
+                    )
+                )
             ) {
                 $data->$key = self::getChildren($key, $value);
             }
         }
 
         unset($data->id);
-        unset($data->_origValues);;
+        unset($data->_origValues);
 
         return $data;
     }
@@ -255,9 +261,9 @@ abstract class Resource
             }
 
             return $arrayOfResources;
-        } else {
-            return $value;
         }
+
+        return $value;
     }
 
     public static function newFromMixed($mixed)

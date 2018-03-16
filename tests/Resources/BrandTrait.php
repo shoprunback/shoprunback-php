@@ -34,4 +34,20 @@ trait BrandTrait
         $this->assertNotNull($brand->name);
         $this->assertNotNull($brand->reference);
     }
+
+    public function testPrintBrandBody()
+    {
+        $name = static::randomString();
+        $reference = static::randomString();
+
+        $brand = new Brand();
+        $brand->name = $name;
+        $brand->reference = $reference;
+
+        $name = json_encode($name);
+        $reference = json_encode($reference);
+
+        $this->expectOutputString($brand . ': {"name":' . $name . ',"reference":' . $reference . '}' . "\n");
+        $brand->printResourceBody();
+    }
 }
