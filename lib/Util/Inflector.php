@@ -59,7 +59,7 @@ abstract class Inflector
         return $inflectedContainer;
     }
 
-    private static function searchSRBObjectsInArrayOrObject($container) #TODO rename
+    private static function searchResourceInContainer($container)
     {
         if (Container::isContainer($container)) {
             return self::inflectContainer($container);
@@ -81,7 +81,7 @@ abstract class Inflector
         } else {
             $valueToAdd = self::isKnownResource($className)
                 ? self::constantize($value, $className)
-                : self::searchSRBObjectsInArrayOrObject($value);
+                : self::searchResourceInContainer($value);
         }
 
         return $valueToAdd;
