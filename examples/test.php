@@ -99,28 +99,30 @@ RestClient::getClient()->disableTesting();
 // $product->printResourceBody();
 // var_dump($product->getDirtyKeys());
 
+// $product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
+// $product->brand = Brand::retrieve($product->brand->id);
+// $product->printResourceBody();
+// var_dump($product->getDirtyKeys());
+
 // echo '<br>____________________________________________________________________________________<br>';
 
-$product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
-$product->brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454');
-$product->brand->name = 'adad';
-$product->printResourceBody();
-var_dump($product->getDirtyKeys());
+// $product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
+// $product->brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454');
+// $product->brand->name = 'adad';
+// $product->printResourceBody();
+// var_dump($product->getDirtyKeys());
 // var_dump($product);
 
 // echo '<br>____________________________________________________________________________________<br>';
 
 
+$product = Product::all()[0][0];
+$product->brand_id = Brand::all()[0][1]->id;
+$product->printResourceBody();
+var_dump($product->getDirtyKeys());
 
 
 
-
-
-// $product = new Product();
-// fejfie
-// $product->brand = Brand::retrieve(...);
-// $product->brand->name = 'newname';
-// $product->save();
 
 
 // $brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL

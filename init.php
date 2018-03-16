@@ -5,6 +5,7 @@ require dirname(__FILE__) . '/lib/Shoprunback.php';
 require dirname(__FILE__) . '/lib/RestClient.php';
 require dirname(__FILE__) . '/lib/RestResponse.php';
 require dirname(__FILE__) . '/lib/RestMocker.php';
+require dirname(__FILE__) . '/lib/Pagination.php';
 
 // Load resources
 require dirname(__FILE__) . '/lib/Resources/traits/Retrieve.php';

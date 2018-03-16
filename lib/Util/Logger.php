@@ -13,7 +13,7 @@ class Logger
     const INFO = 0;
     const ERROR = 1;
 
-    static public function getFullPathToFile($dateToFormat = '')
+    static public function getFullPathToFile($dateToFormat = '', $logType = self::INFO)
     {
         $date = $dateToFormat ? date(self::FILENAME_DATE_FORMAT, $dateToFormat) : date(self::FILENAME_DATE_FORMAT);
         return LOG_PATH . $date . self::FILE_EXTENSION;
@@ -30,7 +30,7 @@ class Logger
     static private function log($message = '', $logType = self::INFO)
     {
         self::createFile();
-        error_log(date(self::LINE_PREFIX_DATE_FORMAT) . $message . "\n", 3, self::getFullPathToFile());
+        error_log(date(self::LINE_PREFIX_DATE_FORMAT) . $message . "\n", 3, self::getFullPathToFile('', $logType));
     }
 
     static public function info($message = '')

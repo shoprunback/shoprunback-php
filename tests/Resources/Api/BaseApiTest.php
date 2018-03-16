@@ -39,7 +39,7 @@ abstract class BaseApiTest extends BaseResourceTest
     public function testCanFetchAll()
     {
         RestClient::getClient()->disableTesting();
-        $this->assertGreaterThan(0, count(static::getResourceClass()::all()));
+        $this->assertGreaterThan(0, count(static::getResourceClass()::all()[0]));
     }
 
     /**
@@ -54,7 +54,7 @@ abstract class BaseApiTest extends BaseResourceTest
     {
         RestClient::getClient()->disableTesting();
 
-        $object = static::getResourceClass()::all()[0];
+        $object = static::getResourceClass()::all()[0][0];
 
         $retrievedObject = static::getResourceClass()::retrieve($object->id);
 

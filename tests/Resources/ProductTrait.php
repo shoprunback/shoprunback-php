@@ -26,7 +26,7 @@ trait ProductTrait
         if (RestClient::getClient()->isTesting()) {
             $product->brand = Brand::retrieve(1);
         } else {
-            $product->brand = Brand::all()[0];
+            $product->brand = Brand::all()[0][0];
         }
 
         return $product;

@@ -48,9 +48,15 @@ abstract class Resource
         return $resourceString . ' (' . $this->id . ')';
     }
 
-    public static function indexEndpoint() {
+    public static function indexEndpoint($page = 1) {
         $className = explode('\\', get_called_class());
-        return Inflector::pluralize(end($className));
+        $endpoint = Inflector::pluralize(end($className));
+
+        if ($page > 1) {
+            $endpoint .= '?page=' . $page;
+        }
+
+        return $endpoint;
     }
 
     public static function showEndpoint($id) {
@@ -174,7 +180,7 @@ abstract class Resource
     public function isKeyDirty($key)
     {
         if (Inflector::isKnownResource($key)) {
-            return $this->$key->isDirty() || $this->checkIfDirty($this->{$key . '_id'});
+            return $this->$key->isDirty() || $this->checkIfDirty($key . '_id');
         } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) {
             foreach ($this->$key as $value) {
                 if ($value->isDirty()) {
@@ -183,6 +189,17 @@ abstract class Resource
             }
 
             return false;
+        }
+
+        $keyPreged = preg_replace('/_id$/', '', $key);
+        if (
+            $keyPreged != $key
+            && Inflector::isKnownResource($keyPreged)
+            && isset($this->$keyPreged->id)
+            && !empty($this->$keyPreged->id)
+            && $this->$key != $this->$keyPreged->id
+        ) {
+            return true;
         }
 
         return $this->checkIfDirty($key);
@@ -203,7 +220,7 @@ abstract class Resource
 
             $parentId = $parent . '_id';
 
-            if (property_exists($this->$parent, 'id') && !empty($this->$parent->id)) {
+            if (property_exists($this->$parent, 'id') && !empty($this->$parent->id) && !$this->isKeyDirty($parent)) {
                 $this->$parentId = $this->$parent->id;
             }
 
@@ -305,5 +322,12 @@ abstract class Resource
     public function getOriginalValues()
     {
         return $this->_origValues;
+    }
+
+    public static function getResourceName()
+    {
+        $className = get_called_class();
+        $explode = explode('\\', $className);
+        return strtolower(end($explode));
     }
 }
