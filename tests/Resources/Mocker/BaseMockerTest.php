@@ -26,8 +26,8 @@ abstract class BaseMockerTest extends BaseResourceTest
     {
         RestClient::getClient()->enableTesting();
 
-        $objects = static::getResourceClass()::all()[0];
-        $this->assertEquals(count($objects), 2);
+        $objects = static::getResourceClass()::all();
+        $this->assertEquals($objects->count, 2);
 
         $object = $objects[0];
         $this->checkIfHasNeededValues($object);

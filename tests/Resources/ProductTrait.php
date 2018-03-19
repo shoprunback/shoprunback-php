@@ -13,7 +13,7 @@ trait ProductTrait
         return 'Shoprunback\Resources\Product';
     }
 
-    protected static function createDefault()
+    public static function createDefault()
     {
         $label = self::randomString();
         $reference = self::randomString();
@@ -26,7 +26,7 @@ trait ProductTrait
         if (RestClient::getClient()->isTesting()) {
             $product->brand = Brand::retrieve(1);
         } else {
-            $product->brand = Brand::all()[0][0];
+            $product->brand = Brand::all()[0];
         }
 
         return $product;

@@ -34,7 +34,7 @@ final class ProductTest extends BaseApiTest
     {
         RestClient::getClient()->disableTesting();
 
-        $product = Product::all()[0][0];
+        $product = Product::all()[0];
         $productId = $product->id;
         $label = self::randomString();
         $product->label = $label;
@@ -49,8 +49,8 @@ final class ProductTest extends BaseApiTest
     {
         RestClient::getClient()->disableTesting();
 
-        $product = Product::all()[0][0];
-        $product->brand = Brand::all()[0][1];
+        $product = Product::all()[0];
+        $product->brand = Brand::all()[1];
 
         $this->assertEquals($product->getDirtyKeys(), ['brand_id']);
         $this->assertEquals($product->brand->getDirtyKeys(), []);
@@ -60,7 +60,7 @@ final class ProductTest extends BaseApiTest
     {
         RestClient::getClient()->disableTesting();
 
-        $product = Product::all()[0][0];
+        $product = Product::all()[0];
         $brand = new Brand();
         $brand->name = BrandTest::randomString();
         $brand->reference = BrandTest::randomString();
@@ -75,8 +75,8 @@ final class ProductTest extends BaseApiTest
     {
         RestClient::getClient()->disableTesting();
 
-        $product = Product::all()[0][0];
-        $product->brand = Brand::all()[0][1];
+        $product = Product::all()[0];
+        $product->brand = Brand::all()[1];
         $product->brand->name = BrandTest::randomString();
 
         $this->assertEquals($product->getDirtyKeys(), ['brand_id', 'brand']);
@@ -87,8 +87,8 @@ final class ProductTest extends BaseApiTest
     {
         RestClient::getClient()->enableTesting();
 
-        $product = Product::all()[0][0];
-        $product->brand = Brand::all()[0][1];
+        $product = Product::all()[0];
+        $product->brand = Brand::all()[1];
 
         $resourceBody = $product->getResourceBody(false);
         $this->assertEquals(count(get_object_vars($resourceBody)), 1);
@@ -99,8 +99,8 @@ final class ProductTest extends BaseApiTest
     {
         RestClient::getClient()->enableTesting();
 
-        $product = Product::all()[0][0];
-        $product->brand = Brand::all()[0][1];
+        $product = Product::all()[0];
+        $product->brand = Brand::all()[1];
         $product->brand->name = BrandTest::randomString();
 
         $resourceBody = $product->getResourceBody(false);

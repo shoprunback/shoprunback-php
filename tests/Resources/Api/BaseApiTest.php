@@ -39,7 +39,32 @@ abstract class BaseApiTest extends BaseResourceTest
     public function testCanFetchAll()
     {
         RestClient::getClient()->disableTesting();
-        $this->assertGreaterThan(0, count(static::getResourceClass()::all()[0]));
+        $this->assertGreaterThan(0, static::getResourceClass()::all()->count);
+    }
+
+    public function testCanIterate()
+    {
+        RestClient::getClient()->disableTesting();
+
+        $resources = static::getResourceClass()::all();
+        $this->assertNotNull($resources[0]->id);
+        $this->assertNotNull($resources[$resources->count - 1]);
+
+        if ($resources->count > $resources->per_page) {
+            $this->assertNotNull($resources[$resources->per_page + 1]->id);
+        }
+    }
+
+
+    /**
+     * @expectedException \Shoprunback\Error\ResourceNumberDoesntExists
+     */
+    public function testExceptionOnWrongIteration()
+    {
+        RestClient::getClient()->disableTesting();
+
+        $resources = static::getResourceClass()::all();
+        $resources[$resources->count + 1];
     }
 
     /**
@@ -54,7 +79,7 @@ abstract class BaseApiTest extends BaseResourceTest
     {
         RestClient::getClient()->disableTesting();
 
-        $object = static::getResourceClass()::all()[0][0];
+        $object = static::getResourceClass()::all()[0];
 
         $retrievedObject = static::getResourceClass()::retrieve($object->id);
 

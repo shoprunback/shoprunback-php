@@ -330,4 +330,9 @@ abstract class Resource
         $explode = explode('\\', $className);
         return strtolower(end($explode));
     }
+
+    public static function getAllResourceKey()
+    {
+        return static::getResourceName() . 's';
+    }
 }

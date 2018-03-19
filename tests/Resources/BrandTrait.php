@@ -11,7 +11,7 @@ trait BrandTrait
         return 'Shoprunback\Resources\Brand';
     }
 
-    protected static function createDefault()
+    public static function createDefault()
     {
         $name = self::randomString();
         $reference = self::randomString();

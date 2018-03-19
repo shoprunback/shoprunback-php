@@ -34,7 +34,7 @@ final class BrandTest extends BaseApiTest
     {
         RestClient::getClient()->disableTesting();
 
-        $brand = Brand::all()[0][0];
+        $brand = Brand::all()[0];
         $brandId = $brand->id;
         $name = self::randomString();
         $brand->name = $name;

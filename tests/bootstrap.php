@@ -25,5 +25,5 @@ require_once __DIR__ . '/Resources/Api/BaseApiTest.php';
 
 // Needed to test ProductTest
 // Will fail BrandTest
-require_once __DIR__ . '/Resources/Mocker/BrandTest.php';
-require_once __DIR__ . '/Resources/Api/BrandTest.php';
+// require_once __DIR__ . '/Resources/Mocker/BrandTest.php';
+// require_once __DIR__ . '/Resources/Api/BrandTest.php';

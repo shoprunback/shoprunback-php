@@ -116,8 +116,17 @@ RestClient::getClient()->disableTesting();
 // echo '<br>____________________________________________________________________________________<br>';
 
 
-$product = Product::all()[0][0];
-$product->brand_id = Brand::all()[0][1]->id;
+$products = Product::all();
+
+echo $products->count;
+var_dump($products[0]->id);
+var_dump($products[10]->id);
+var_dump($products[25]->id);
+var_dump($products[99]->id);
+die;
+
+$products = Product::all();
+$product->brand_id = Brand::all()[1]->id;
 $product->printResourceBody();
 var_dump($product->getDirtyKeys());
 
