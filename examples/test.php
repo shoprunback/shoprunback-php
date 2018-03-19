@@ -119,15 +119,14 @@ RestClient::getClient()->disableTesting();
 $products = Product::all();
 $brands = Brand::all();
 
-// echo $products->count;
-// foreach ($products as $product) {
-//     var_dump($product->label);
-// }
-
-echo $brands->count;
-foreach ($brands as $brand) {
-    var_dump($brand->name);
+foreach ($products as $product) {
+    echo($product->label) . "\n";
 }
+
+// echo $brands->count;
+// foreach ($brands as $brand) {
+//     echo($brand->name) . "\n";
+// }
 die;
 
 $products = Product::all();

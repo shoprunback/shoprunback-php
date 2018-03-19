@@ -31,12 +31,20 @@ class ResourceIterator extends \ArrayObject
 
     public function getIterator()
     {
-        return new \ArrayIterator($this->resources);
-    }
+        $i = 1;
+        $resourceIterator = self::getResourceName()::all();
+        $resources = $resourceIterator->resources;
 
-    public function getArrayCopy()
-    {
-        return $this->resources;
+        while (isset($resourceIterator->next_page) && !is_null($resourceIterator->next_page)) {
+            $i++;
+            $resourceIterator = self::getResourceName()::all($i);
+
+            foreach ($resourceIterator->resources as $resource) {
+                $resources[] = $resource;
+            }
+        }
+
+        return new \ArrayIterator($resources);
     }
 
     public function offsetGet($id)
