@@ -53,8 +53,9 @@ abstract class BaseApiTest extends BaseResourceTest
         if ($resources->count > $resources->per_page) {
             $this->assertNotNull($resources[$resources->per_page + 1]->id);
         }
-    }
 
+        $this->assertTrue(is_iterable($resources));
+    }
 
     /**
      * @expectedException \Shoprunback\Error\ResourceNumberDoesntExists

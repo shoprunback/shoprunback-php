@@ -29,6 +29,16 @@ class ResourceIterator extends \ArrayObject
         }
     }
 
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->resources);
+    }
+
+    public function getArrayCopy()
+    {
+        return $this->resources;
+    }
+
     public function offsetGet($id)
     {
         if (isset($this->resources[$id])) {
