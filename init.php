@@ -6,6 +6,7 @@ require dirname(__FILE__) . '/lib/RestClient.php';
 require dirname(__FILE__) . '/lib/RestResponse.php';
 require dirname(__FILE__) . '/lib/RestMocker.php';
 require dirname(__FILE__) . '/lib/ResourceIterator.php';
+require dirname(__FILE__) . '/lib/ResourceManager.php';
 
 // Load resources
 require dirname(__FILE__) . '/lib/Resources/traits/Retrieve.php';

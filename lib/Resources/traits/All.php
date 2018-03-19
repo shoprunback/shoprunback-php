@@ -2,7 +2,7 @@
 
 namespace Shoprunback\Resources;
 
-use Shoprunback\ResourceIterator;
+use Shoprunback\ResourceManager;
 use Shoprunback\RestClient;
 use Shoprunback\Util\Inflector;
 
@@ -13,7 +13,6 @@ trait All
         $restClient = RestClient::getClient();
         $response = $restClient->request(self::indexEndpoint($page), \Shoprunback\RestClient::GET);
 
-        # TODO Quelle page c'est ? S'il y a une prochaine page ? Combien de produits en tout ?
-        return new ResourceIterator($response->getBody(), get_called_class());
+        return new ResourceManager($response->getBody(), get_called_class());
     }
 }

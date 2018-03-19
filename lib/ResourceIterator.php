@@ -4,64 +4,71 @@ namespace Shoprunback;
 
 use Shoprunback\Error\ResourceNumberDoesntExists;
 
-class ResourceIterator extends \ArrayObject
+class ResourceIterator implements \Iterator, \ArrayAccess
 {
-    public function __construct($responseBody, $resourceName)
+    // Implements Iterator
+    private $position = 0;
+    public $manager;
+
+    public function __construct($manager)
     {
-        $this->per_page = 10;
+        $this->manager      = $manager;
+        $this->per_page     = $manager->per_page;
+        $this->next_page    = $manager->next_page;
+        $this->current_page = $manager->current_page;
+    }
 
-        if (isset($responseBody->pagination)) {
-            $this->count        = $responseBody->pagination->count;
-            $this->per_page     = $responseBody->pagination->per_page;
-            $this->next_page    = $responseBody->pagination->next_page;
-            $this->current_page = $responseBody->pagination->current_page;
-
-            $resourceKey = $resourceName::getAllResourceKey();
-            foreach ($responseBody->$resourceKey as $resource) {
-                $this->resources[] = $resourceName::newFromMixed($resource);
-            }
+    public function next()
+    {
+        if ($this->position == 9 && isset($this->current_page) && !is_null($this->next_page)) {
+            $this->position     = 0;
+            $this->manager      = $this->manager->getResourceClass()::all($this->next_page);
+            $this->per_page     = $this->manager->per_page;
+            $this->next_page    = $this->manager->next_page;
+            $this->current_page = $this->manager->current_page;
         } else {
-            $this->count = count($responseBody);
-
-            foreach ($responseBody as $resource) {
-                $this->resources[] = $resourceName::newFromMixed($resource);
-            }
+            $this->position++;
         }
     }
 
-    public function getIterator()
+    public function valid()
     {
-        $i = 1;
-        $resourceIterator = self::getResourceName()::all();
-        $resources = $resourceIterator->resources;
-
-        while (isset($resourceIterator->next_page) && !is_null($resourceIterator->next_page)) {
-            $i++;
-            $resourceIterator = self::getResourceName()::all($i);
-
-            foreach ($resourceIterator->resources as $resource) {
-                $resources[] = $resource;
-            }
-        }
-
-        return new \ArrayIterator($resources);
+        return isset($this->manager->resources[$this->position]);
     }
 
-    public function offsetGet($id)
+    public function current()
     {
-        if (isset($this->resources[$id])) {
-            return $this->resources[$id];
-        }
-
-        if ($id < $this->count) {
-            return self::getResourceName()::all(floor($id / $this->per_page))[$id % $this->per_page];
-        }
-
-        throw new ResourceNumberDoesntExists('There is ' . $this->count . ' ' . self::getResourceName()::getResourceName() . ' and the number asked was ' . $id);
+        return $this->manager->resources[$this->position];
     }
 
-    public function getResourceName()
+    public function key()
     {
-        return get_class($this[0]);
+        return $this->position;
+    }
+
+    public function rewind()
+    {
+        $this->position = 0;
+    }
+
+    // Implements ArrayAccess
+    public function offsetSet($offset, $value) {
+        if (is_null($offset)) {
+            $this->manager->resources[] = $value;
+        } else {
+            $this->manager->resources[$offset] = $value;
+        }
+    }
+
+    public function offsetExists($offset) {
+        return isset($this->manager->resources[$offset]);
+    }
+
+    public function offsetUnset($offset) {
+        unset($this->manager->resources[$offset]);
+    }
+
+    public function offsetGet($offset) {
+        return $this->offsetExists($offset) ? $this->manager->resources[$offset] : null;
     }
 }
