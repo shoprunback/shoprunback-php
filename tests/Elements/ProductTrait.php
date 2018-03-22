@@ -1,16 +1,16 @@
 <?php
 
-namespace Tests\Resources;
+namespace Tests\Elements;
 
-use \Shoprunback\Resources\Product;
-use \Shoprunback\Resources\Brand;
+use \Shoprunback\Elements\Product;
+use \Shoprunback\Elements\Brand;
 use \Shoprunback\RestClient;
 
 trait ProductTrait
 {
-    public static function getResourceClass()
+    public static function getElementClass()
     {
-        return 'Shoprunback\Resources\Product';
+        return 'Shoprunback\Elements\Product';
     }
 
     public static function createDefault()
@@ -35,7 +35,7 @@ trait ProductTrait
     protected function checkIfHasNeededValues($product)
     {
         $this->assertInstanceOf(
-            self::getResourceClass(),
+            self::getElementClass(),
             $product
         );
 
@@ -56,7 +56,7 @@ trait ProductTrait
 
         $this->assertSame($product->brand_id, $product->brand->id);
         $this->assertInstanceOf(
-            'Shoprunback\Resources\Brand',
+            'Shoprunback\Elements\Brand',
             $product->brand
         );
     }
@@ -74,6 +74,6 @@ trait ProductTrait
         $reference = json_encode($reference);
 
         $this->expectOutputString($product . ': {"label":' . $label . ',"reference":' . $reference . '}' . "\n");
-        $product->printResourceBody();
+        $product->printElementBody();
     }
 }

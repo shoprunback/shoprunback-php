@@ -5,23 +5,23 @@ require dirname(__FILE__) . '/lib/Shoprunback.php';
 require dirname(__FILE__) . '/lib/RestClient.php';
 require dirname(__FILE__) . '/lib/RestResponse.php';
 require dirname(__FILE__) . '/lib/RestMocker.php';
-require dirname(__FILE__) . '/lib/ResourceIterator.php';
-require dirname(__FILE__) . '/lib/ResourceManager.php';
+require dirname(__FILE__) . '/lib/ElementIterator.php';
+require dirname(__FILE__) . '/lib/ElementManager.php';
 
-// Load resources
-require dirname(__FILE__) . '/lib/Resources/traits/Retrieve.php';
-require dirname(__FILE__) . '/lib/Resources/traits/All.php';
-require dirname(__FILE__) . '/lib/Resources/traits/Update.php';
-require dirname(__FILE__) . '/lib/Resources/traits/Create.php';
-require dirname(__FILE__) . '/lib/Resources/traits/Delete.php';
-require dirname(__FILE__) . '/lib/Resources/Resource.php';
-// require dirname(__FILE__) . '/lib/Resources/ShoprunbackObject.php';
-require dirname(__FILE__) . '/lib/Resources/Brand.php';
-require dirname(__FILE__) . '/lib/Resources/Product.php';
-// require dirname(__FILE__) . '/lib/Resources/Item.php';
-// require dirname(__FILE__) . '/lib/Resources/Order.php';
-// require dirname(__FILE__) . '/lib/Resources/Shipback.php';
-// require dirname(__FILE__) . '/lib/Resources/User.php';
+// Load elements
+require dirname(__FILE__) . '/lib/Elements/traits/Retrieve.php';
+require dirname(__FILE__) . '/lib/Elements/traits/All.php';
+require dirname(__FILE__) . '/lib/Elements/traits/Update.php';
+require dirname(__FILE__) . '/lib/Elements/traits/Create.php';
+require dirname(__FILE__) . '/lib/Elements/traits/Delete.php';
+require dirname(__FILE__) . '/lib/Elements/Element.php';
+// require dirname(__FILE__) . '/lib/Elements/ShoprunbackObject.php';
+require dirname(__FILE__) . '/lib/Elements/Brand.php';
+require dirname(__FILE__) . '/lib/Elements/Product.php';
+// require dirname(__FILE__) . '/lib/Elements/Item.php';
+// require dirname(__FILE__) . '/lib/Elements/Order.php';
+// require dirname(__FILE__) . '/lib/Elements/Shipback.php';
+// require dirname(__FILE__) . '/lib/Elements/User.php';
 
 // Load Utils
 require dirname(__FILE__) . '/lib/Util/Container.php';
@@ -33,4 +33,4 @@ require dirname(__FILE__) . '/lib/Error/Error.php';
 require dirname(__FILE__) . '/lib/Error/UnknownApiToken.php';
 require dirname(__FILE__) . '/lib/Error/NotFoundError.php';
 require dirname(__FILE__) . '/lib/Error/RestClientError.php';
-require dirname(__FILE__) . '/lib/Error/ResourceNumberDoesntExists.php';
+require dirname(__FILE__) . '/lib/Error/ElementNumberDoesntExists.php';

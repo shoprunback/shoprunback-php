@@ -88,7 +88,6 @@ class RestMocker
             $pathParts = explode('/', $endpoint);
 
             if (count($pathParts) % 2 == 0) {
-                $resourceId = $pathParts[count($pathParts) - 1];
                 $filename = Inflector::classify($pathParts[count($pathParts) - 2]);
             } else {
                 $filename = $pathParts[count($pathParts) - 1];

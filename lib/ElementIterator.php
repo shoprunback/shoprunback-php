@@ -2,9 +2,9 @@
 
 namespace Shoprunback;
 
-use Shoprunback\Error\ResourceNumberDoesntExists;
+use Shoprunback\Error\ElementNumberDoesntExists;
 
-class ResourceIterator implements \Iterator, \ArrayAccess
+class ElementIterator implements \Iterator, \ArrayAccess
 {
     // Implements Iterator
     private $position = 0;
@@ -22,7 +22,7 @@ class ResourceIterator implements \Iterator, \ArrayAccess
     {
         if ($this->position == 9 && isset($this->current_page) && !is_null($this->next_page)) {
             $this->position     = 0;
-            $this->manager      = $this->manager->getResourceClass()::all($this->next_page);
+            $this->manager      = $this->manager->getElementClass()::all($this->next_page);
             $this->per_page     = $this->manager->per_page;
             $this->next_page    = $this->manager->next_page;
             $this->current_page = $this->manager->current_page;
@@ -33,12 +33,12 @@ class ResourceIterator implements \Iterator, \ArrayAccess
 
     public function valid()
     {
-        return isset($this->manager->resources[$this->position]);
+        return isset($this->manager->elements[$this->position]);
     }
 
     public function current()
     {
-        return $this->manager->resources[$this->position];
+        return $this->manager->elements[$this->position];
     }
 
     public function key()
@@ -54,21 +54,21 @@ class ResourceIterator implements \Iterator, \ArrayAccess
     // Implements ArrayAccess
     public function offsetSet($offset, $value) {
         if (is_null($offset)) {
-            $this->manager->resources[] = $value;
+            $this->manager->elements[] = $value;
         } else {
-            $this->manager->resources[$offset] = $value;
+            $this->manager->elements[$offset] = $value;
         }
     }
 
     public function offsetExists($offset) {
-        return isset($this->manager->resources[$offset]);
+        return isset($this->manager->elements[$offset]);
     }
 
     public function offsetUnset($offset) {
-        unset($this->manager->resources[$offset]);
+        unset($this->manager->elements[$offset]);
     }
 
     public function offsetGet($offset) {
-        return $this->offsetExists($offset) ? $this->manager->resources[$offset] : null;
+        return $this->offsetExists($offset) ? $this->manager->elements[$offset] : null;
     }
 }

@@ -3,15 +3,15 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require dirname(__FILE__, 2) . '/init.php';
+require dirname(dirname(__FILE__)) . '/init.php';
 
 use Shoprunback\Shoprunback         as Shoprunback;
-use Shoprunback\Resources\Brand     as Brand;
-use Shoprunback\Resources\Product   as Product;
-use Shoprunback\Resources\User      as User;
-use Shoprunback\Resources\Item      as Item;
-use Shoprunback\Resources\Order     as Order;
-use Shoprunback\Resources\Shipback  as Shipback;
+use Shoprunback\Elements\Brand      as Brand;
+use Shoprunback\Elements\Product    as Product;
+use Shoprunback\Elements\User       as User;
+use Shoprunback\Elements\Item       as Item;
+use Shoprunback\Elements\Order      as Order;
+use Shoprunback\Elements\Shipback   as Shipback;
 use Shoprunback\RestClient          as RestClient;
 use Shoprunback\Util\Converter      as Converter;
 use Shoprunback\Util\Logger         as Logger;
@@ -29,39 +29,39 @@ RestClient::getClient()->enableTesting();
 RestClient::getClient()->disableTesting();
 
 // $brand = Brand::retrieve(1);
-// $brand->printResourceBody();
+// $brand->printElementBody();
 // $brand->name = 'toto';
-// $brand->printResourceBody();
+// $brand->printElementBody();
 
 
 // $product = Product::retrieve(1);
 // $product->brand = Brand::retrieve(1);
-// $product->printResourceBody();
+// $product->printElementBody();
 
 // $product = Product::retrieve(1);
 // $product->brand = Brand::retrieve(1);
 // $product->brand->name = 'mario';
-// $product->printResourceBody();
+// $product->printElementBody();
 
 // $product = Product::retrieve(1);
 // $brand = new Brand();
 // $brand->name = 'toto';
 // $brand->reference = 'toto';
 // $product->brand = $brand;
-// $product->printResourceBody();
+// $product->printElementBody();
 
 // $product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
 // $product->brand = Brand::retrieve('5c07f77f-6db7-41cc-95d2-5bbfdb10ddb6');
 // var_dump($product->_origValues);
 // var_dump($product->brand);
-// $product->printResourceBody();
+// $product->printElementBody();
 
 
 
 // $brand = new Brand();
 // $brand->name = 'lol';
 // $brand->reference = 'lol';
-// $brand->printResourceBody();
+// $brand->printElementBody();
 // var_dump($brand->getDirtyKeys());
 
 // echo '<br>____________________________________________________________________________________<br>';
@@ -72,7 +72,7 @@ RestClient::getClient()->disableTesting();
 // $product->brand = new Brand();
 // $product->brand->name = 'nana';
 // $product->brand->reference = 'nana';
-// $product->printResourceBody();
+// $product->printElementBody();
 // var_dump($product->getDirtyKeys());
 
 // echo '<br>____________________________________________________________________________________<br>';
@@ -81,14 +81,14 @@ RestClient::getClient()->disableTesting();
 // $product->label = 'lol';
 // $product->reference = 'lol';
 // $product->brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454');
-// $product->printResourceBody();
+// $product->printElementBody();
 // var_dump($product->getDirtyKeys());
 
 // echo '<br>____________________________________________________________________________________<br>';
 
 // $product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
 // $product->brand->name = 'lol';
-// $product->printResourceBody();
+// $product->printElementBody();
 // var_dump($product->getDirtyKeys());
 
 // echo '<br>____________________________________________________________________________________<br>';
@@ -96,12 +96,12 @@ RestClient::getClient()->disableTesting();
 
 // $product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
 // $product->brand = Brand::retrieve('fe8e3e93-be16-46af-8a42-f80ec91ea7fe');
-// $product->printResourceBody();
+// $product->printElementBody();
 // var_dump($product->getDirtyKeys());
 
 // $product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
 // $product->brand = Brand::retrieve($product->brand->id);
-// $product->printResourceBody();
+// $product->printElementBody();
 // var_dump($product->getDirtyKeys());
 
 // echo '<br>____________________________________________________________________________________<br>';
@@ -109,7 +109,7 @@ RestClient::getClient()->disableTesting();
 // $product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
 // $product->brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454');
 // $product->brand->name = 'adad';
-// $product->printResourceBody();
+// $product->printElementBody();
 // var_dump($product->getDirtyKeys());
 // var_dump($product);
 
@@ -130,7 +130,7 @@ die;
 
 $products = Product::all();
 $product->brand_id = Brand::all()[1]->id;
-$product->printResourceBody();
+$product->printElementBody();
 var_dump($product->getDirtyKeys());
 
 

@@ -13,11 +13,11 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 require_once __DIR__ . '/BaseTest.php';
 
 // Load Base classes and traits
-require_once __DIR__ . '/Resources/BaseResourceTest.php';
-require_once __DIR__ . '/Resources/BrandTrait.php';
-require_once __DIR__ . '/Resources/ProductTrait.php';
-require_once __DIR__ . '/Resources/Mocker/BaseMockerTest.php';
-require_once __DIR__ . '/Resources/Api/BaseApiTest.php';
+require_once __DIR__ . '/Elements/BaseElementTest.php';
+require_once __DIR__ . '/Elements/BrandTrait.php';
+require_once __DIR__ . '/Elements/ProductTrait.php';
+require_once __DIR__ . '/Elements/Mocker/BaseMockerTest.php';
+require_once __DIR__ . '/Elements/Api/BaseApiTest.php';
 
 // ------------------------------------------------------------------------------
 // FOR THE FOLOWING, SOME LOADS ARE REQUIRED FOR SOME TESTS BUT WILL FAIL OTHERS
@@ -25,5 +25,5 @@ require_once __DIR__ . '/Resources/Api/BaseApiTest.php';
 
 // Needed to test ProductTest
 // Will fail BrandTest
-// require_once __DIR__ . '/Resources/Mocker/BrandTest.php';
-// require_once __DIR__ . '/Resources/Api/BrandTest.php';
+// require_once __DIR__ . '/Elements/Mocker/BrandTest.php';
+// require_once __DIR__ . '/Elements/Api/BrandTest.php';

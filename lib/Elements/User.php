@@ -1,8 +1,8 @@
 <?php
 
-namespace Shoprunback\Resources;
+namespace Shoprunback\Elements;
 
-class User extends Resource
+class User extends Element
 {
     public function __toString()
     {

@@ -1,29 +1,27 @@
 <?php
 
-declare(strict_types=1);
+namespace Tests\Elements\Mocker;
 
-namespace Tests\Resources\Mocker;
+use \Tests\Elements\Mocker\BaseMockerTest;
+use \Tests\Elements\Mocker\BrandTest;
 
-use \Tests\Resources\Mocker\BaseMockerTest;
-use \Tests\Resources\Mocker\BrandTest;
-
-use \Shoprunback\Resources\Brand;
-use \Shoprunback\Resources\Product;
+use \Shoprunback\Elements\Brand;
+use \Shoprunback\Elements\Product;
 use \Shoprunback\RestClient;
 
 final class ProductTest extends BaseMockerTest
 {
-    use \Tests\Resources\ProductTrait;
+    use \Tests\Elements\ProductTrait;
 
     public function testCanUpdateOneMocked()
     {
         RestClient::getClient()->enableTesting();
 
-        $product = self::getResourceClass()::retrieve(1);
+        $product = self::getElementClass()::retrieve(1);
         $product->label = self::randomString();
         $product->save();
 
-        $retrievedProduct = self::getResourceClass()::retrieve(1);
+        $retrievedProduct = self::getElementClass()::retrieve(1);
 
         $this->assertNotSame($retrievedProduct->label, $product->label);
     }
@@ -65,7 +63,7 @@ final class ProductTest extends BaseMockerTest
     {
         RestClient::getClient()->enableTesting();
 
-        $product = self::getResourceClass()::retrieve(1);
+        $product = self::getElementClass()::retrieve(1);
         $product->brand->name = BrandTest::randomString();
 
         $this->assertEquals($product->getDirtyKeys(), ['brand']);
@@ -76,12 +74,12 @@ final class ProductTest extends BaseMockerTest
     {
         RestClient::getClient()->enableTesting();
 
-        $product = self::getResourceClass()::retrieve(1);
+        $product = self::getElementClass()::retrieve(1);
 
         $product->label = self::randomString();
-        $resourceBody = $product->getResourceBody(false);
-        $this->assertTrue(property_exists($resourceBody, 'label'));
-        $this->assertEquals(count(get_object_vars($resourceBody)), 1);
+        $elementBody = $product->getElementBody(false);
+        $this->assertTrue(property_exists($elementBody, 'label'));
+        $this->assertEquals(count(get_object_vars($elementBody)), 1);
     }
 
     public function testGetNewProductBody()
@@ -91,14 +89,14 @@ final class ProductTest extends BaseMockerTest
         $product = new Product();
 
         $product->label = self::randomString();
-        $resourceBody = $product->getResourceBody(false);
-        $this->assertTrue(property_exists($resourceBody, 'label'));
-        $this->assertEquals(count(get_object_vars($resourceBody)), 1);
+        $elementBody = $product->getElementBody(false);
+        $this->assertTrue(property_exists($elementBody, 'label'));
+        $this->assertEquals(count(get_object_vars($elementBody)), 1);
 
         $product->reference = self::randomString();
-        $resourceBody = $product->getResourceBody(false);
-        $this->assertTrue(property_exists($resourceBody, 'reference'));
-        $this->assertEquals(count(get_object_vars($resourceBody)), 2);
+        $elementBody = $product->getElementBody(false);
+        $this->assertTrue(property_exists($elementBody, 'reference'));
+        $this->assertEquals(count(get_object_vars($elementBody)), 2);
     }
 
     public function testGetNewProductNewBrandBody()
@@ -112,9 +110,9 @@ final class ProductTest extends BaseMockerTest
         $product = new Product();
         $product->brand = $brand;
 
-        $resourceBody = $product->getResourceBody(false);
-        $this->assertEquals(count(get_object_vars($resourceBody)), 1);
-        $this->assertTrue(property_exists($resourceBody, 'brand'));
+        $elementBody = $product->getElementBody(false);
+        $this->assertEquals(count(get_object_vars($elementBody)), 1);
+        $this->assertTrue(property_exists($elementBody, 'brand'));
     }
 
     public function testGetNewProductRetrievedBrandBody()
@@ -126,9 +124,9 @@ final class ProductTest extends BaseMockerTest
         $product = new Product();
         $product->brand = $brand;
 
-        $resourceBody = $product->getResourceBody(false);
-        $this->assertEquals(count(get_object_vars($resourceBody)), 1);
-        $this->assertTrue(property_exists($resourceBody, 'brand_id'));
+        $elementBody = $product->getElementBody(false);
+        $this->assertEquals(count(get_object_vars($elementBody)), 1);
+        $this->assertTrue(property_exists($elementBody, 'brand_id'));
     }
 
     public function testGetRetrievedProductNewBrandBody()
@@ -142,8 +140,8 @@ final class ProductTest extends BaseMockerTest
         $product = Product::retrieve(1);
         $product->brand = $brand;
 
-        $resourceBody = $product->getResourceBody(false);
-        $this->assertEquals(count(get_object_vars($resourceBody)), 1);
-        $this->assertTrue(property_exists($resourceBody, 'brand'));
+        $elementBody = $product->getElementBody(false);
+        $this->assertEquals(count(get_object_vars($elementBody)), 1);
+        $this->assertTrue(property_exists($elementBody, 'brand'));
     }
 }

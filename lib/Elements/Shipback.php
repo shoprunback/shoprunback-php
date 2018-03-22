@@ -1,8 +1,8 @@
 <?php
 
-namespace Shoprunback\Resources;
+namespace Shoprunback\Elements;
 
-class Shipback extends Resource
+class Shipback extends Element
 {
     public function __toString()
     {

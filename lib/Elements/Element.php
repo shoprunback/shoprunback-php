@@ -1,6 +1,6 @@
 <?php
 
-namespace Shoprunback\Resources;
+namespace Shoprunback\Elements;
 
 use Shoprunback\Util\Logger;
 use Shoprunback\Shoprunback;
@@ -9,7 +9,7 @@ use Shoprunback\Util\Inflector;
 use Shoprunback\Error\NotFoundError;
 use Shoprunback\Error\RestClientError;
 
-abstract class Resource
+abstract class Element
 {
     public $id;
 
@@ -43,9 +43,9 @@ abstract class Resource
         return in_array($key, static::getAcceptNestedAttributes());
     }
 
-    public function display($resourceString)
+    public function display($elementString)
     {
-        return $resourceString . ' (' . $this->id . ')';
+        return $elementString . ' (' . $this->id . ')';
     }
 
     public static function indexEndpoint($page = 1) {
@@ -105,7 +105,7 @@ abstract class Resource
     private function post()
     {
         $restClient = RestClient::getClient();
-        $data = $this->getResourceBody();
+        $data = $this->getElementBody();
         $response = $restClient->request(self::createEndpoint(), \Shoprunback\RestClient::POST, $data);
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
@@ -113,7 +113,7 @@ abstract class Resource
     private function put()
     {
         $restClient = RestClient::getClient();
-        $data = $this->getResourceBody();
+        $data = $this->getElementBody();
         $response = $restClient->request(self::updateEndpoint($this->id), \Shoprunback\RestClient::PUT, $data);
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
@@ -126,9 +126,9 @@ abstract class Resource
         $response = $restClient->request(self::deleteEndpoint($this->id), \Shoprunback\RestClient::DELETE);
     }
 
-    public function printResourceBody()
+    public function printElementBody()
     {
-        echo $this . ': ' . json_encode($this->getResourceBody(false)) . "\n";
+        echo $this . ': ' . json_encode($this->getElementBody(false)) . "\n";
     }
 
     public function getDirtyKeys()
@@ -141,10 +141,10 @@ abstract class Resource
                 && $this->isKeyDirty($key)
             ) {
                 $dirtyKeys[] = $key;
-            } elseif (!Inflector::isKnownResource($key)) {
+            } elseif (!Inflector::isKnownElement($key)) {
                 $keyPreged = preg_replace('/_id$/', '', $key);
 
-                if ($keyPreged != $key && Inflector::isKnownResource($keyPreged) && $this->$keyPreged->id != $value) {
+                if ($keyPreged != $key && Inflector::isKnownElement($keyPreged) && $this->$keyPreged->id != $value) {
                     if (!empty($this->$keyPreged->id) && $this->$keyPreged->id != $this->_origValues->$key) {
                         $dirtyKeys[] = $key;
                     }
@@ -156,9 +156,9 @@ abstract class Resource
                 }
             }
 
-            // If nested resource is a different one, but an unchanged one
+            // If nested element is a different one, but an unchanged one
             $keyToUnset = array_search($key, $dirtyKeys);
-            if ($keyToUnset && Inflector::isKnownResource($key) && !$value->isDirty()) {
+            if ($keyToUnset && Inflector::isKnownElement($key) && !$value->isDirty()) {
                 unset($dirtyKeys[$keyToUnset]);
             }
         }
@@ -179,7 +179,7 @@ abstract class Resource
 
     public function isKeyDirty($key)
     {
-        if (Inflector::isKnownResource($key)) {
+        if (Inflector::isKnownElement($key)) {
             return $this->$key->isDirty() || $this->checkIfDirty($key . '_id');
         } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) {
             foreach ($this->$key as $value) {
@@ -194,7 +194,7 @@ abstract class Resource
         $keyPreged = preg_replace('/_id$/', '', $key);
         if (
             $keyPreged != $key
-            && Inflector::isKnownResource($keyPreged)
+            && Inflector::isKnownElement($keyPreged)
             && isset($this->$keyPreged->id)
             && !empty($this->$keyPreged->id)
             && $this->$key != $this->$keyPreged->id
@@ -210,7 +210,7 @@ abstract class Resource
         return !property_exists($this->_origValues, $key) || $this->$key != $this->_origValues->$key;
     }
 
-    public function getResourceBody($save = true)
+    public function getElementBody($save = true)
     {
         // #TODO manage belongsTo and belongsToOptional
         foreach (static::getBelongsTo() as $parent) {
@@ -250,7 +250,7 @@ abstract class Resource
                 && (
                     $keyPreged == $key
                     || (
-                        Inflector::isKnownResource($keyPreged)
+                        Inflector::isKnownElement($keyPreged)
                         && property_exists($this->$keyPreged, 'id')
                         && !empty($this->$keyPreged->id)
                     )
@@ -268,16 +268,16 @@ abstract class Resource
 
     private function getChildren($key, $value)
     {
-        if (Inflector::isKnownResource($key)) { // If it is a resource
-            return $value->getResourceBody();
-        } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) { // If it is an array of resources
-            $arrayOfResources = [];
+        if (Inflector::isKnownElement($key)) { // If it is a element
+            return $value->getElementBody();
+        } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) { // If it is an array of elements
+            $arrayOfElements = [];
 
-            foreach ($value as $k => $resource) {
-                $arrayOfResources[] = $resource->getResourceBody();
+            foreach ($value as $k => $element) {
+                $arrayOfElements[] = $element->getElementBody();
             }
 
-            return $arrayOfResources;
+            return $arrayOfElements;
         }
 
         return $value;
@@ -285,15 +285,15 @@ abstract class Resource
 
     public static function newFromMixed($mixed)
     {
-        $resource = Inflector::constantize($mixed, get_called_class());
-        foreach ($resource as $key => $value) {
-            if (is_object($value) && Inflector::isKnownResource($key)) {
+        $element = Inflector::constantize($mixed, get_called_class());
+        foreach ($element as $key => $value) {
+            if (is_object($value) && Inflector::isKnownElement($key)) {
                 $class = get_class($value);
-                $resource->$key = $class::newFromMixed($value);
+                $element->$key = $class::newFromMixed($value);
             }
         }
-        $resource->copyValues($resource);
-        return $resource;
+        $element->copyValues($element);
+        return $element;
     }
 
     public function copyValues($object)
@@ -324,15 +324,15 @@ abstract class Resource
         return $this->_origValues;
     }
 
-    public static function getResourceName()
+    public static function getElementName()
     {
         $className = get_called_class();
         $explode = explode('\\', $className);
         return strtolower(end($explode));
     }
 
-    public static function getAllResourceKey()
+    public static function getAllElementKey()
     {
-        return static::getResourceName() . 's';
+        return static::getElementName() . 's';
     }
 }

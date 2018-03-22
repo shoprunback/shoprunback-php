@@ -1,26 +1,24 @@
 <?php
 
-declare(strict_types=1);
+namespace Tests\Elements\Api;
 
-namespace Tests\Resources\Api;
-
-use Tests\Resources\BaseResourceTest;
+use Tests\Elements\BaseElementTest;
 
 use \Shoprunback\RestClient;
 
-abstract class BaseApiTest extends BaseResourceTest
+abstract class BaseApiTest extends BaseElementTest
 {
     public function testNewObjectIsNotPersisted()
     {
-        $resourceClass = static::getResourceClass();
-        $object = new $resourceClass();
+        $elementClass = static::getElementClass();
+        $object = new $elementClass();
         $this->assertFalse($object->isPersisted());
     }
 
     public function testNewObjectWithIdIsNotPersisted()
     {
-        $resourceClass = static::getResourceClass();
-        $object = new $resourceClass();
+        $elementClass = static::getElementClass();
+        $object = new $elementClass();
         $object->id = 1;
         $this->assertFalse($object->isPersisted());
     }
@@ -39,35 +37,35 @@ abstract class BaseApiTest extends BaseResourceTest
     public function testCanFetchAll()
     {
         RestClient::getClient()->disableTesting();
-        $this->assertGreaterThan(0, static::getResourceClass()::all()->count);
+        $this->assertGreaterThan(0, static::getElementClass()::all()->count);
     }
 
     public function testCanIterate()
     {
         RestClient::getClient()->disableTesting();
 
-        $resources = static::getResourceClass()::all();
-        $this->assertNotNull($resources[0]->id);
-        $this->assertNotNull($resources[$resources->count - 1]);
+        $elements = static::getElementClass()::all();
+        $this->assertNotNull($elements[0]->id);
+        $this->assertNotNull($elements[$elements->count - 1]);
 
-        if ($resources->count > $resources->per_page && !is_null($resources->next_page)) {
-            $this->assertNotNull($resources[$resources->per_page + 1]->id);
-            $this->assertNotEquals(count($resources), $resources->count);
-            $this->assertEquals($resources->per_page, count($resources));
+        if ($elements->count > $elements->per_page && !is_null($elements->next_page)) {
+            $this->assertNotNull($elements[$elements->per_page + 1]->id);
+            $this->assertNotEquals(count($elements), $elements->count);
+            $this->assertEquals($elements->per_page, count($elements));
         }
 
-        $this->assertTrue(is_iterable($resources));
+        $this->assertTrue(is_array($elements) || $elements instanceof \Traversable);
     }
 
     /**
-     * @expectedException \Shoprunback\Error\ResourceNumberDoesntExists
+     * @expectedException \Shoprunback\Error\ElementNumberDoesntExists
      */
     public function testExceptionOnWrongIteration()
     {
         RestClient::getClient()->disableTesting();
 
-        $resources = static::getResourceClass()::all();
-        $resources[$resources->count + 1];
+        $elements = static::getElementClass()::all();
+        $elements[$elements->count + 1];
     }
 
     /**
@@ -75,16 +73,16 @@ abstract class BaseApiTest extends BaseResourceTest
      */
     public function testCanNotRetrieveUnknown()
     {
-        static::getResourceClass()::retrieve(self::randomString());
+        static::getElementClass()::retrieve(self::randomString());
     }
 
     public function testCanRetrieve()
     {
         RestClient::getClient()->disableTesting();
 
-        $object = static::getResourceClass()::all()[0];
+        $object = static::getElementClass()::all()[0];
 
-        $retrievedObject = static::getResourceClass()::retrieve($object->id);
+        $retrievedObject = static::getElementClass()::retrieve($object->id);
 
         $this->assertSame($object->id, $retrievedObject->id);
     }
@@ -101,6 +99,6 @@ abstract class BaseApiTest extends BaseResourceTest
 
         $object->remove();
 
-        static::getResourceClass()::retrieve($object->id);
+        static::getElementClass()::retrieve($object->id);
     }
 }

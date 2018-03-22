@@ -1,8 +1,8 @@
 <?php
 
-namespace Shoprunback\Resources;
+namespace Shoprunback\Elements;
 
-class Brand extends Resource
+class Brand extends Element
 {
     use Retrieve;
     use All;

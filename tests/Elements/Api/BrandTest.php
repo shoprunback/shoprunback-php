@@ -1,18 +1,16 @@
 <?php
 
-declare(strict_types=1);
+namespace Tests\Elements\Api;
 
-namespace Tests\Resources\Api;
+use \Tests\Elements\Api\BaseApiTest;
 
-use \Tests\Resources\Api\BaseApiTest;
-
-use \Shoprunback\Resources\Brand;
+use \Shoprunback\Elements\Brand;
 use \Shoprunback\RestClient;
 use \Shoprunback\Error\NotFoundError;
 
 final class BrandTest extends BaseApiTest
 {
-    use \Tests\Resources\BrandTrait;
+    use \Tests\Elements\BrandTrait;
 
     public function testCanSaveNewBrand()
     {

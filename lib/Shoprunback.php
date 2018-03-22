@@ -3,7 +3,7 @@
 namespace Shoprunback;
 
 use Shoprunback\Util\Logger;
-use Shoprunback\Resources\User;
+use Shoprunback\Elements\User;
 
 class Shoprunback
 {
