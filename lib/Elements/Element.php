@@ -2,14 +2,15 @@
 
 namespace Shoprunback\Elements;
 
-use Shoprunback\Util\Logger;
 use Shoprunback\Shoprunback;
 use Shoprunback\RestClient;
 use Shoprunback\Util\Inflector;
+use Shoprunback\Util\Logger;
 use Shoprunback\Error\NotFoundError;
 use Shoprunback\Error\RestClientError;
+use Shoprunback\Elements\NestedAttributes;
 
-abstract class Element
+abstract class Element implements NestedAttributes
 {
     public $id;
 
@@ -28,10 +29,6 @@ abstract class Element
 
         $this->$key = $value;
     }
-
-    abstract static function getBelongsTo();
-
-    abstract static function getAcceptNestedAttributes();
 
     public function belongsTo($key)
     {

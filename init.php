@@ -8,12 +8,15 @@ require dirname(__FILE__) . '/lib/RestMocker.php';
 require dirname(__FILE__) . '/lib/ElementIterator.php';
 require dirname(__FILE__) . '/lib/ElementManager.php';
 
-// Load elements
+// Load Traits
 require dirname(__FILE__) . '/lib/Elements/traits/Retrieve.php';
 require dirname(__FILE__) . '/lib/Elements/traits/All.php';
 require dirname(__FILE__) . '/lib/Elements/traits/Update.php';
 require dirname(__FILE__) . '/lib/Elements/traits/Create.php';
 require dirname(__FILE__) . '/lib/Elements/traits/Delete.php';
+
+// Load Elements
+require dirname(__FILE__) . '/lib/Elements/NestedAttributes.php';
 require dirname(__FILE__) . '/lib/Elements/Element.php';
 // require dirname(__FILE__) . '/lib/Elements/ShoprunbackObject.php';
 require dirname(__FILE__) . '/lib/Elements/Brand.php';

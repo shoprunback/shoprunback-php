@@ -155,7 +155,7 @@ class RestClient
         }
 
         if (!$response->success()) {
-            throw new RestClientError($response); #TODO return the RestResponse object (or its errors)
+            throw new RestClientError($response);
         }
 
         return $response;

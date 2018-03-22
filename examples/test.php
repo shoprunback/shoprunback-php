@@ -172,9 +172,9 @@ var_dump($product->getDirtyKeys());
 // echo Inflector::classify('countries');
 
 // echo Inflector::pluralize('brand');
-// echo Inflector::pluralize('brands');#TODO
+// echo Inflector::pluralize('brands');
 // echo Inflector::pluralize('country');
-// echo Inflector::pluralize('countries');#TODO
+// echo Inflector::pluralize('countries');
 // $brand->name = 'Delfino place 2';
 // $brand->save();
 
