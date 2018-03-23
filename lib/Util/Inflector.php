@@ -6,21 +6,25 @@ use Shoprunback\Util\Container;
 
 abstract class Inflector
 {
-    const RESSOURCES_NAMESPACE = 'Shoprunback\Elements\\';
+    const ELEMENTS_NAMESPACE = 'Shoprunback\Elements\\';
 
     public static function classify($string)
     {
         if (substr($string, -3) == 'ies') {
             return rtrim(ucfirst($string), 'ies') . 'y';
-        } else {
+        } elseif (substr($string, -2) != 'ss') {
             return rtrim(ucfirst($string), 's');
         }
+
+        return $string;
     }
 
     public static function pluralize($className)
     {
         if (substr($className, -1) == 'y') {
             return strtolower(rtrim($className, 'y') . 'ies');
+        } else if (substr($className, -2) == 'ss') {
+            return strtolower($className . 'es');
         } else if (substr($className, -1) == 's') {
             return strtolower($className);
         } else {
@@ -33,12 +37,12 @@ abstract class Inflector
     }
 
     public static function isKnownElement($className) {
-        return class_exists(self::RESSOURCES_NAMESPACE . $className);
+        return class_exists(self::ELEMENTS_NAMESPACE . $className);
     }
 
     public static function constantize($mixed, $inflectedClassName)
     {
-        $inflectedClassName = self::RESSOURCES_NAMESPACE . str_replace(self::RESSOURCES_NAMESPACE, '', $inflectedClassName);
+        $inflectedClassName = self::ELEMENTS_NAMESPACE . str_replace(self::ELEMENTS_NAMESPACE, '', $inflectedClassName);
         $object = new $inflectedClassName();
 
         foreach ($mixed as $key => $value) {

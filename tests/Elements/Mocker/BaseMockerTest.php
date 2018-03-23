@@ -35,17 +35,25 @@ abstract class BaseMockerTest extends BaseElementTest
     {
         RestClient::getClient()->enableTesting();
 
-        $object = static::createDefault();
-        $object->save();
+        if (static::getElementClass()::canUpdate()) {
+            $object = static::createDefault();
+            $object->save();
 
-        $this->assertNotNull($object->id);
+            $this->assertNotNull($object->id);
+        } else {
+            $this->assertTrue(true);
+        }
     }
 
     public function testCanDeleteMocked()
     {
         RestClient::getClient()->enableTesting();
 
-        $this->assertNull(static::getElementClass()::delete(1));
+        if (static::getElementClass()::canDelete()) {
+            $this->assertNull(static::getElementClass()::delete(1));
+        } else {
+            $this->assertTrue(true);
+        }
     }
 
     public function testGetUnchangedElementBody()

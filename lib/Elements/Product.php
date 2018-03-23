@@ -24,4 +24,9 @@ class Product extends Element
     {
         return ['brand'];
     }
+
+    public static function canOnlyBeNested()
+    {
+        return false;
+    }
 }

@@ -61,6 +61,16 @@ trait ProductTrait
         );
     }
 
+    public function testCanUpdate()
+    {
+        $this->assertTrue(static::getElementClass()::canUpdate());
+    }
+
+    public function testCanDelete()
+    {
+        $this->assertTrue(static::getElementClass()::canDelete());
+    }
+
     public function testPrintProductBody()
     {
         $label = static::randomString();

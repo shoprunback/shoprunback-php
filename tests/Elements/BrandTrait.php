@@ -35,6 +35,16 @@ trait BrandTrait
         $this->assertNotNull($brand->reference);
     }
 
+    public function testCanUpdate()
+    {
+        $this->assertTrue(static::getElementClass()::canUpdate());
+    }
+
+    public function testCanDelete()
+    {
+        $this->assertTrue(static::getElementClass()::canDelete());
+    }
+
     public function testPrintBrandBody()
     {
         $name = static::randomString();

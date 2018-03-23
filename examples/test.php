@@ -26,7 +26,7 @@ use Shoprunback\Util\Inflector      as Inflector;
 
 // Fetch and update Brand
 RestClient::getClient()->enableTesting();
-RestClient::getClient()->disableTesting();
+// RestClient::getClient()->disableTesting();
 
 // $brand = Brand::retrieve(1);
 // $brand->printElementBody();
@@ -116,22 +116,22 @@ RestClient::getClient()->disableTesting();
 // echo '<br>____________________________________________________________________________________<br>';
 
 
-$products = Product::all();
-foreach ($products as $product) {
-    echo($product->label) . "\n";
-}
+// $products = Product::all();
+// foreach ($products as $product) {
+//     echo($product->label) . "\n";
+// }
 
 // $brands = Brand::all();
 // echo $brands->count;
 // foreach ($brands as $brand) {
 //     echo($brand->name) . "\n";
 // }
-die;
+// die;
 
-$products = Product::all();
-$product->brand_id = Brand::all()[1]->id;
-$product->printElementBody();
-var_dump($product->getDirtyKeys());
+// $products = Product::all();
+// $product->brand_id = Brand::all()[1]->id;
+// $product->printElementBody();
+// var_dump($product->getDirtyKeys());
 
 
 
@@ -246,3 +246,10 @@ var_dump($product->getDirtyKeys());
 // var_dump($shipback->order->items[0]);
 // var_dump($shipback->order->items[0]->product);
 // var_dump($shipback->order->items[0]->product->brand);
+
+
+
+
+// $order = Order::all()[0];
+// $order->printElementBody();
+// var_dump($order->items);
