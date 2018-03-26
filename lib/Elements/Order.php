@@ -7,6 +7,7 @@ class Order extends Element
     use Retrieve;
     use All;
     use Create;
+    use Delete;
 
     private $shipback;
     private $customer;

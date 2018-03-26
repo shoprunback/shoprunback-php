@@ -69,9 +69,9 @@ trait OrderTrait
         $this->assertFalse(static::getElementClass()::canUpdate());
     }
 
-    public function testCannotDelete()
+    public function testCanDelete()
     {
-        $this->assertFalse(static::getElementClass()::canDelete());
+        $this->assertTrue(static::getElementClass()::canDelete());
     }
 
     public function testPrintOrderBody()
