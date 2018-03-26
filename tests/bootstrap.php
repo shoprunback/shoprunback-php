@@ -17,6 +17,8 @@ require_once __DIR__ . '/Elements/BaseElementTest.php';
 require_once __DIR__ . '/Elements/BrandTrait.php';
 require_once __DIR__ . '/Elements/ProductTrait.php';
 require_once __DIR__ . '/Elements/OrderTrait.php';
+require_once __DIR__ . '/Elements/AddressTrait.php';
+require_once __DIR__ . '/Elements/CustomerTrait.php';
 require_once __DIR__ . '/Elements/Mocker/BaseMockerTest.php';
 require_once __DIR__ . '/Elements/Api/BaseApiTest.php';
 

@@ -23,4 +23,9 @@ class Address extends Element
     {
         return true;
     }
+
+    public function getAllAttributes()
+    {
+        return get_object_vars($this);
+    }
 }

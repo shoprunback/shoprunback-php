@@ -26,6 +26,19 @@ final class ProductTest extends BaseMockerTest
         $this->assertNotSame($retrievedProduct->label, $product->label);
     }
 
+    public function testGetBrand()
+    {
+        RestClient::getClient()->enableTesting();
+
+        $product = new Product();
+        $this->assertNull($product->brand);
+        $product->brand_id = Brand::retrieve(1)->id;
+        $this->assertInstanceOf(
+            BrandTest::getElementClass(),
+            $product->brand
+        );
+    }
+
     public function testGetNewProductNewBrandDirtyKeys()
     {
         RestClient::getClient()->enableTesting();
@@ -41,7 +54,7 @@ final class ProductTest extends BaseMockerTest
 
         $product->brand = $brand;
 
-        $this->assertEquals($product->getDirtyKeys(), ['label', 'reference', 'weight_grams', 'brand', 'brand_id'], "\$canonicalize = true", $delta = 0.0, $maxDepth = 10, $canonicalize = true);
+        $this->assertEquals($product->getDirtyKeys(), ['label', 'reference', 'weight_grams', 'brand_id'], "\$canonicalize = true", $delta = 0.0, $maxDepth = 10, $canonicalize = true);
         $this->assertEquals($product->brand->getDirtyKeys(), ['name', 'reference'], "\$canonicalize = true", $delta = 0.0, $maxDepth = 10, $canonicalize = true);
     }
 
@@ -66,7 +79,7 @@ final class ProductTest extends BaseMockerTest
         $product = self::getElementClass()::retrieve(1);
         $product->brand->name = BrandTest::randomString();
 
-        $this->assertEquals($product->getDirtyKeys(), ['brand']);
+        $this->assertEquals($product->getDirtyKeys(), []);
         $this->assertEquals($product->brand->getDirtyKeys(), ['name']);
     }
 
@@ -125,8 +138,8 @@ final class ProductTest extends BaseMockerTest
         $product->brand = $brand;
 
         $elementBody = $product->getElementBody(false);
-        $this->assertEquals(count(get_object_vars($elementBody)), 1);
         $this->assertTrue(property_exists($elementBody, 'brand_id'));
+        $this->assertEquals(count(get_object_vars($elementBody)), 1);
     }
 
     public function testGetRetrievedProductNewBrandBody()

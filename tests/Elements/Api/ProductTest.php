@@ -65,7 +65,7 @@ final class ProductTest extends BaseApiTest
 
         $product->brand = $brand;
 
-        $this->assertEquals($product->getDirtyKeys(), ['brand']);
+        $this->assertEquals($product->getDirtyKeys(), ['brand_id']);
         $this->assertEquals($product->brand->getDirtyKeys(), ['name', 'reference'], "\$canonicalize = true", $delta = 0.0, $maxDepth = 10, $canonicalize = true);
     }
 
@@ -77,7 +77,7 @@ final class ProductTest extends BaseApiTest
         $product->brand = Brand::all()[1];
         $product->brand->name = BrandTest::randomString();
 
-        $this->assertEquals($product->getDirtyKeys(), ['brand_id', 'brand']);
+        $this->assertEquals($product->getDirtyKeys(), ['brand_id']);
         $this->assertEquals($product->brand->getDirtyKeys(), ['name']);
     }
 

@@ -29,4 +29,9 @@ class Brand extends Element
     {
         return false;
     }
+
+    public function getAllAttributes()
+    {
+        return get_object_vars($this);
+    }
 }
