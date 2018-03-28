@@ -2,23 +2,23 @@
 
 namespace Shoprunback\Elements;
 
-class Customer extends Element
+class ReturnedItem extends Element
 {
-    private $address;
+    private $item;
 
     public function __toString()
     {
-        return $this->display($this->first_name . ' ' . $this->last_name);
+        return $this->display($this->item->label);
     }
 
     public static function getBelongsTo()
     {
-        return ['order', 'shipback'];
+        return ['shipback'];
     }
 
     public static function getAcceptNestedAttributes()
     {
-        return ['address'];
+        return [];
     }
 
     public static function canOnlyBeNested()
@@ -31,13 +31,13 @@ class Customer extends Element
         return get_object_vars($this);
     }
 
-    public function setAddress($address)
+    public function setItem($item)
     {
-        $this->address = $address;
+        $this->item = $item;
     }
 
-    public function getAddress()
+    public function getItem()
     {
-        return $this->address;
+        return $this->item;
     }
 }
