@@ -58,13 +58,13 @@ class Shipback extends Element
         return $this->customer;
     }
 
-    public function setCompany($customer)
+    public function setCompany($company)
     {
-        $this->customer = $customer;
+        $this->company = $company;
     }
 
     public function getCompany()
     {
-        return $this->customer;
+        return $this->company;
     }
 }
