@@ -64,7 +64,7 @@ trait ShipbackTrait
         $this->assertEquals($shipback->order->shipback_id, $shipback->id);
     }
 
-    public function testCannotUpdate()
+    public function testCantUpdate()
     {
         $this->assertTrue(static::getElementClass()::canUpdate());
     }

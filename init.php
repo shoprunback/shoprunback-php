@@ -28,6 +28,7 @@ require dirname(__FILE__) . '/lib/Elements/Order.php';
 require dirname(__FILE__) . '/lib/Elements/Shipback.php';
 require dirname(__FILE__) . '/lib/Elements/ReturnedItem.php';
 require dirname(__FILE__) . '/lib/Elements/Warehouse.php';
+require dirname(__FILE__) . '/lib/Elements/Company.php';
 // require dirname(__FILE__) . '/lib/Elements/User.php';
 
 // Load Utils
@@ -41,4 +42,6 @@ require dirname(__FILE__) . '/lib/Error/UnknownApiToken.php';
 require dirname(__FILE__) . '/lib/Error/NotFoundError.php';
 require dirname(__FILE__) . '/lib/Error/RestClientError.php';
 require dirname(__FILE__) . '/lib/Error/ElementNumberDoesntExists.php';
+require dirname(__FILE__) . '/lib/Error/ElementCannotBeCreated.php';
 require dirname(__FILE__) . '/lib/Error/ElementCannotBeUpdated.php';
+require dirname(__FILE__) . '/lib/Error/ElementCannotGetAll.php';

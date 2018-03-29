@@ -25,7 +25,7 @@ class Shipback extends Element
 
     public static function getAcceptNestedAttributes()
     {
-        return ['returnedItems', 'customer'];
+        return ['returnedItems', 'customer', 'company'];
     }
 
     public static function canOnlyBeNested()
@@ -54,6 +54,16 @@ class Shipback extends Element
     }
 
     public function getCustomer()
+    {
+        return $this->customer;
+    }
+
+    public function setCompany($customer)
+    {
+        $this->customer = $customer;
+    }
+
+    public function getCompany()
     {
         return $this->customer;
     }
