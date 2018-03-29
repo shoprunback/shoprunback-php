@@ -258,18 +258,17 @@ abstract class Element implements NestedAttributes
                 continue;
             }
 
-            $parentId = $parent . '_id';
-
-            if (property_exists($this->$parent, 'id') && !empty($this->$parent->id) && !$this->isKeyDirty($parent)) {
-                $this->$parentId = $this->$parent->id;
-            }
-
             if (!$this->$parent->isPersisted()) {
                 if (!in_array($parent, static::getAcceptNestedAttributes()) && $save) {
                     $this->$parent->save();
                 }
             } elseif ($this->$parent->isDirty() && $save) {
                 $this->$parent->save();
+            }
+
+            if (property_exists($this->$parent, 'id') && !empty($this->$parent->id)) {
+                $parentId = $parent . '_id';
+                $this->$parentId = $this->$parent->id;
             }
         }
 
@@ -306,6 +305,9 @@ abstract class Element implements NestedAttributes
                 $data->$key = self::getChildren($key, $value);
             }
         }
+
+        unset($data->id);
+        unset($data->_origValues);
 
         return $data;
     }

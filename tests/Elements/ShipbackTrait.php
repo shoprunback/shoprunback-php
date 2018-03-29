@@ -19,40 +19,12 @@ trait ShipbackTrait
 
     public static function createDefault()
     {
-        $address = new Address();
-        $address->line1 = static::randomString();
-        $address->country_code = 'FR';
-        $address->city = static::randomString();
-
-        $customer = new Customer();
-        $customer->first_name = static::randomString();
-        $customer->last_name = static::randomString();
-        $customer->email = 'test@test.com';
-        $customer->phone = '0123456789';
-        $customer->address = $address;
-
-        $product;
+        $order;
         if (RestClient::getClient()->isTesting()) {
-            $product = Product::Retrieve(1);
+            $order = Order::Retrieve(1);
         } else {
-            $product = Product::all()[0];
+            $order = Order::all()->getLast();
         }
-
-        $item = new Item();
-        $item->product = $product;
-        $item->product_id = $product->id;
-        $item->label = $product->label;
-        $item->reference = $product->reference;
-        $item->barcode = '9782700507089';
-        $item->price_cents = 1000;
-        $item->currency = 'eur';
-        $item->created_at = '2017-06-15T16:17:46.482+02:00';
-
-        $order = new Order();
-        $order->order_number = static::randomString();
-        $order->ordered_at = date('Y-m-d');
-        $order->customer = $customer;
-        $order->items = [$item, $item];
 
         $shipback = new Shipback();
         $shipback->rma = self::randomRma();
@@ -61,10 +33,10 @@ trait ShipbackTrait
         $shipback->computed_weight_in_grams = 1020;
         $shipback->created_at = '2017-06-15T16:17:46.435+02:0';
         $shipback->public_url = 'http://localhost:3002/company/123';
-        $shipback->returned_items = [$order->items[1]];
+        $shipback->returned_items = [$order->items[0]];
         $shipback->order_id = $order->id;
         $shipback->order = $order;
-        $shipback->customer = $customer;
+        $shipback->customer = $order->customer;
 
         return $shipback;
     }
@@ -135,17 +107,18 @@ trait ShipbackTrait
         $randomCharacters = array_rand($seed, 12);
         $rma = '';
         foreach ($randomCharacters as $key => $character) {
-            if ($key % 3 == 0 && $key > 0) {
+            if ($key % 2 == 0 && $key > 0) {
                 $rma .= ':';
             }
 
-            $rma .= $character;
+            $rma .= $seed[$character];
         }
         return $rma;
     }
 
     public static function randomMode()
     {
-        return array_rand(['postal', 'pickup', 'dropoff', 'direct'], 1);
+        $modes = ['postal', 'pickup', 'dropoff', 'direct'];
+        return $modes[array_rand($modes, 1)];
     }
 }

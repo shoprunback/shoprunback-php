@@ -3,6 +3,7 @@
 namespace Tests\Elements\Api;
 
 use \Tests\Elements\Api\BaseApiTest;
+use \Tests\Elements\Api\OrderTest;
 
 use \Shoprunback\Elements\Shipback;
 use \Shoprunback\Elements\Order;
@@ -39,5 +40,18 @@ final class ShipbackTest extends BaseApiTest
         $retrievedShipback = Shipback::retrieve($shipbackId);
 
         $this->assertSame($retrievedShipback->rma, $rma);
+    }
+
+    public function testObjectFromApiIsPersisted()
+    {
+        RestClient::getClient()->disableTesting();
+
+        $shipback = new Shipback();
+        $this->assertFalse($shipback->isPersisted());
+
+        $order = OrderTest::createDefault();
+        $shipback->order = $order;
+        $shipback->save();
+        $this->assertTrue($shipback->isPersisted());
     }
 }
