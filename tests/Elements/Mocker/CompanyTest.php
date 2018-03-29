@@ -13,11 +13,11 @@ final class CompanyTest extends BaseMockerTest
 
     public function testCanUpdateOneMocked()
     {
-        $company = Company::retrieve(1);
+        $company = static::getElementClass()::retrieve(1);
         $company->name = self::randomString();
         $company->save();
 
-        $retrievedCompany = Company::retrieve(1);
+        $retrievedCompany = static::getElementClass()::retrieve(1);
 
         $this->assertNotSame($retrievedCompany->name, $company->name);
     }
@@ -26,7 +26,7 @@ final class CompanyTest extends BaseMockerTest
     {
         RestClient::getClient()->enableTesting();
 
-        $company = Company::retrieve(1);
+        $company = static::getElementClass()::retrieve(1);
 
         $company->name = static::randomString();
         $elementBody = $company->getElementBody(false);
@@ -51,7 +51,7 @@ final class CompanyTest extends BaseMockerTest
         $this->assertEquals(count(get_object_vars($elementBody)), 2);
     }
 
-    public function testCanSaveMocked()
+    public function testCanCreateMocked()
     {
         $this->assertTrue(true);
     }

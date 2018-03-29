@@ -47,11 +47,11 @@ final class CompanyTest extends BaseApiTest
     {
         RestClient::getClient()->disableTesting();
 
-        $object = static::createDefault();
-        $this->assertFalse($object->isPersisted());
+        $company = static::createDefault();
+        $this->assertFalse($company->isPersisted());
 
-        $object = static::getElementClass()::getOwn();
-        $this->assertTrue($object->isPersisted());
+        $company = static::getElementClass()::getOwn();
+        $this->assertTrue($company->isPersisted());
     }
 
     public function testCanNotRetrieveUnknown()

@@ -35,7 +35,7 @@ abstract class BaseMockerTest extends BaseElementTest
         }
     }
 
-    public function testCanSaveMocked()
+    public function testCanCreateMocked()
     {
         RestClient::getClient()->enableTesting();
 
