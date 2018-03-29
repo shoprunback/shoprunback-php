@@ -19,8 +19,11 @@ final class ShipbackTest extends BaseApiTest
     {
         RestClient::getClient()->disableTesting();
 
+        $newOrder = OrderTest::createDefault();
+        $newOrder->save();
+
         $shipback = new Shipback();
-        $shipback->order_id = Order::All()->getLast()->id;
+        $shipback->order_id = $newOrder->id;
 
         $shipback->save();
 

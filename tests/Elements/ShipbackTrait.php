@@ -55,13 +55,15 @@ trait ShipbackTrait
             $shipback->order
         );
 
-        $this->assertNotNull($shipback->order->id);
-        $this->assertEquals($shipback->order->id, $shipback->order_id);
-        $this->assertNotNull($shipback->order->order_number);
-        $this->assertNotNull($shipback->order->ordered_at);
-        $this->assertNotNull($shipback->order->items);
-        $this->assertNotNull($shipback->order->created_at);
-        $this->assertEquals($shipback->order->shipback_id, $shipback->id);
+        $this->assertInstanceOf(
+            'Shoprunback\Elements\Company',
+            $shipback->company
+        );
+
+        $this->assertInstanceOf(
+            'Shoprunback\Elements\Customer',
+            $shipback->customer
+        );
     }
 
     public function testCantUpdate()
