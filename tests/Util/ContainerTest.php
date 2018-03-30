@@ -25,11 +25,23 @@ final class ContainerTest extends BaseTest
         $this->assertSame($array[$key], $object->$key);
     }
 
-    public function testIsContainer()
+    public function testArrayIsContainer()
     {
         $this->assertTrue(Container::isContainer([]));
+    }
+
+    public function testObjectIsContainer()
+    {
         $this->assertTrue(Container::isContainer(new \stdClass()));
+    }
+
+    public function testStringIsNotContainer()
+    {
         $this->assertFalse(Container::isContainer('a'));
+    }
+
+    public function testIntIsNotContainer()
+    {
         $this->assertFalse(Container::isContainer(1));
     }
 }
