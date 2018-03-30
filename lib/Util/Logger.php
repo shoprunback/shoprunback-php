@@ -43,14 +43,14 @@ class Logger
         self::log($message, self::ERROR);
     }
 
-    static public function getLogsOfDate($dateToFormat = '')
+    static public function getLogsForDate($dateToFormat = '')
     {
         return file_get_contents(self::getFullPathToFile($dateToFormat));
     }
 
     static public function getLastMessageOfDate($dateToFormat = '')
     {
-        $allLines = explode("\n", self::getLogsOfDate($dateToFormat));
+        $allLines = explode("\n", self::getLogsForDate($dateToFormat));
         return $allLines[count($allLines) - 2];
     }
 }
