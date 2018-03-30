@@ -51,7 +51,7 @@ final class LoggerTest extends BaseTest
         if (!$fileAlreadyExisted) {
             unlink($yesterdayLogfilePath);
         } else {
-            $fileContent = Logger::getLogsOfDate($todayTime);
+            $fileContent = Logger::getLogsForDate($todayTime);
             str_replace($line, '', $fileContent);
 
             unlink($yesterdayLogfilePath);
