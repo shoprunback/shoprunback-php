@@ -12,6 +12,7 @@ class Shipback extends Element
 
     private $order;
     private $customer;
+    private $company;
 
     public function __toString()
     {

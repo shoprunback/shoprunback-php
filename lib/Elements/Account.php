@@ -9,6 +9,8 @@ class Account extends Element
     use Retrieve;
     use Update;
 
+    private $company;
+
     public function __toString()
     {
         return $this->display($this->first_name . ' ' . $this->last_name);

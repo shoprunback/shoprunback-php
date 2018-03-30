@@ -8,6 +8,8 @@ class Warehouse extends Element
     use All;
     use Create;
 
+    private $address;
+
     public function __toString()
     {
         return $this->display($this->name);
