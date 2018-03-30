@@ -6,7 +6,7 @@ namespace Tests\Resources;
 
 require_once('BrandTest.php');
 
-use \Tests\BaseTest;
+use \Tests\Resources\BaseResourceTest;
 use \Tests\Resources\BrandTest;
 
 use \Shoprunback\Resources\Product;
@@ -14,14 +14,14 @@ use \Shoprunback\Resources\Brand;
 use \Shoprunback\RestClient;
 use \Shoprunback\Error\NotFoundError;
 
-final class ProductTest extends BaseTest
+final class ProductTest extends BaseResourceTest
 {
     public static function getResourceClass()
     {
         return 'Shoprunback\Resources\Product';
     }
 
-    protected static function createDefault()
+    public static function createDefault()
     {
         $label = self::randomString();
         $reference = self::randomString();

@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Tests\Resources;
 
-use \Tests\BaseTest;
+use \Tests\Resources\BaseResourceTest;
 
 use \Shoprunback\Resources\Brand;
 use \Shoprunback\RestClient;
 use \Shoprunback\Error\NotFoundError;
 
-final class BrandTest extends BaseTest
+final class BrandTest extends BaseResourceTest
 {
     public static function getResourceClass()
     {
         return 'Shoprunback\Resources\Brand';
     }
 
-    protected static function createDefault()
+    public static function createDefault()
     {
         $name = self::randomString();
         $reference = self::randomString();
