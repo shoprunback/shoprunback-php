@@ -116,7 +116,7 @@ abstract class Element implements NestedAttributes
         $restClient = RestClient::getClient();
 
         try {
-            $response = $restClient->request(self::showEndpoint($this->id), \Shoprunback\RestClient::GET);
+            $response = $restClient->request(static::showEndpoint($this->id), \Shoprunback\RestClient::GET);
         } catch(RestClientError $e) {
             self::logCurrentClass(json_encode($e));
             if ($e->response->getCode() == 404) {
@@ -150,7 +150,7 @@ abstract class Element implements NestedAttributes
     {
         $restClient = RestClient::getClient();
         $data = $this->getElementBody();
-        $response = $restClient->request(self::createEndpoint(), \Shoprunback\RestClient::POST, $data);
+        $response = $restClient->request(static::createEndpoint(), \Shoprunback\RestClient::POST, $data);
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
 

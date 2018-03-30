@@ -13,6 +13,8 @@ final class BrandTest extends BaseMockerTest
 
     public function testCanUpdateOneMocked()
     {
+        RestClient::getClient()->enableTesting();
+
         $brand = Brand::retrieve(1);
         $brand->name = self::randomString();
         $brand->save();

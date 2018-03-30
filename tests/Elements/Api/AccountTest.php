@@ -53,14 +53,4 @@ final class AccountTest extends BaseApiTest
         $account = static::getElementClass()::getOwn();
         $this->assertTrue($account->isPersisted());
     }
-
-    public function testCanNotRetrieveUnknown()
-    {
-        RestClient::getClient()->disableTesting();
-
-        $retrievedAccount = static::getElementClass()::retrieve(self::randomString());
-        $ownAccount = static::getElementClass()::getOwn();
-
-        $this->assertEquals($retrievedAccount->id, $ownAccount->id);
-    }
 }
