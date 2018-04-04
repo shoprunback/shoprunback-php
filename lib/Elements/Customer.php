@@ -40,4 +40,8 @@ class Customer extends Element
     {
         return $this->address;
     }
+
+    public static function getReferenceAttribute() {
+        return 'id';
+    }
 }

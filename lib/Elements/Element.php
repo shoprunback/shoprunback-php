@@ -116,7 +116,11 @@ abstract class Element implements NestedAttributes
         $restClient = RestClient::getClient();
 
         try {
-            $response = $restClient->request(static::showEndpoint($this->id), \Shoprunback\RestClient::GET);
+            if (isset($this->id)) {
+                $response = $restClient->request(static::showEndpoint($this->id), \Shoprunback\RestClient::GET);
+            } else {
+                $response = $restClient->request(static::showEndpoint($this->getReference()), \Shoprunback\RestClient::GET);
+            }
         } catch(RestClientError $e) {
             self::logCurrentClass(json_encode($e));
             if ($e->response->getCode() == 404) {
@@ -378,6 +382,15 @@ abstract class Element implements NestedAttributes
     public function getOriginalValues()
     {
         return $this->_origValues;
+    }
+
+    public static function getReferenceAttribute() {
+        return 'reference';
+    }
+
+    public function getReference() {
+        $reference = $this->getReferenceAttribute();
+        return $this->$reference;
     }
 
     public static function getElementName()

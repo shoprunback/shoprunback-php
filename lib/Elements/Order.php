@@ -56,4 +56,8 @@ class Order extends Element
     {
         return $this->customer;
     }
+
+    public static function getReferenceAttribute() {
+        return 'order_number';
+    }
 }

@@ -65,4 +65,8 @@ class Company extends Element
         $company->copyValues($company->newFromMixed($response->getBody()));
         return $company;
     }
+
+    public static function getReferenceAttribute() {
+        return 'id';
+    }
 }

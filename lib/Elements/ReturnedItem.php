@@ -40,4 +40,8 @@ class ReturnedItem extends Element
     {
         return $this->item;
     }
+
+    public static function getReferenceAttribute() {
+        return 'id';
+    }
 }

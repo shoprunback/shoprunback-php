@@ -114,6 +114,27 @@ abstract class BaseApiTest extends BaseElementTest
         }
     }
 
+    public function testCanRetrieveByReference()
+    {
+        RestClient::getClient()->disableTesting();
+
+        if (static::getElementClass()::canGetAll()) {
+            $elementClass = static::getElementClass();
+            $reference = $elementClass::getReferenceAttribute();
+
+            $element = $elementClass::all()[0];
+
+            $createdElement = new $elementClass();
+            $createdElement->$reference = $element->getReference();
+
+            $retrievedElement = static::getElementClass()::retrieve($createdElement->getReference());
+
+            $this->assertSame($element->id, $retrievedElement->id);
+        } else {
+            $this->assertTrue(method_exists($this, 'testCanRetrieve'));
+        }
+    }
+
     /**
      * @expectedException \Shoprunback\Error\NotFoundError
      */

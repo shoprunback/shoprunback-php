@@ -68,4 +68,8 @@ class Shipback extends Element
     {
         return $this->company;
     }
+
+    public static function getReferenceAttribute() {
+        return 'id';
+    }
 }
