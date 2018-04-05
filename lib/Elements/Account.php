@@ -52,6 +52,10 @@ class Account extends Element
         ];
     }
 
+    public static function getBaseEndpoint() {
+        return 'me';
+    }
+
     public static function ownEndpoint() {
         return 'me';
     }

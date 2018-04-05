@@ -53,6 +53,10 @@ class Company extends Element
         ];
     }
 
+    public static function getBaseEndpoint() {
+        return 'company';
+    }
+
     public static function ownEndpoint() {
         return 'company';
     }

@@ -44,6 +44,10 @@ class Customer extends Element
         ];
     }
 
+    public static function getBaseEndpoint() {
+        return '';
+    }
+
     public function setAddress($address)
     {
         $this->address = $address;

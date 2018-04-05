@@ -31,6 +31,10 @@ class ReturnedItem extends Element
         return get_object_vars($this);
     }
 
+    public static function getBaseEndpoint() {
+        return '';
+    }
+
     public function getApiAttributesKeys()
     {
         return [

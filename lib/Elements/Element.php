@@ -87,8 +87,7 @@ abstract class Element implements NestedAttributes
     }
 
     public static function indexEndpoint($page = 1) {
-        $className = explode('\\', get_called_class());
-        $endpoint = Inflector::pluralize(end($className));
+        $endpoint = static::getBaseEndpoint();
 
         if ($page > 1) {
             $endpoint .= '?page=' . $page;
