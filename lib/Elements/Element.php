@@ -69,6 +69,8 @@ abstract class Element implements NestedAttributes
 
     abstract public function getAllAttributes();
 
+    abstract public function getApiAttributesKeys();
+
     public function belongsTo($key)
     {
         return in_array($key, static::getBelongsTo());
@@ -76,7 +78,7 @@ abstract class Element implements NestedAttributes
 
     public function acceptNestedAttribute($key)
     {
-        return in_array($key, static::getAcceptNestedAttributes());
+        return in_array($key, static::getAcceptedNestedElements());
     }
 
     public function display($elementString)
@@ -197,9 +199,21 @@ abstract class Element implements NestedAttributes
         return $dirtyKeys;
     }
 
+    public function getApiAttributes()
+    {
+        $attributes = [];
+        foreach ($this->getApiAttributesKeys() as $key) {
+            if (property_exists($this, $key)) {
+                $attributes[$key] = $this->$key;
+            }
+        }
+
+        return $attributes;
+    }
+
     public function isDirty()
     {
-        foreach ($this->getAllAttributes() as $key => $value) {
+        foreach ($this->getApiAttributes() as $key => $value) {
             if ($this->isKeyDirty($key)) {
                 return true;
             }
@@ -267,7 +281,7 @@ abstract class Element implements NestedAttributes
             }
 
             if (!$this->$parent->isPersisted()) {
-                if (!in_array($parent, static::getAcceptNestedAttributes()) && $save) {
+                if (!in_array($parent, static::getAcceptedNestedElements()) && $save) {
                     $this->$parent->save();
                 }
             } elseif ($this->$parent->isDirty() && $save) {
@@ -281,7 +295,7 @@ abstract class Element implements NestedAttributes
         }
 
         $data = new \stdClass();
-        foreach ($this->getAllAttributes() as $key => $value) {
+        foreach ($this->getApiAttributes() as $key => $value) {
             if ($key == 'id' || $key == '_origValues') continue;
 
             if (is_null($value) && $this->isKeyDirty($key)) {
@@ -352,7 +366,7 @@ abstract class Element implements NestedAttributes
 
     public function copyValues($object)
     {
-        foreach ($object->getAllAttributes() as $key => $value) {
+        foreach ($object->getApiAttributes() as $key => $value) {
             if ($key != '_origValues') {
                 if (is_object($value) && $value instanceof Element) {
                     $setter = 'set' . Inflector::classify($value::getElementName());

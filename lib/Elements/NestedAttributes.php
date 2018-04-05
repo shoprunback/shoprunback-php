@@ -5,6 +5,6 @@ namespace Shoprunback\Elements;
 interface NestedAttributes
 {
     static function getBelongsTo();
-    static function getAcceptNestedAttributes();
+    static function getAcceptedNestedElements();
     static function canOnlyBeNested();
 }

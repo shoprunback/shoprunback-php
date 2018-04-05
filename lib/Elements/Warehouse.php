@@ -20,7 +20,7 @@ class Warehouse extends Element
         return [];
     }
 
-    public static function getAcceptNestedAttributes()
+    public static function getAcceptedNestedElements()
     {
         return ['address'];
     }
@@ -33,6 +33,16 @@ class Warehouse extends Element
     public function getAllAttributes()
     {
         return get_object_vars($this);
+    }
+
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'name',
+            'reference',
+            'address'
+        ];
     }
 
     public function setAddress($address)

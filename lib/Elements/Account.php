@@ -21,7 +21,7 @@ class Account extends Element
         return [];
     }
 
-    public static function getAcceptNestedAttributes()
+    public static function getAcceptedNestedElements()
     {
         return [];
     }
@@ -34,6 +34,22 @@ class Account extends Element
     public function getAllAttributes()
     {
         return get_object_vars($this);
+    }
+
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'first_name',
+            'last_name',
+            'email',
+            'company_id',
+            'created_at',
+            'owner',
+            'pending',
+            'manager',
+            'auth_token'
+        ];
     }
 
     public static function ownEndpoint() {

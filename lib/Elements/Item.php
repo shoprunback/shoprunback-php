@@ -16,7 +16,7 @@ class Item extends Element
         return ['order'];
     }
 
-    public static function getAcceptNestedAttributes()
+    public static function getAcceptedNestedElements()
     {
         return [];
     }
@@ -29,6 +29,21 @@ class Item extends Element
     public function getAllAttributes()
     {
         return get_object_vars($this);
+    }
+
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'label',
+            'reference',
+            'barcode',
+            'price_cents',
+            'currency',
+            'created_at',
+            'product_id',
+            'product'
+        ];
     }
 
     public function setProduct($product)

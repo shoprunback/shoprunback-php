@@ -14,7 +14,7 @@ class Address extends Element
         return ['customer'];
     }
 
-    public static function getAcceptNestedAttributes()
+    public static function getAcceptedNestedElements()
     {
         return [];
     }
@@ -27,6 +27,19 @@ class Address extends Element
     public function getAllAttributes()
     {
         return get_object_vars($this);
+    }
+
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'line1',
+            'line2',
+            'zipcode',
+            'country_code',
+            'city',
+            'state'
+        ];
     }
 
     public static function getReferenceAttribute() {

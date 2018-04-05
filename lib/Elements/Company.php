@@ -19,7 +19,7 @@ class Company extends Element
         return ['account'];
     }
 
-    public static function getAcceptNestedAttributes()
+    public static function getAcceptedNestedElements()
     {
         return [];
     }
@@ -32,6 +32,25 @@ class Company extends Element
     public function getAllAttributes()
     {
         return get_object_vars($this);
+    }
+
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'name',
+            'slug',
+            'address1',
+            'address2',
+            'zipcode',
+            'state',
+            'country_code',
+            'contact_email',
+            'website_url',
+            'phone_number',
+            'logo_url',
+            'reasons'
+        ];
     }
 
     public static function ownEndpoint() {

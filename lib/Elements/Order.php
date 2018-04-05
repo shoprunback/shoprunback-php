@@ -22,7 +22,7 @@ class Order extends Element
         return [];
     }
 
-    public static function getAcceptNestedAttributes()
+    public static function getAcceptedNestedElements()
     {
         return ['items', 'customer'];
     }
@@ -35,6 +35,20 @@ class Order extends Element
     public function getAllAttributes()
     {
         return get_object_vars($this);
+    }
+
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'order_number',
+            'ordered_at',
+            'customer',
+            'metadata',
+            'items',
+            'created_at',
+            'shipback_id'
+        ];
     }
 
     public function setShipback($shipback)

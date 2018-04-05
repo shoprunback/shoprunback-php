@@ -16,7 +16,7 @@ class ReturnedItem extends Element
         return ['shipback'];
     }
 
-    public static function getAcceptNestedAttributes()
+    public static function getAcceptedNestedElements()
     {
         return [];
     }
@@ -29,6 +29,15 @@ class ReturnedItem extends Element
     public function getAllAttributes()
     {
         return get_object_vars($this);
+    }
+
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'item_id',
+            'reason_code'
+        ];
     }
 
     public function setItem($item)

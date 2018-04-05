@@ -16,7 +16,7 @@ class Customer extends Element
         return ['order', 'shipback'];
     }
 
-    public static function getAcceptNestedAttributes()
+    public static function getAcceptedNestedElements()
     {
         return ['address'];
     }
@@ -29,6 +29,19 @@ class Customer extends Element
     public function getAllAttributes()
     {
         return get_object_vars($this);
+    }
+
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'first_name',
+            'last_name',
+            'email',
+            'phone',
+            'locale',
+            'address'
+        ];
     }
 
     public function setAddress($address)
