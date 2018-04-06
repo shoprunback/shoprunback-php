@@ -134,7 +134,7 @@ abstract class Element implements NestedAttributes
             }
 
             $originalObject = static::newFromMixed($response->getBody());
-            unset($this->_origValues);
+            unset($originalObject->_origValues);
             $this->_origValues = clone $originalObject;
         }
     }
