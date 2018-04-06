@@ -8,6 +8,8 @@ use Shoprunback\Util\Inflector;
 use Shoprunback\Util\Logger;
 use Shoprunback\Error\NotFoundError;
 use Shoprunback\Error\RestClientError;
+use Shoprunback\Error\ElementCannotBeUpdated;
+use Shoprunback\Error\ElementCannotBeCreated;
 use Shoprunback\Elements\NestedAttributes;
 
 abstract class Element implements NestedAttributes
