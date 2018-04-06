@@ -119,10 +119,10 @@ abstract class Inflector
             }
 
             // Check if it has a parent class which is not abstract
-            if ($parentClass = get_parent_class($class) && class_exists($class, FALSE)) {
+            if ($parentClass = get_parent_class($class) && class_exists($parentClass, FALSE)) {
                 $parent = new $parentClass();
                 try {
-                    return static::getClass($parentClass);
+                    return static::getClass($parent);
                 } catch (UnknownElement $e) {
                     return $e;
                 }
@@ -133,6 +133,18 @@ abstract class Inflector
 
         if (self::isKnownElement($class)) {
             return self::getFullClassName($class);
+        }
+
+        if (class_exists($class, FALSE)) {
+            $object = new $class();
+            if ($parentClass = get_parent_class($object) && class_exists($parentClass, FALSE)) {
+                $parent = new $parentClass();
+                try {
+                    return static::getClass($parent);
+                } catch (UnknownElement $e) {
+                    return $e;
+                }
+            }
         }
 
         throw new UnknownElement('Unknown element ' . $class);
