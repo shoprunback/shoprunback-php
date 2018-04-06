@@ -120,9 +120,9 @@ abstract class Inflector
 
             // Check if it has a parent class which is not abstract
             if ($parentClass = get_parent_class($class) && class_exists($parentClass, FALSE)) {
-                $parent = new $parentClass();
+                $parent = new ReflectionClass($parentClass);
                 try {
-                    return static::getClass($parent);
+                    return static::getClass($parent->getParentClass()->getName());
                 } catch (UnknownElement $e) {
                     return $e;
                 }
@@ -138,9 +138,9 @@ abstract class Inflector
         if (class_exists($class, FALSE)) {
             $object = new $class();
             if ($parentClass = get_parent_class($object) && class_exists($parentClass, FALSE)) {
-                $parent = new $parentClass();
+                $parent = new ReflectionClass($parentClass);
                 try {
-                    return static::getClass($parent);
+                    return static::getClass($parent->getParentClass()->getName());
                 } catch (UnknownElement $e) {
                     return $e;
                 }
