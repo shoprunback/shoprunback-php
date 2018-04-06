@@ -112,6 +112,15 @@ abstract class Element implements NestedAttributes
         return self::indexEndpoint() . '/' . $id;
     }
 
+    public function tryRefresh()
+    {
+        try {
+            $this->refresh();
+        } catch (Exception $e) {
+
+        }
+    }
+
     public function refresh()
     {
         $restClient = RestClient::getClient();
@@ -136,6 +145,8 @@ abstract class Element implements NestedAttributes
 
     public function save()
     {
+        $this->tryRefresh();
+
         if ($this->isPersisted()) {
             if (static::canUpdate()) {
                 $this->put();
