@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Elements;
+namespace Tests\Util;
 
 use \Tests\BaseTest;
 

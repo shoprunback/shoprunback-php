@@ -2,18 +2,10 @@
 
 namespace Tests\Elements\Mocker;
 
-require_once dirname(__FILE__) . '/../../../init.php';
-
 use \Tests\Elements\Mocker\BaseMockerTest;
 
 use \Shoprunback\Elements\Brand;
 use \Shoprunback\RestClient;
-
-// To test getClass
-class BrandChild extends \Shoprunback\Elements\Brand
-{}
-class BrandChildChild extends BrandChild
-{}
 
 final class BrandTest extends BaseMockerTest
 {
