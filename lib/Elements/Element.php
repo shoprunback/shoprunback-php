@@ -112,12 +112,30 @@ abstract class Element implements NestedAttributes
         return self::indexEndpoint() . '/' . $id;
     }
 
-    public function tryRefresh()
+    public function loadOriginal()
     {
-        try {
-            $this->refresh();
-        } catch (Exception $e) {
+        if (!$this->isPersisted()) {
+            $restClient = RestClient::getClient();
 
+            try {
+                if (isset($this->id) && $this->id != '') {
+                    $response = $restClient->request(static::showEndpoint($this->id), \Shoprunback\RestClient::GET);
+                } elseif ($this->getReference() != '') {
+                    $response = $restClient->request(static::showEndpoint($this->getReference()), \Shoprunback\RestClient::GET);
+                } else {
+                    return;
+                }
+            } catch(RestClientError $e) {
+                if ($e->response->getCode() == 404) {
+                    return;
+                } else {
+                    throw $e;
+                }
+            }
+
+            $originalObject = $this->newFromMixed($response->getBody());
+            unset($this->_origValues);
+            $this->_origValues = clone $originalObject;
         }
     }
 
@@ -145,7 +163,7 @@ abstract class Element implements NestedAttributes
 
     public function save()
     {
-        $this->tryRefresh();
+        $this->loadOriginal();
 
         if ($this->isPersisted()) {
             if (static::canUpdate()) {

@@ -37,10 +37,11 @@ require dirname(__FILE__) . '/lib/Util/Logger.php';
 
 // Load Errors
 require dirname(__FILE__) . '/lib/Error/Error.php';
-require dirname(__FILE__) . '/lib/Error/UnknownApiToken.php';
-require dirname(__FILE__) . '/lib/Error/NotFoundError.php';
-require dirname(__FILE__) . '/lib/Error/RestClientError.php';
-require dirname(__FILE__) . '/lib/Error/ElementNumberDoesntExists.php';
 require dirname(__FILE__) . '/lib/Error/ElementCannotBeCreated.php';
 require dirname(__FILE__) . '/lib/Error/ElementCannotBeUpdated.php';
 require dirname(__FILE__) . '/lib/Error/ElementCannotGetAll.php';
+require dirname(__FILE__) . '/lib/Error/ElementNumberDoesntExists.php';
+require dirname(__FILE__) . '/lib/Error/NotFoundError.php';
+require dirname(__FILE__) . '/lib/Error/RestClientError.php';
+require dirname(__FILE__) . '/lib/Error/UnknownApiToken.php';
+require dirname(__FILE__) . '/lib/Error/UnknownElement.php';

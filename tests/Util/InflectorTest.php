@@ -77,4 +77,23 @@ final class InflectorTest extends BaseTest
 
         $this->assertEquals($inflectedArrayBrand->_origValues, $inflectedObjectBrand->_origValues);
     }
+
+    public function testGetClass()
+    {
+        $brand = new Brand();
+        $this->assertSame(Inflector::getClass($brand), 'Shoprunback\Elements\Brand');
+        $this->assertSame(Inflector::getClass(get_class($brand)), 'Shoprunback\Elements\Brand');
+
+        // $brandChild = new BrandChild();
+        // $this->assertSame(Inflector::getClass($brandChild), 'Shoprunback\Elements\Brand');
+
+        // $brandChildChild = new BrandChildChild();
+        // $this->assertSame(Inflector::getClass($brandChildChild), 'Shoprunback\Elements\Brand');
+
+        // $stdClass = new stdClass();
+        // $this->assertInstanceOf(
+        //     Inflector::getClass($stdClass),
+        //     'Shoprunback\Error\UnknownElement'
+        // );
+    }
 }
