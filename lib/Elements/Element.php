@@ -18,6 +18,10 @@ abstract class Element implements NestedAttributes
     {
         $this->id = $id;
         $this->_origValues = new \stdClass();
+
+        if ($this->id != '') {
+            $this->loadOriginal();
+        }
     }
 
     public function __set($key, $value)
