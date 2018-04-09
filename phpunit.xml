@@ -3,8 +3,8 @@
     colors="auto"
     >
     <php>
-        <env name="DASHBOARD_URL" value="localhost:3000"/>
-        <env name="SHOPRUNBACK_API_TOKEN" value="UD3RW8zx7WKe75KWz96Z6YroCXeUrPzyPsZxfVsyLhRDM8xWoA"/>
+        <env name="SHOPRUNBACK_URL" value="https://sandbox.dashboard.shoprunback.com"/>
+        <env name="SHOPRUNBACK_TOKEN" value="1yHRJJFgzU4McVsuicLNbtm5sPpYeEW2eCpt5-awiWRx7218wg"/>
     </php>
     <testsuites>
         <testsuite name="Shoprunback API Wrapper Test Suite">

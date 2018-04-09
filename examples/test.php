@@ -12,21 +12,91 @@ use Shoprunback\Resources\User      as User;
 use Shoprunback\Resources\Item      as Item;
 use Shoprunback\Resources\Order     as Order;
 use Shoprunback\Resources\Shipback  as Shipback;
-use Shoprunback\ApiCaller           as ApiCaller;
+use Shoprunback\RestClient          as RestClient;
 use Shoprunback\Util\Converter      as Converter;
 use Shoprunback\Util\Logger         as Logger;
+use Shoprunback\Util\Inflector      as Inflector;
 
 // Setup for test
-Shoprunback::setApiBaseUrl(getenv('DASHBOARD_URL') . '/api/v1/');
-Shoprunback::setApiToken(getenv('SHOPRUNBACK_API_TOKEN'));
+// Shoprunback::setApiBaseUrl(getenv('DASHBOARD_URL') . '/api/v1/');
+// Shoprunback::setApiToken(getenv('SHOPRUNBACK_API_TOKEN'));
 
 // Use this var to check if the exception is caught
 // Shoprunback::setApiToken('afalsetoken');
 
 // Fetch and update Brand
-// $brand = Brand::fetch('Fashion-Manufacturer');
+RestClient::getClient()->enableTesting();
+// RestClient::getClient()->disableTesting();
+// $brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
+// var_dump($brand);
+// var_dump($brand->_origValues);
+// $brand->name = 'mamamamama';
+// var_dump($brand);
+// var_dump($brand->_origValues);
+// $updatedBrand = Brand::update($brand);
+// var_dump($updatedBrand);
+// var_dump($updatedBrand->_origValues);
+// $brand = Brand::retrieve('5d87e512-719b-44b2-8f5c-43cc6bb7b834'); // JULIEN
+// Brand::delete('2a9f7ec0-2fa7-4758-be9c-5aa0abd8ed38');
+
+// RestClient::getClient()->disableTesting();
+// $brand = Brand::retrieve('b5ebd8d0-d223-40a1-8b0c-d54b1505a454'); // PAUL
+// $brand->name = 'AH';
+// Brand::update($brand);
+// var_dump($brand);
+
+// $brand = new Brand();
+// $brand->id = 'toto';
+// $brand->name = 'final fantasy';
+// $brand->reference = 'final-fantasy';
+// $brand->save();
+// var_dump($createdBrand);
+
+// $result = Brand::delete('05f044d4-e385-496c-a242-aae58e19df87');
+// var_dump($result);
+
+
+// echo Inflector::classify('brand');
+// echo Inflector::classify('brands');
+// echo Inflector::classify('country');
+// echo Inflector::classify('countries');
+
+// echo Inflector::pluralize('brand');
+// echo Inflector::pluralize('brands');#TODO
+// echo Inflector::pluralize('country');
+// echo Inflector::pluralize('countries');#TODO
 // $brand->name = 'Delfino place 2';
 // $brand->save();
+
+// $products = Product::all();
+// var_dump($products);die;
+
+// $product = new Product();
+// $product->label = 'lebeau';
+// $product->reference = rand();
+// $product->weight_grams = 10000000;
+// $product->brand = $brand;
+// $createdProduct = Product::create($product);
+
+// $product = new Product();
+// $product->label = 'lebeau';
+// $product->reference = rand();
+// $product->weight_grams = 10000000;
+// $product->brand = $brand;
+// $createdProduct = Product::create($product);
+// var_dump($createdProduct);
+
+// $product = Product::retrieve('a529f86c-ece7-4880-95bc-1608ae18752b');
+// var_dump($product);
+
+// $product->ean = '789456123';
+// $updatedProduct = Product::update($product);
+// var_dump($updatedProduct);
+
+// Product::delete(1234);
+
+
+
 
 // Fetch and update User
 // $user = User::fetch();

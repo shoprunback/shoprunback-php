@@ -2,20 +2,13 @@
 
 namespace Shoprunback\Resources;
 
-class Brand extends ApiObject
+class Brand extends Resource
 {
-    public $name;
-    public $reference;
-
-    static public function getApiUrlResource()
-    {
-        return 'brands';
-    }
-
-    static public function getApiUrlReference()
-    {
-        return 'id';
-    }
+    use Retrieve;
+    use All;
+    use Update;
+    use Create;
+    use Delete;
 
     public function display()
     {

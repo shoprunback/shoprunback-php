@@ -2,6 +2,6 @@
 
 namespace Shoprunback\Error;
 
-class ReferenceTaken extends Error
+class NotFoundError extends Error
 {
 }
