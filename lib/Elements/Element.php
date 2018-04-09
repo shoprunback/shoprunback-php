@@ -28,7 +28,17 @@ abstract class Element implements NestedAttributes
 
     public function __set($key, $value)
     {
-        if ($this->belongsTo($key)) {
+        if (
+            is_object($value)
+            && isset($value->id)
+            && (
+                $this->belongsTo($key)
+                || (
+                    in_array($key, static::getAcceptedNestedElements())
+                    && Inflector::isKnownElement($key)
+                )
+            )
+        ) {
             $attributeId = $key . '_id';
             $this->$attributeId = $value->id;
         }
@@ -150,7 +160,7 @@ abstract class Element implements NestedAttributes
         $restClient = RestClient::getClient();
 
         try {
-            if (isset($this->id)) {
+            if (isset($this->id) && !empty($this->id)) {
                 $response = $restClient->request(static::showEndpoint($this->id), \Shoprunback\RestClient::GET);
             } else {
                 $response = $restClient->request(static::showEndpoint($this->getReference()), \Shoprunback\RestClient::GET);
@@ -175,7 +185,7 @@ abstract class Element implements NestedAttributes
             if (static::canUpdate()) {
                 $this->put();
             } else {
-                throw new ElementCannotBeUpdated(Inflector::getClass($this) . ' cannot be updated');
+                $this->refresh();
             }
         } else {
             if (static::canCreate()) {
@@ -271,12 +281,14 @@ abstract class Element implements NestedAttributes
                 !in_array($key, static::getBelongsTo())
                 && in_array(static::getElementName(), $keyClass::getBelongsTo())
                 && property_exists($this, $key . '_id')
+                && !$keyClass::canOnlyBeNested()
+
             ) {
                 return false;
             }
 
             return $this->$key->isDirty() || (!$this->$key::canOnlyBeNested() && $this->checkIfDirty($key . '_id'));
-        } elseif (Inflector::isPluralClassName(Inflector::classify($key), $key)) {
+        } elseif (Inflector::isKnownElement(Inflector::classify($key)) && Inflector::isPluralClassName(Inflector::classify($key), $key)) {
             foreach ($this->$key as $value) {
                 if ($value->isDirty()) {
                     return true;
@@ -302,8 +314,9 @@ abstract class Element implements NestedAttributes
 
     public function checkIfDirty($key)
     {
-        return (!property_exists($this->_origValues, $key) && !is_null($this->$key))
-                || (isset($this->$key) && $this->$key != $this->_origValues->$key);
+        return is_null($this->_origValues)
+            || (!property_exists($this->_origValues, $key) && !is_null($this->$key))
+            || (isset($this->$key) && $this->$key != $this->_origValues->$key);
     }
 
     public function getElementBody($save = true)
@@ -330,7 +343,7 @@ abstract class Element implements NestedAttributes
 
         $data = new \stdClass();
         foreach ($this->getApiAttributes() as $key => $value) {
-            if ($key == 'id' || $key == '_origValues') continue;
+            if ($key == '_origValues') continue;
 
             if (is_null($value) && $this->isKeyDirty($key)) {
                 $data->$key = $value;
@@ -338,11 +351,13 @@ abstract class Element implements NestedAttributes
             }
 
             $keyPreged = preg_replace('/_id$/', '', $key);
+            $keyClass = Inflector::getFullClassName($key);
 
             if (
                 $this->isKeyDirty($key)
                 && (
                     !isset($this->{$key . '_id'})
+                    || $keyClass::canOnlyBeNested()
                     || (
                         !$save
                         && $value->isDirty()
@@ -352,7 +367,7 @@ abstract class Element implements NestedAttributes
                     $keyPreged == $key
                     || (
                         Inflector::isKnownElement($keyPreged)
-                        && property_exists($this, $keyPreged)
+                        && (property_exists($this, $keyPreged) || !is_null($this->$keyPreged))
                         && property_exists($this->$keyPreged, 'id')
                         && !empty($this->$keyPreged->id)
                     )
@@ -362,7 +377,17 @@ abstract class Element implements NestedAttributes
             }
         }
 
-        if (!$this->isPersisted() || $this->id !== $this->_origValues->id || is_null($data->id)) {
+        if (
+            !$this->isPersisted()
+            || (
+                !is_null($this->_origValues)
+                && $this->id !== $this->_origValues->id
+            )
+            || (
+                isset($data->id)
+                && is_null($data->id)
+            )
+        ) {
             unset($data->id);
         }
         unset($data->_origValues);
@@ -374,7 +399,7 @@ abstract class Element implements NestedAttributes
     {
         if (Inflector::isKnownElement($key)) { // If it is a element
             return $value->getElementBody();
-        } elseif (Inflector::isPluralClassName(Inflector::classify($key), $key)) { // If it is an array of elements
+        } elseif (Inflector::isKnownElement(Inflector::classify($key)) && Inflector::isPluralClassName(Inflector::classify($key), $key)) { // If it is an array of elements
             $arrayOfElements = [];
 
             foreach ($value as $k => $element) {
