@@ -22,6 +22,7 @@ require dirname(__FILE__) . '/lib/Resources/Product.php';
 // require dirname(__FILE__) . '/lib/Resources/User.php';
 
 // Load Utils
+require dirname(__FILE__) . '/lib/Util/Container.php';
 require dirname(__FILE__) . '/lib/Util/Inflector.php';
 require dirname(__FILE__) . '/lib/Util/Logger.php';
 
