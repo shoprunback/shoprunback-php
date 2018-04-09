@@ -19,3 +19,5 @@ Doc: ```https://www.sitepoint.com/quick-intro-phpcompatibility-standard-for-phpc
 
 To test if the code respect writing standards and is compatible with various PHP versions, run
 ```vendor/bin/phpcs --ignore=/vendor/ --standard=PHPCompatibility --extensions=php --runtime-set testVersion <version_to_check> <path_to_test>```
+Example :
+```vendor/bin/phpcs --ignore=/vendor/ --standard=PHPCompatibility --extensions=php --runtime-set testVersion 7.2 ./tests/```
