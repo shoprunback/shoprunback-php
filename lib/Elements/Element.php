@@ -237,7 +237,7 @@ abstract class Element implements NestedAttributes
     {
         $attributes = [];
         foreach ($this->getApiAttributesKeys() as $key) {
-            if (property_exists($this, $key)) {
+            if (property_exists($this, $key) || isset($this->$key) || $this->$key != null) {
                 $attributes[$key] = $this->$key;
             }
         }
@@ -276,7 +276,7 @@ abstract class Element implements NestedAttributes
             }
 
             return $this->$key->isDirty() || (!$this->$key::canOnlyBeNested() && $this->checkIfDirty($key . '_id'));
-        } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) {
+        } elseif (Inflector::isPluralClassName(self::classify($key), $key)) {
             foreach ($this->$key as $value) {
                 if ($value->isDirty()) {
                     return true;
@@ -362,7 +362,9 @@ abstract class Element implements NestedAttributes
             }
         }
 
-        unset($data->id);
+        if (!$this->isPersisted() || $this->id !== $this->_origValues->id || is_null($data->id)) {
+            unset($data->id);
+        }
         unset($data->_origValues);
 
         return $data;
@@ -372,7 +374,7 @@ abstract class Element implements NestedAttributes
     {
         if (Inflector::isKnownElement($key)) { // If it is a element
             return $value->getElementBody();
-        } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) { // If it is an array of elements
+        } elseif (Inflector::isPluralClassName(self::classify($key), $key)) { // If it is an array of elements
             $arrayOfElements = [];
 
             foreach ($value as $k => $element) {
