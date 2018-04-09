@@ -276,7 +276,7 @@ abstract class Element implements NestedAttributes
             }
 
             return $this->$key->isDirty() || (!$this->$key::canOnlyBeNested() && $this->checkIfDirty($key . '_id'));
-        } elseif (Inflector::isPluralClassName(self::classify($key), $key)) {
+        } elseif (Inflector::isPluralClassName(Inflector::classify($key), $key)) {
             foreach ($this->$key as $value) {
                 if ($value->isDirty()) {
                     return true;
@@ -374,7 +374,7 @@ abstract class Element implements NestedAttributes
     {
         if (Inflector::isKnownElement($key)) { // If it is a element
             return $value->getElementBody();
-        } elseif (Inflector::isPluralClassName(self::classify($key), $key)) { // If it is an array of elements
+        } elseif (Inflector::isPluralClassName(Inflector::classify($key), $key)) { // If it is an array of elements
             $arrayOfElements = [];
 
             foreach ($value as $k => $element) {
