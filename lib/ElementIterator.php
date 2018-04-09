@@ -20,7 +20,7 @@ class ElementIterator implements \Iterator, \ArrayAccess
 
     public function next()
     {
-        if ($this->position == 9 && isset($this->current_page) && !is_null($this->next_page)) {
+        if ($this->position == ($this->per_page - 1) && isset($this->current_page) && !is_null($this->next_page)) {
             $this->position     = 0;
             $this->manager      = $this->manager->getElementClass()::all($this->next_page);
             $this->per_page     = $this->manager->per_page;
