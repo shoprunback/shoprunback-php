@@ -278,7 +278,7 @@ abstract class Element implements NestedAttributes
             }
             $keyClass = Inflector::getFullClassName($key);
             if (
-                !in_array($key, static::getBelongsTo())
+                !$this->belongsTo($key)
                 && in_array(static::getElementName(), $keyClass::getBelongsTo())
                 && property_exists($this, $key . '_id')
                 && !$keyClass::canOnlyBeNested()
@@ -427,7 +427,7 @@ abstract class Element implements NestedAttributes
 
     public function copyValues($object)
     {
-        foreach ($object->getApiAttributes() as $key => $value) {
+        foreach ($object->getAllAttributes() as $key => $value) {
             if ($key != '_origValues') {
                 if (is_object($value) && $value instanceof Element) {
                     $setter = 'set' . Inflector::classify($value::getElementName());
