@@ -54,7 +54,7 @@ final class CompanyTest extends BaseApiTest
         $this->assertTrue($company->isPersisted());
     }
 
-    public function testCanNotRetrieveUnknown()
+    public function testCannotRetrieveUnknown()
     {
         RestClient::getClient()->disableTesting();
 

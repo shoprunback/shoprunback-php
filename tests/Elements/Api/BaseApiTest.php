@@ -41,7 +41,7 @@ abstract class BaseApiTest extends BaseElementTest
         RestClient::getClient()->disableTesting();
 
         if (static::getElementClass()::canGetAll()) {
-            $this->assertGreaterThan(0, static::getElementClass()::all()->count);
+            $this->assertGreaterThan(static::getElementClass()::all()->count, 0);
         } else {
             $this->assertTrue(true);
         }
@@ -87,7 +87,7 @@ abstract class BaseApiTest extends BaseElementTest
     /**
      * @expectedException \Shoprunback\Error\NotFoundError
      */
-    public function testCanNotRetrieveUnknown()
+    public function testCannotRetrieveUnknown()
     {
         RestClient::getClient()->disableTesting();
 
