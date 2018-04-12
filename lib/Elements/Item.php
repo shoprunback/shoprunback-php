@@ -41,10 +41,6 @@ class Item extends Element
         ];
     }
 
-    public static function getBaseEndpoint() {
-        return '';
-    }
-
     public function setProduct($product)
     {
         $this->product = $product;

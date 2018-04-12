@@ -16,7 +16,6 @@ require dirname(__FILE__) . '/lib/Elements/traits/Create.php';
 require dirname(__FILE__) . '/lib/Elements/traits/Delete.php';
 
 // Load Elements
-require dirname(__FILE__) . '/lib/Elements/NestedAttributes.php';
 require dirname(__FILE__) . '/lib/Elements/Element.php';
 require dirname(__FILE__) . '/lib/Elements/Brand.php';
 require dirname(__FILE__) . '/lib/Elements/Product.php';

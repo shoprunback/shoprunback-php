@@ -37,10 +37,6 @@ class Address extends Element
         ];
     }
 
-    public static function getBaseEndpoint() {
-        return '';
-    }
-
     public static function getReferenceAttribute() {
         return 'id';
     }

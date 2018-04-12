@@ -10,9 +10,8 @@ use Shoprunback\Error\NotFoundError;
 use Shoprunback\Error\RestClientError;
 use Shoprunback\Error\ElementCannotBeUpdated;
 use Shoprunback\Error\ElementCannotBeCreated;
-use Shoprunback\Elements\NestedAttributes;
 
-abstract class Element implements NestedAttributes
+abstract class Element
 {
     public $id;
 
@@ -115,6 +114,11 @@ abstract class Element implements NestedAttributes
     public function display($elementString)
     {
         return $elementString . ' (' . $this->id . ')';
+    }
+
+    public static function getBaseEndpoint()
+    {
+        return '';
     }
 
     public static function indexEndpoint($page = 1) {
