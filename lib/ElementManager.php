@@ -42,17 +42,17 @@ class ElementManager extends \ArrayObject
         return new ElementIterator($this);
     }
 
-    public function offsetGet($id)
+    public function offsetGet($index)
     {
-        if (isset($this->elements[$id])) {
-            return $this->elements[$id];
+        if (isset($this->elements[$index])) {
+            return $this->elements[$index];
         }
 
-        if ($id < $this->count) {
-            return $this->getElementClass()::all(floor($id / $this->per_page))[$id % $this->per_page];
+        if ($index < $this->count) {
+            return $this->getElementClass()::all(floor($index / $this->per_page))[$index % $this->per_page];
         }
 
-        throw new ElementNumberDoesntExists('There is ' . $this->count . ' ' . $this->getElementClass()::getAllElementKey() . ' and the number asked was ' . $id);
+        throw new ElementNumberDoesntExists('There is ' . $this->count . ' ' . $this->getElementClass()::getAllElementKey() . ' and the number asked was ' . $index);
     }
 
     public function getElementClass()
