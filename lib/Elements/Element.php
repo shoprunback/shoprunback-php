@@ -351,8 +351,8 @@ abstract class Element implements NestedAttributes
             }
 
             if (property_exists($this->$parent, 'id') && !empty($this->$parent->id)) {
-                $parentId = $parent . '_id';
-                $this->$parentId = $this->$parent->id;
+                $parentForeignKey = $parent . '_id';
+                $this->$parentForeignKey = $this->$parent->id;
             }
         }
 
