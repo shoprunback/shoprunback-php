@@ -433,6 +433,13 @@ abstract class Element implements NestedAttributes
                     $setter = 'set' . Inflector::classify($value::getElementName());
                     $value->copyValues($value);
                     $this->$setter($value);
+                } elseif (is_array($value) && !empty($value) && $value[0] instanceof Element) {
+                    $nestedElements = [];
+                    foreach ($value as $key => $element) {
+                        $element->copyValues($element);
+                        $nestedElements[] = $element;
+                    }
+                    $this->$key = $nestedElements;
                 } else {
                     $this->$key = $value;
                 }
