@@ -7,7 +7,7 @@ use Shoprunback\Error\UnknownApiToken;
 use Shoprunback\Error\RestClientError;
 use Shoprunback\Util\Logger;
 use Shoprunback\RestResponse;
-use Shoprunback\RestMocker;
+use Tests\RestMocker;
 
 class RestClient
 {

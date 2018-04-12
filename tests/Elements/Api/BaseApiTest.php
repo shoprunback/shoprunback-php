@@ -41,7 +41,7 @@ abstract class BaseApiTest extends BaseElementTest
         RestClient::getClient()->disableTesting();
 
         if (static::getElementClass()::canGetAll()) {
-            $this->assertGreaterThan(static::getElementClass()::all()->count, 0);
+            $this->assertGreaterThan(0, static::getElementClass()::all()->count);
         } else {
             $this->assertTrue(true);
         }

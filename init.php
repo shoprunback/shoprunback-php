@@ -4,9 +4,9 @@
 require dirname(__FILE__) . '/lib/Shoprunback.php';
 require dirname(__FILE__) . '/lib/RestClient.php';
 require dirname(__FILE__) . '/lib/RestResponse.php';
-require dirname(__FILE__) . '/lib/RestMocker.php';
 require dirname(__FILE__) . '/lib/ElementIterator.php';
 require dirname(__FILE__) . '/lib/ElementManager.php';
+require dirname(__FILE__) . '/tests/RestMocker.php';
 
 // Load Traits
 require dirname(__FILE__) . '/lib/Elements/traits/Retrieve.php';
