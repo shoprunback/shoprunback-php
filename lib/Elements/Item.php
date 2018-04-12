@@ -16,11 +16,6 @@ class Item extends Element
         return ['order', 'product'];
     }
 
-    public static function getAcceptedNestedElements()
-    {
-        return [];
-    }
-
     public static function canOnlyBeNested()
     {
         return true;

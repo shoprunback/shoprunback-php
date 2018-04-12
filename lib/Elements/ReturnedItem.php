@@ -16,11 +16,6 @@ class ReturnedItem extends Element
         return ['shipback'];
     }
 
-    public static function getAcceptedNestedElements()
-    {
-        return [];
-    }
-
     public static function canOnlyBeNested()
     {
         return true;

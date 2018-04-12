@@ -29,11 +29,6 @@ class Shipback extends Element
         return ['returnedItems', 'customer', 'company'];
     }
 
-    public static function canOnlyBeNested()
-    {
-        return false;
-    }
-
     public function getAllAttributes()
     {
         return get_object_vars($this);

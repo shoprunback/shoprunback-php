@@ -15,19 +15,9 @@ class Warehouse extends Element
         return $this->display($this->name);
     }
 
-    public static function getBelongsTo()
-    {
-        return [];
-    }
-
     public static function getAcceptedNestedElements()
     {
         return ['address'];
-    }
-
-    public static function canOnlyBeNested()
-    {
-        return false;
     }
 
     public function getAllAttributes()

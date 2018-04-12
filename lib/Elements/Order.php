@@ -17,19 +17,9 @@ class Order extends Element
         return $this->display($this->order_number);
     }
 
-    public static function getBelongsTo()
-    {
-        return [];
-    }
-
     public static function getAcceptedNestedElements()
     {
         return ['items', 'customer'];
-    }
-
-    public static function canOnlyBeNested()
-    {
-        return false;
     }
 
     public function getAllAttributes()

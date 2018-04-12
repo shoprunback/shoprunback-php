@@ -87,6 +87,21 @@ abstract class Element implements NestedAttributes
 
     abstract public function getApiAttributesKeys();
 
+    public static function getBelongsTo()
+    {
+        return [];
+    }
+
+    public static function getAcceptedNestedElements()
+    {
+        return [];
+    }
+
+    public static function canOnlyBeNested()
+    {
+        return false;
+    }
+
     public function belongsTo($key)
     {
         return in_array($key, static::getBelongsTo());

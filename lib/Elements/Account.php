@@ -16,21 +16,6 @@ class Account extends Element
         return $this->display($this->first_name . ' ' . $this->last_name);
     }
 
-    public static function getBelongsTo()
-    {
-        return [];
-    }
-
-    public static function getAcceptedNestedElements()
-    {
-        return [];
-    }
-
-    public static function canOnlyBeNested()
-    {
-        return false;
-    }
-
     public function getAllAttributes()
     {
         return get_object_vars($this);

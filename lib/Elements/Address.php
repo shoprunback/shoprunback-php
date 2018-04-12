@@ -14,11 +14,6 @@ class Address extends Element
         return ['customer'];
     }
 
-    public static function getAcceptedNestedElements()
-    {
-        return [];
-    }
-
     public static function canOnlyBeNested()
     {
         return true;
