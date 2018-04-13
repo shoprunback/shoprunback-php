@@ -318,7 +318,7 @@ abstract class Element
                 return false;
             }
 
-            return $this->$key->isDirty() || (!$this->$key::canOnlyBeNested() && $this->checkIfDirty($key . '_id'));
+            return $this->$key->isDirty() || (!$keyClass::canOnlyBeNested() && $this->checkIfDirty($key . '_id'));
         } elseif (Inflector::isKnownElement(Inflector::classify($key)) && Inflector::isPluralClassName(Inflector::classify($key), $key)) {
             foreach ($this->$key as $value) {
                 if ($value->isDirty()) {

@@ -48,11 +48,12 @@ class ElementManager extends \ArrayObject
             return $this->elements[$index];
         }
 
+        $elementClass = $this->getElementClass();
         if ($index < $this->count) {
-            return $this->getElementClass()::all(floor($index / $this->per_page))[$index % $this->per_page];
+            return $elementClass::all(floor($index / $this->per_page))[$index % $this->per_page];
         }
 
-        throw new ElementNumberDoesntExists('There is ' . $this->count . ' ' . $this->getElementClass()::getAllElementKey() . ' and the number asked was ' . $index);
+        throw new ElementNumberDoesntExists('There is ' . $this->count . ' ' . $elementClass::getAllElementKey() . ' and the number asked was ' . $index);
     }
 
     public function getElementClass()
