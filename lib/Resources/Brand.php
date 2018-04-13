@@ -14,4 +14,14 @@ class Brand extends Resource
     {
         return $this->name;
     }
+
+    public static function getBelongsTo()
+    {
+        return [];
+    }
+
+    public static function getAcceptNestedAttributes()
+    {
+        return [];
+    }
 }

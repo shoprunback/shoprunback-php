@@ -14,4 +14,14 @@ class Product extends Resource
     {
         return $this->label;
     }
+
+    public static function getBelongsTo()
+    {
+        return ['brand'];
+    }
+
+    public static function getAcceptNestedAttributes()
+    {
+        return ['brand'];
+    }
 }

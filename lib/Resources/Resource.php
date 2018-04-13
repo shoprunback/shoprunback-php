@@ -19,6 +19,10 @@ abstract class Resource
         $this->_origValues = new \stdClass();
     }
 
+    abstract static function getBelongsTo();
+
+    abstract static function getAcceptNestedAttributes();
+
     public static function indexEndpoint() {
         $className = explode('\\', get_called_class());
         return Inflector::pluralize(end($className));
@@ -93,6 +97,24 @@ abstract class Resource
 
     public function formatResourceForApi()
     {
+        foreach (static::getBelongsTo() as $parent) {
+            $parentId = $parent . '_id';
+
+            if (!$this->$parent->isPersisted()) {
+                if (!in_array($parent, static::getAcceptNestedAttributes())) {
+                    $this->$parent->save();
+                    $this->$parentId = $this->$parent->id;
+                    unset($this->$parent);
+                }
+            } else {
+                if (!isset($this->$parentId) || empty($this->$parentId)) {
+                    $this->$parentId = $this->$parent->id;
+                }
+
+                unset($this->$parent);
+            }
+        }
+
         $data = new \stdClass();
         foreach ($this as $key => $value) {
             // Check if we need to take the value
