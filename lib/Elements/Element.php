@@ -86,6 +86,18 @@ abstract class Element
 
     abstract public function getApiAttributesKeys();
 
+    public function getAllNestedElements()
+    {
+        $nestedElements = [];
+        foreach ($this->getAllAttributes() as $key => $element) {
+            if (Inflector::isKnownElement(Inflector::getClass($element))) {
+                $nestedElements[] = $element;
+            }
+        }
+
+        return $nestedElements;
+    }
+
     public static function getBelongsTo()
     {
         return [];
