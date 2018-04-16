@@ -29,4 +29,12 @@ final class OrderTest extends BaseMockerTest
         $this->assertTrue(property_exists($elementBody, 'created_at'));
         $this->assertEquals(count(get_object_vars($elementBody)), 3);
     }
+
+    public function testHasItems()
+    {
+        RestClient::getClient()->enableTesting();
+
+        $order = self::createDefault();
+        $this->assertEquals(count($order->items), 2);
+    }
 }

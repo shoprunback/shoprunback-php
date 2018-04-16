@@ -48,9 +48,4 @@ trait CustomerTrait
         $this->assertNotNull($customer->address->country_code);
         $this->assertNotNull($customer->address->city);
     }
-
-    public function testCanOnlyBeNested()
-    {
-        $this->assertTrue(static::getElementClass()::canOnlyBeNested());
-    }
 }

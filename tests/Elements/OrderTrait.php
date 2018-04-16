@@ -3,8 +3,11 @@
 namespace Tests\Elements;
 
 use \Shoprunback\Elements\Order;
+use \Shoprunback\Elements\Item;
+use \Shoprunback\Elements\Product;
 use \Shoprunback\Elements\Customer;
 use \Shoprunback\Elements\Address;
+use \Shoprunback\RestClient;
 
 trait OrderTrait
 {
@@ -27,10 +30,31 @@ trait OrderTrait
         $customer->phone = '0123456789';
         $customer->address = $address;
 
+        $product;
+        if (RestClient::getClient()->isTesting()) {
+            $product = Product::Retrieve(1);
+        } else {
+            $product = Product::all()[0];
+        }
+
         $order = new Order();
         $order->order_number = static::randomString();
         $order->ordered_at = date('Y-m-d');
         $order->customer = $customer;
+        $order->items = [];
+        for ($i = 0; $i < 2; $i++) {
+            $item = new Item();
+            $item->product = $product;
+            $item->product_id = $product->id;
+            $item->label = $product->label;
+            $item->reference = $product->reference;
+            $item->barcode = '9782700507089';
+            $item->price_cents = 1000;
+            $item->currency = 'eur';
+            $item->created_at = '2017-06-15T16:17:46.482+02:00';
+
+            $order->items[] = $item;
+        }
 
         return $order;
     }
