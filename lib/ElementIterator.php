@@ -2,7 +2,7 @@
 
 namespace Shoprunback;
 
-use Shoprunback\Error\ElementNumberDoesntExists;
+use Shoprunback\Error\ElementIndexDoesntExists;
 
 class ElementIterator implements \Iterator, \ArrayAccess
 {

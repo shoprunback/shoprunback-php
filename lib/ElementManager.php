@@ -2,7 +2,7 @@
 
 namespace Shoprunback;
 
-use Shoprunback\Error\ElementNumberDoesntExists;
+use Shoprunback\Error\ElementIndexDoesntExists;
 use Shoprunback\ElementIterator;
 
 class ElementManager extends \ArrayObject
@@ -53,7 +53,7 @@ class ElementManager extends \ArrayObject
             return $elementClass::all(floor($index / $this->per_page))[$index % $this->per_page];
         }
 
-        throw new ElementNumberDoesntExists('There is ' . $this->count . ' ' . $elementClass::getAllElementKey() . ' and the number asked was ' . $index);
+        throw new ElementIndexDoesntExists('There is ' . $this->count . ' ' . $elementClass::getAllElementKey() . ' and the number asked was ' . $index);
     }
 
     public function getElementClass()

@@ -10,20 +10,16 @@ abstract class BaseMockerTest extends BaseElementTest
 {
     public function testCanFetchOneMocked()
     {
-        RestClient::getClient()->enableTesting();
         $this->checkIfHasNeededValues(static::getElementClass()::retrieve(1));
     }
 
     public function testObjectFromMockerIsPersisted()
     {
-        RestClient::getClient()->enableTesting();
         $this->assertTrue(static::getElementClass()::retrieve(1)->isPersisted());
     }
 
     public function testCanFetchAllMocked()
     {
-        RestClient::getClient()->enableTesting();
-
         if (static::getElementClass()::canGetAll()) {
             $objects = static::getElementClass()::all();
             $this->assertEquals($objects->count, 2);
@@ -37,8 +33,6 @@ abstract class BaseMockerTest extends BaseElementTest
 
     public function testCanCreateMocked()
     {
-        RestClient::getClient()->enableTesting();
-
         if (static::getElementClass()::canUpdate()) {
             $object = static::createDefault();
             $object->save();
@@ -51,8 +45,6 @@ abstract class BaseMockerTest extends BaseElementTest
 
     public function testCanDeleteMocked()
     {
-        RestClient::getClient()->enableTesting();
-
         if (static::getElementClass()::canDelete()) {
             $this->assertNull(static::getElementClass()::delete(1));
         } else {
@@ -62,8 +54,6 @@ abstract class BaseMockerTest extends BaseElementTest
 
     public function testGetUnchangedElementBody()
     {
-        RestClient::getClient()->enableTesting();
-
         $element = static::getElementClass()::retrieve(1);
         $this->assertEquals(count(get_object_vars($element->getElementBody(false))), 0);
     }

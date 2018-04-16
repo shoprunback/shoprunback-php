@@ -70,7 +70,7 @@ abstract class BaseApiTest extends BaseElementTest
     }
 
     /**
-     * @expectedException \Shoprunback\Error\ElementNumberDoesntExists
+     * @expectedException \Shoprunback\Error\ElementIndexDoesntExists
      */
     public function testExceptionOnWrongIteration()
     {
@@ -80,7 +80,7 @@ abstract class BaseApiTest extends BaseElementTest
             $elements = static::getElementClass()::all();
             $elements[$elements->count + 1];
         } else {
-            throw new \Shoprunback\Error\ElementNumberDoesntExists('Test worked');
+            throw new \Shoprunback\Error\ElementIndexDoesntExists('Test worked');
         }
     }
 
