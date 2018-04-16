@@ -21,8 +21,10 @@ require dirname(__FILE__) . '/lib/Elements/Element.php';
 // require dirname(__FILE__) . '/lib/Elements/ShoprunbackObject.php';
 require dirname(__FILE__) . '/lib/Elements/Brand.php';
 require dirname(__FILE__) . '/lib/Elements/Product.php';
-// require dirname(__FILE__) . '/lib/Elements/Item.php';
-// require dirname(__FILE__) . '/lib/Elements/Order.php';
+require dirname(__FILE__) . '/lib/Elements/Item.php';
+require dirname(__FILE__) . '/lib/Elements/Address.php';
+require dirname(__FILE__) . '/lib/Elements/Customer.php';
+require dirname(__FILE__) . '/lib/Elements/Order.php';
 // require dirname(__FILE__) . '/lib/Elements/Shipback.php';
 // require dirname(__FILE__) . '/lib/Elements/User.php';
 
@@ -37,3 +39,4 @@ require dirname(__FILE__) . '/lib/Error/UnknownApiToken.php';
 require dirname(__FILE__) . '/lib/Error/NotFoundError.php';
 require dirname(__FILE__) . '/lib/Error/RestClientError.php';
 require dirname(__FILE__) . '/lib/Error/ElementNumberDoesntExists.php';
+require dirname(__FILE__) . '/lib/Error/ElementCannotBeUpdated.php';

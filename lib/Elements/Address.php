@@ -2,29 +2,25 @@
 
 namespace Shoprunback\Elements;
 
-class Order extends Element
+class Address extends Element
 {
-    use Retrieve;
-    use All;
-    use Create;
-
     public function __toString()
     {
-        return $this->display($this->order_number);
+        return $this->display($this->line1 . ' ' . $this->line2 . ', ' . $this->city . ' ' . $this->zipcode . ', ' . $this->country_code);
     }
 
     public static function getBelongsTo()
     {
-        return [];
+        return ['customer'];
     }
 
     public static function getAcceptNestedAttributes()
     {
-        return ['items', 'customer'];
+        return [];
     }
 
     public static function canOnlyBeNested()
     {
-        return false;
+        return true;
     }
 }

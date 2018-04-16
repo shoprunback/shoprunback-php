@@ -94,11 +94,15 @@ abstract class BaseApiTest extends BaseElementTest
     {
         RestClient::getClient()->disableTesting();
 
-        $object = static::createDefault();
-        $object->save();
+        if (static::getElementClass()::canDelete()) {
+            $object = static::createDefault();
+            $object->save();
 
-        $object->remove();
+            $object->remove();
 
-        static::getElementClass()::retrieve($object->id);
+            static::getElementClass()::retrieve($object->id);
+        } else {
+            throw new \Shoprunback\Error\NotFoundError('Test worked');
+        }
     }
 }

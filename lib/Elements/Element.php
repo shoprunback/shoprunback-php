@@ -93,7 +93,11 @@ abstract class Element implements NestedAttributes
     public function save()
     {
         if ($this->isPersisted()) {
-            $this->put();
+            if (static::canUpdate()) {
+                $this->put();
+            } else {
+                throw new ElementCannotBeUpdated(get_called_class() . ' cannot be updated');
+            }
         } else {
             $this->post();
         }
@@ -107,22 +111,6 @@ abstract class Element implements NestedAttributes
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
 
-    private function put()
-    {
-        $restClient = RestClient::getClient();
-        $data = $this->getElementBody();
-        $response = $restClient->request(self::updateEndpoint($this->id), \Shoprunback\RestClient::PUT, $data);
-        $this->copyValues($this->newFromMixed($response->getBody()));
-    }
-
-    public function remove()
-    {
-        $restClient = RestClient::getClient();
-        $this->refresh();
-        self::logCurrentClass('Log of the object before its removal: ' . json_encode($this->_origValues));
-        $response = $restClient->request(self::deleteEndpoint($this->id), \Shoprunback\RestClient::DELETE);
-    }
-
     public function printElementBody()
     {
         echo $this . ': ' . json_encode($this->getElementBody(false)) . "\n";
@@ -133,8 +121,7 @@ abstract class Element implements NestedAttributes
         $dirtyKeys = [];
         foreach ($this as $key => $value) {
             if (
-                $key != '_origValues'
-                && $key != 'id'
+                $key != 'id'
                 && $this->isKeyDirty($key)
             ) {
                 $dirtyKeys[] = $key;
@@ -166,7 +153,7 @@ abstract class Element implements NestedAttributes
     public function isDirty()
     {
         foreach ($this as $key => $value) {
-            if ($key != '_origValues' && $this->isKeyDirty($key)) {
+            if ($this->isKeyDirty($key)) {
                 return true;
             }
         }
@@ -176,8 +163,12 @@ abstract class Element implements NestedAttributes
 
     public function isKeyDirty($key)
     {
+        if ($key == '_origValues') {
+            return false;
+        }
+
         if (Inflector::isKnownElement($key)) {
-            return $this->$key->isDirty() || $this->checkIfDirty($key . '_id');
+            return $this->$key->isDirty() || (!$this->$key::canOnlyBeNested() && $this->checkIfDirty($key . '_id'));
         } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) {
             foreach ($this->$key as $value) {
                 if ($value->isDirty()) {
@@ -235,8 +226,7 @@ abstract class Element implements NestedAttributes
             $keyPreged = preg_replace('/_id$/', '', $key);
 
             if (
-                $key != '_origValues'
-                && $this->isKeyDirty($key)
+                $this->isKeyDirty($key)
                 && (
                     !isset($this->{$key . '_id'})
                     || (
@@ -331,5 +321,15 @@ abstract class Element implements NestedAttributes
     public static function getAllElementKey()
     {
         return static::getElementName() . 's';
+    }
+
+    public static function canDelete()
+    {
+        return method_exists(get_called_class(), 'delete');
+    }
+
+    public static function canUpdate()
+    {
+        return method_exists(get_called_class(), 'update');
     }
 }

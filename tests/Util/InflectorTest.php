@@ -16,6 +16,12 @@ final class InflectorTest extends BaseTest
         $this->assertTrue(Inflector::isKnownElement('Brand'));
         $this->assertTrue(Inflector::isKnownElement('brand'));
         $this->assertFalse(Inflector::isKnownElement('Brands'));
+
+        $this->assertTrue(Inflector::isKnownElement('Address'));
+        $this->assertTrue(Inflector::isKnownElement('Customer'));
+        $this->assertTrue(Inflector::isKnownElement('Item'));
+        $this->assertTrue(Inflector::isKnownElement('Order'));
+        $this->assertTrue(Inflector::isKnownElement('Product'));
     }
 
     public function testClassify()
@@ -24,6 +30,8 @@ final class InflectorTest extends BaseTest
         $this->assertSame(Inflector::classify('Brands'), 'Brand');
         $this->assertSame(Inflector::classify('Country'), 'Country');
         $this->assertSame(Inflector::classify('Countries'), 'Country');
+        $this->assertSame(Inflector::classify('Address'), 'Address');
+        $this->assertSame(Inflector::classify('Addresses'), 'Address');
     }
 
     public function testPluralize()
@@ -32,6 +40,8 @@ final class InflectorTest extends BaseTest
         $this->assertSame(Inflector::pluralize('Brands'), 'brands');
         $this->assertSame(Inflector::pluralize('Country'), 'countries');
         $this->assertSame(Inflector::pluralize('Countries'), 'countries');
+        $this->assertSame(Inflector::pluralize('Address'), 'addresses');
+        $this->assertSame(Inflector::pluralize('Addresses'), 'addresses');
     }
 
     public function testIsPluralClassName()
@@ -40,6 +50,8 @@ final class InflectorTest extends BaseTest
         $this->assertTrue(Inflector::isPluralClassName('Brands', 'brands'));
         $this->assertTrue(Inflector::isPluralClassName('Country', 'countries'));
         $this->assertTrue(Inflector::isPluralClassName('Countries', 'countries'));
+        $this->assertSame(Inflector::isPluralClassName('Address'), 'addresses');
+        $this->assertSame(Inflector::isPluralClassName('Addresses'), 'addresses');
     }
 
     public function testConstantizeOne()
