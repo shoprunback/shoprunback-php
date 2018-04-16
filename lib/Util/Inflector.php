@@ -46,7 +46,16 @@ abstract class Inflector
         $object = new $inflectedClassName();
 
         foreach ($mixed as $key => $value) {
-            $object->$key = self::getContent($key, $value);
+            if ($key == '_origValues') continue;
+
+            $content = self::getContent($key, $value);
+            if (is_object($content) && $content instanceof Element) {
+                $class = self::classify($content::getElementName());
+                $setter = 'set' . $class;
+                $object->$setter($content);
+            } else {
+                $object->$key = $content;
+            }
         }
 
         return $object;

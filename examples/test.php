@@ -26,7 +26,7 @@ use Shoprunback\Util\Inflector      as Inflector;
 
 // Fetch and update Brand
 RestClient::getClient()->enableTesting();
-// RestClient::getClient()->disableTesting();
+RestClient::getClient()->disableTesting();
 
 // $brand = Brand::retrieve(1);
 // $brand->printElementBody();
@@ -248,8 +248,20 @@ RestClient::getClient()->enableTesting();
 // var_dump($shipback->order->items[0]->product->brand);
 
 
-
-
 // $order = Order::all()[0];
 // $order->printElementBody();
 // var_dump($order->items);
+
+
+// $product = Product::All()[0];
+// var_dump($product->brand);
+
+$product = new Product();
+$product->label = 'loel';
+$product->reference = 'zkjod';
+$product->brand_id = Brand::All()[0]->id;
+var_dump(isset($product->brand));
+var_dump($product);
+var_dump($product->brand);
+var_dump($product);
+die;

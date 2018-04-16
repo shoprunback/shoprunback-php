@@ -27,8 +27,47 @@ abstract class Element implements NestedAttributes
             $this->$attributeId = $value->id;
         }
 
-        $this->$key = $value;
+        if (Inflector::isKnownElement($key)) {
+            $class = Inflector::classify($key);
+            $setter = 'set' . $class;
+            $this->$setter($value);
+        } else {
+            $this->$key = $value;
+        }
     }
+
+    public function __get($key)
+    {
+        if (Inflector::isKnownElement($key)) {
+            $class = Inflector::classify($key);
+            $fullClass = Inflector::ELEMENTS_NAMESPACE . $class;
+            $getter = 'get' . $class;
+
+            if (empty($this->$getter())) {
+                if ($fullClass::canOnlyBeNested()) {
+                    return null;
+                }
+
+                $classId = strtolower($class) . '_id';
+                if (empty($this->$classId)) {
+                    return null;
+                }
+
+                $setter = 'set' . $class;
+                $this->$setter($fullClass::retrieve($this->$classId));
+            }
+
+            return $this->$getter();
+        }
+
+        if (isset($this->$key)) {
+            return $this->$key;
+        }
+
+        return null;
+    }
+
+    abstract public function getAllAttributes();
 
     public function belongsTo($key)
     {
@@ -152,7 +191,7 @@ abstract class Element implements NestedAttributes
 
     public function isDirty()
     {
-        foreach ($this as $key => $value) {
+        foreach ($this->getAllAttributes() as $key => $value) {
             if ($this->isKeyDirty($key)) {
                 return true;
             }
@@ -168,6 +207,10 @@ abstract class Element implements NestedAttributes
         }
 
         if (Inflector::isKnownElement($key)) {
+            if (is_null($this->$key)) {
+                return $this->checkIfDirty($key);
+            }
+
             return $this->$key->isDirty() || (!$this->$key::canOnlyBeNested() && $this->checkIfDirty($key . '_id'));
         } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) {
             foreach ($this->$key as $value) {
@@ -195,14 +238,15 @@ abstract class Element implements NestedAttributes
 
     public function checkIfDirty($key)
     {
-        return !property_exists($this->_origValues, $key) || $this->$key != $this->_origValues->$key;
+        return (!property_exists($this->_origValues, $key) && !is_null($this->$key))
+                || (isset($this->$key) && $this->$key != $this->_origValues->$key);
     }
 
     public function getElementBody($save = true)
     {
         // #TODO manage belongsTo and belongsToOptional
         foreach (static::getBelongsTo() as $parent) {
-            if (!property_exists($this, $parent)) {
+            if (!property_exists($this, $parent) || empty($this->$parent)) {
                 continue;
             }
 
@@ -222,7 +266,14 @@ abstract class Element implements NestedAttributes
         }
 
         $data = new \stdClass();
-        foreach ($this as $key => $value) {
+        foreach ($this->getAllAttributes() as $key => $value) {
+            if ($key == 'id' || $data == '_origValues') continue;
+
+            if (is_null($value) && $this->isKeyDirty($key)) {
+                $data->$key = $value;
+                continue;
+            }
+
             $keyPreged = preg_replace('/_id$/', '', $key);
 
             if (
@@ -238,6 +289,7 @@ abstract class Element implements NestedAttributes
                     $keyPreged == $key
                     || (
                         Inflector::isKnownElement($keyPreged)
+                        && property_exists($this, $keyPreged)
                         && property_exists($this->$keyPreged, 'id')
                         && !empty($this->$keyPreged->id)
                     )
@@ -246,9 +298,6 @@ abstract class Element implements NestedAttributes
                 $data->$key = self::getChildren($key, $value);
             }
         }
-
-        unset($data->id);
-        unset($data->_origValues);
 
         return $data;
     }
@@ -285,9 +334,15 @@ abstract class Element implements NestedAttributes
 
     public function copyValues($object)
     {
-        foreach ($object as $key => $value) {
+        foreach ($object->getAllAttributes() as $key => $value) {
             if ($key != '_origValues') {
-                $this->$key = $value;
+                if (is_object($value) && $value instanceof Element) {
+                    $setter = 'set' . Inflector::classify($value::getElementName());
+                    $value->copyValues($value);
+                    $this->$setter($value);
+                } else {
+                    $this->$key = $value;
+                }
             }
         }
 

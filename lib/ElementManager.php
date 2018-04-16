@@ -59,4 +59,9 @@ class ElementManager extends \ArrayObject
     {
         return get_class($this[0]);
     }
+
+    public function getLast()
+    {
+        return $this[$this->count - 1];
+    }
 }

@@ -130,7 +130,6 @@ class RestClient
             CURLOPT_RETURNTRANSFER  => true,
             CURLOPT_TIMEOUT         => 30,
             CURLOPT_CONNECTTIMEOUT  => 30,
-            CURLOPT_RETURNTRANSFER  => true,
             CURLOPT_CUSTOMREQUEST   => $method,
             CURLOPT_URL             => $url,
             CURLOPT_POSTFIELDS      => $json

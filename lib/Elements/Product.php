@@ -10,6 +10,8 @@ class Product extends Element
     use Create;
     use Delete;
 
+    private $brand;
+
     public function __toString()
     {
         return $this->display($this->label);
@@ -28,5 +30,20 @@ class Product extends Element
     public static function canOnlyBeNested()
     {
         return false;
+    }
+
+    public function getAllAttributes()
+    {
+        return get_object_vars($this);
+    }
+
+    public function setBrand($brand)
+    {
+        $this->brand = $brand;
+    }
+
+    public function getBrand()
+    {
+        return $this->brand;
     }
 }
