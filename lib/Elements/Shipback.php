@@ -34,8 +34,14 @@ class Shipback extends Element
         return get_object_vars($this);
     }
 
-    public static function getBaseEndpoint() {
+    public static function getBaseEndpoint()
+    {
         return 'shipbacks';
+    }
+
+    public static function getReferenceAttribute()
+    {
+        return 'id';
     }
 
     public function getApiAttributesKeys()
@@ -88,9 +94,5 @@ class Shipback extends Element
     public function getCompany()
     {
         return $this->company;
-    }
-
-    public static function getReferenceAttribute() {
-        return 'id';
     }
 }

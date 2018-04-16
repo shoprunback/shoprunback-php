@@ -19,6 +19,11 @@ class Address extends Element
         return true;
     }
 
+    public static function getReferenceAttribute()
+    {
+        return 'id';
+    }
+
     public function getAllAttributes()
     {
         return get_object_vars($this);
@@ -35,9 +40,5 @@ class Address extends Element
             'city',
             'state'
         ];
-    }
-
-    public static function getReferenceAttribute() {
-        return 'id';
     }
 }

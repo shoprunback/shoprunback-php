@@ -37,20 +37,29 @@ class Account extends Element
         ];
     }
 
-    public static function getBaseEndpoint() {
+    public static function getBaseEndpoint()
+    {
         return 'me';
     }
 
-    public static function ownEndpoint() {
+    public static function ownEndpoint()
+    {
         return 'me';
     }
 
-    public static function updateEndpoint($id) {
+    public static function updateEndpoint($id)
+    {
         return 'me';
     }
 
-    public static function showEndpoint($id) {
+    public static function showEndpoint($id)
+    {
         return 'users/' . $id;
+    }
+
+    public static function getReferenceAttribute()
+    {
+        return 'id';
     }
 
     public static function getOwn()
@@ -81,9 +90,5 @@ class Account extends Element
     public function getCompany()
     {
         return $this->company;
-    }
-
-    public static function getReferenceAttribute() {
-        return 'id';
     }
 }

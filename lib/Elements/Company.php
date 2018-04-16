@@ -43,20 +43,29 @@ class Company extends Element
         ];
     }
 
-    public static function getBaseEndpoint() {
+    public static function getBaseEndpoint()
+    {
         return 'company';
     }
 
-    public static function ownEndpoint() {
+    public static function ownEndpoint()
+    {
         return 'company';
     }
 
-    public static function updateEndpoint($id) {
+    public static function updateEndpoint($id)
+    {
         return 'company';
     }
 
-    public static function showEndpoint($id) {
+    public static function showEndpoint($id)
+    {
         return 'companies/' . $id;
+    }
+
+    public static function getReferenceAttribute()
+    {
+        return 'id';
     }
 
     public static function getOwn()
@@ -77,9 +86,5 @@ class Company extends Element
         $company = new self();
         $company->copyValues($company->newFromMixed($response->getBody()));
         return $company;
-    }
-
-    public static function getReferenceAttribute() {
-        return 'id';
     }
 }

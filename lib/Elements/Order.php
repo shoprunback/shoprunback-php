@@ -27,8 +27,14 @@ class Order extends Element
         return get_object_vars($this);
     }
 
-    public static function getBaseEndpoint() {
+    public static function getBaseEndpoint()
+    {
         return 'orders';
+    }
+
+    public static function getReferenceAttribute()
+    {
+        return 'order_number';
     }
 
     public function getApiAttributesKeys()
@@ -63,9 +69,5 @@ class Order extends Element
     public function getCustomer()
     {
         return $this->customer;
-    }
-
-    public static function getReferenceAttribute() {
-        return 'order_number';
     }
 }

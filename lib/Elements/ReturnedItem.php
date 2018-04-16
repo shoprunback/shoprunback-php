@@ -21,6 +21,11 @@ class ReturnedItem extends Element
         return true;
     }
 
+    public static function getReferenceAttribute()
+    {
+        return 'id';
+    }
+
     public function getAllAttributes()
     {
         return get_object_vars($this);
@@ -43,9 +48,5 @@ class ReturnedItem extends Element
     public function getItem()
     {
         return $this->item;
-    }
-
-    public static function getReferenceAttribute() {
-        return 'id';
     }
 }

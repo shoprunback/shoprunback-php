@@ -26,6 +26,11 @@ class Customer extends Element
         return true;
     }
 
+    public static function getReferenceAttribute()
+    {
+        return 'id';
+    }
+
     public function getAllAttributes()
     {
         return get_object_vars($this);
@@ -52,9 +57,5 @@ class Customer extends Element
     public function getAddress()
     {
         return $this->address;
-    }
-
-    public static function getReferenceAttribute() {
-        return 'id';
     }
 }
