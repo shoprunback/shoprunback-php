@@ -137,6 +137,7 @@ abstract class Inflector
             return self::getFullClassName($class);
         }
 
+        // FALSE checks if the class is not abstract so we can instantiate it
         if (class_exists($class, FALSE)) {
             $object = new \ReflectionClass($class);
             if ($object->getParentClass()) {
