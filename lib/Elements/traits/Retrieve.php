@@ -1,6 +1,6 @@
 <?php
 
-namespace Shoprunback\Resources;
+namespace Shoprunback\Elements;
 
 trait Retrieve
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Shoprunback\Resources;
+namespace Shoprunback\Elements;
 
-use Shoprunback\ResourceManager;
+use Shoprunback\ElementManager;
 use Shoprunback\RestClient;
 use Shoprunback\Util\Inflector;
 
@@ -13,6 +13,6 @@ trait All
         $restClient = RestClient::getClient();
         $response = $restClient->request(self::indexEndpoint($page), \Shoprunback\RestClient::GET);
 
-        return new ResourceManager($response->getBody(), get_called_class());
+        return new ElementManager($response->getBody(), get_called_class());
     }
 }

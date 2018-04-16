@@ -2,7 +2,7 @@
 
 namespace Shoprunback\Util;
 
-define('LOG_PATH', dirname(__FILE__, 3) . '/logs/');
+define('LOG_PATH', dirname(dirname(dirname(__FILE__))) . '/logs/');
 
 class Logger
 {

@@ -6,7 +6,7 @@ use Shoprunback\Util\Container;
 
 abstract class Inflector
 {
-    const RESSOURCES_NAMESPACE = 'Shoprunback\Resources\\';
+    const RESSOURCES_NAMESPACE = 'Shoprunback\Elements\\';
 
     public static function classify($string)
     {
@@ -32,7 +32,7 @@ abstract class Inflector
         return self::pluralize($className) == $string;
     }
 
-    public static function isKnownResource($className) {
+    public static function isKnownElement($className) {
         return class_exists(self::RESSOURCES_NAMESPACE . $className);
     }
 
@@ -59,7 +59,7 @@ abstract class Inflector
         return $inflectedContainer;
     }
 
-    private static function searchResourceInContainer($container)
+    private static function searchElementInContainer($container)
     {
         if (Container::isContainer($container)) {
             return self::inflectContainer($container);
@@ -74,14 +74,14 @@ abstract class Inflector
 
         $valueToAdd = [];
 
-        if (self::isKnownResource($className) && self::isPluralClassName($className, $key)) {
+        if (self::isKnownElement($className) && self::isPluralClassName($className, $key)) {
             foreach ($value as $k => $v) {
                 $valueToAdd[] = self::constantize($v, $className);
             }
         } else {
-            $valueToAdd = self::isKnownResource($className)
+            $valueToAdd = self::isKnownElement($className)
                 ? self::constantize($value, $className)
-                : self::searchResourceInContainer($value);
+                : self::searchElementInContainer($value);
         }
 
         return $valueToAdd;

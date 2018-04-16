@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Tests\Resources;
+namespace Tests\Elements;
 
 use \Tests\BaseTest;
 
 use \Shoprunback\RestClient;
-use \Shoprunback\Resources\Brand;
+use \Shoprunback\Elements\Brand;
 use \Shoprunback\Util\Logger;
 
 final class LoggerTest extends BaseTest
@@ -24,7 +22,7 @@ final class LoggerTest extends BaseTest
         $this->assertTrue(strpos(Logger::getLastMessageOfDate(), 'Error') > 0);
     }
 
-    public function testCanLogResource()
+    public function testCanLogElement()
     {
         RestClient::getClient()->enableTesting();
         Brand::delete(1);

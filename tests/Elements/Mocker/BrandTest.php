@@ -1,17 +1,15 @@
 <?php
 
-declare(strict_types=1);
+namespace Tests\Elements\Mocker;
 
-namespace Tests\Resources\Mocker;
+use \Tests\Elements\Mocker\BaseMockerTest;
 
-use \Tests\Resources\Mocker\BaseMockerTest;
-
-use \Shoprunback\Resources\Brand;
+use \Shoprunback\Elements\Brand;
 use \Shoprunback\RestClient;
 
 final class BrandTest extends BaseMockerTest
 {
-    use \Tests\Resources\BrandTrait;
+    use \Tests\Elements\BrandTrait;
 
     public function testCanUpdateOneMocked()
     {
@@ -31,9 +29,9 @@ final class BrandTest extends BaseMockerTest
         $brand = Brand::retrieve(1);
 
         $brand->name = static::randomString();
-        $resourceBody = $brand->getResourceBody(false);
-        $this->assertTrue(property_exists($resourceBody, 'name'));
-        $this->assertEquals(count(get_object_vars($resourceBody)), 1);
+        $elementBody = $brand->getElementBody(false);
+        $this->assertTrue(property_exists($elementBody, 'name'));
+        $this->assertEquals(count(get_object_vars($elementBody)), 1);
     }
 
     public function testGetNewBrandBody()
@@ -43,13 +41,13 @@ final class BrandTest extends BaseMockerTest
         $brand = new Brand();
 
         $brand->name = static::randomString();
-        $resourceBody = $brand->getResourceBody(false);
-        $this->assertTrue(property_exists($resourceBody, 'name'));
-        $this->assertEquals(count(get_object_vars($resourceBody)), 1);
+        $elementBody = $brand->getElementBody(false);
+        $this->assertTrue(property_exists($elementBody, 'name'));
+        $this->assertEquals(count(get_object_vars($elementBody)), 1);
 
         $brand->reference = static::randomString();
-        $resourceBody = $brand->getResourceBody(false);
-        $this->assertTrue(property_exists($resourceBody, 'reference'));
-        $this->assertEquals(count(get_object_vars($resourceBody)), 2);
+        $elementBody = $brand->getElementBody(false);
+        $this->assertTrue(property_exists($elementBody, 'reference'));
+        $this->assertEquals(count(get_object_vars($elementBody)), 2);
     }
 }

@@ -1,23 +1,21 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Tests\Resources;
+namespace Tests\Elements;
 
 use \Tests\BaseTest;
 
 use \Shoprunback\RestClient;
-use \Shoprunback\Resources\Brand;
+use \Shoprunback\Elements\Brand;
 use \Shoprunback\Util\Inflector;
 use \Shoprunback\Util\Container;
 
 final class InflectorTest extends BaseTest
 {
-    public function testIsKnownResource()
+    public function testIsKnownElement()
     {
-        $this->assertTrue(Inflector::isKnownResource('Brand'));
-        $this->assertTrue(Inflector::isKnownResource('brand'));
-        $this->assertFalse(Inflector::isKnownResource('Brands'));
+        $this->assertTrue(Inflector::isKnownElement('Brand'));
+        $this->assertTrue(Inflector::isKnownElement('brand'));
+        $this->assertFalse(Inflector::isKnownElement('Brands'));
     }
 
     public function testClassify()

@@ -1,8 +1,8 @@
 <?php
 
-namespace Shoprunback\Resources;
+namespace Shoprunback\Elements;
 
-class Order extends Resource
+class Order extends Element
 {
     public function __toString()
     {
