@@ -4,19 +4,21 @@ namespace Shoprunback\Elements;
 
 use Shoprunback\RestClient;
 
-class Company extends Element
+class Account extends Element
 {
     use Retrieve;
     use Update;
 
+    private $company;
+
     public function __toString()
     {
-        return $this->display($this->name);
+        return $this->display($this->first_name . ' ' . $this->last_name);
     }
 
     public static function getBelongsTo()
     {
-        return ['account'];
+        return [];
     }
 
     public static function getAcceptNestedAttributes()
@@ -35,15 +37,15 @@ class Company extends Element
     }
 
     public static function ownEndpoint() {
-        return 'company';
+        return 'me';
     }
 
     public static function updateEndpoint($id) {
-        return 'company';
+        return 'me';
     }
 
     public static function showEndpoint($id) {
-        return 'companies/' . $id;
+        return 'users/' . $id;
     }
 
     public static function getOwn()
@@ -61,8 +63,18 @@ class Company extends Element
             }
         }
 
-        $company = new self();
-        $company->copyValues($company->newFromMixed($response->getBody()));
-        return $company;
+        $user = new self();
+        $user->copyValues($user->newFromMixed($response->getBody()));
+        return $user;
+    }
+
+    public function setCompany($company)
+    {
+        $this->company = $company;
+    }
+
+    public function getCompany()
+    {
+        return $this->company;
     }
 }

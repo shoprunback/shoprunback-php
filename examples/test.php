@@ -16,6 +16,7 @@ use Shoprunback\RestClient          as RestClient;
 use Shoprunback\Util\Converter      as Converter;
 use Shoprunback\Util\Logger         as Logger;
 use Shoprunback\Util\Inflector      as Inflector;
+use Shoprunback\Elements\Account    as Account;
 
 // Setup for test
 // Shoprunback::setApiBaseUrl(getenv('DASHBOARD_URL') . '/api/v1/');
@@ -256,12 +257,12 @@ RestClient::getClient()->disableTesting();
 // $product = Product::All()[0];
 // var_dump($product->brand);
 
-$product = new Product();
-$product->label = 'loel';
-$product->reference = 'zkjod';
-$product->brand_id = Brand::All()[0]->id;
-var_dump(isset($product->brand));
-var_dump($product);
-var_dump($product->brand);
-var_dump($product);
-die;
+// $product = new Product();
+// $product->label = 'loel';
+// $product->reference = 'zkjod';
+// $product->brand_id = Brand::All()[0]->id;
+// var_dump(isset($product->brand));
+// var_dump($product);
+// var_dump($product->brand);
+// var_dump($product);
+// die;
