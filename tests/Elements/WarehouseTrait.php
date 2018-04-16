@@ -45,7 +45,7 @@ trait WarehouseTrait
         $this->assertFalse(static::getElementClass()::canUpdate());
     }
 
-    public function testCanDelete()
+    public function testCannotDelete()
     {
         $this->assertFalse(static::getElementClass()::canDelete());
     }

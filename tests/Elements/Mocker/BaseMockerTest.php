@@ -24,11 +24,15 @@ abstract class BaseMockerTest extends BaseElementTest
     {
         RestClient::getClient()->enableTesting();
 
-        $objects = static::getElementClass()::all();
-        $this->assertEquals($objects->count, 2);
+        if (static::getElementClass()::canGetAll()) {
+            $objects = static::getElementClass()::all();
+            $this->assertEquals($objects->count, 2);
 
-        $object = $objects[0];
-        $this->checkIfHasNeededValues($object);
+            $object = $objects[0];
+            $this->checkIfHasNeededValues($object);
+        } else {
+            $this->assertTrue(true);
+        }
     }
 
     public function testCanSaveMocked()

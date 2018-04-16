@@ -104,11 +104,11 @@ abstract class Element implements NestedAttributes
     }
 
     public static function updateEndpoint($id) {
-        return self::showEndpoint($id);
+        return self::indexEndpoint() . '/' . $id;
     }
 
     public static function deleteEndpoint($id) {
-        return self::showEndpoint($id);
+        return self::indexEndpoint() . '/' . $id;
     }
 
     public function refresh()
@@ -138,7 +138,11 @@ abstract class Element implements NestedAttributes
                 throw new ElementCannotBeUpdated(get_called_class() . ' cannot be updated');
             }
         } else {
-            $this->post();
+            if (static::canCreate()) {
+                $this->post();
+            } else {
+                throw new ElementCannotBeCreated(get_called_class() . ' cannot be created');
+            }
         }
     }
 
@@ -388,6 +392,16 @@ abstract class Element implements NestedAttributes
         return static::getElementName() . 's';
     }
 
+    public static function canRetrieve()
+    {
+        return method_exists(get_called_class(), 'retrieve');
+    }
+
+    public static function canCreate()
+    {
+        return method_exists(get_called_class(), 'create');
+    }
+
     public static function canDelete()
     {
         return method_exists(get_called_class(), 'delete');
@@ -396,5 +410,10 @@ abstract class Element implements NestedAttributes
     public static function canUpdate()
     {
         return method_exists(get_called_class(), 'update');
+    }
+
+    public static function canGetAll()
+    {
+        return method_exists(get_called_class(), 'all');
     }
 }

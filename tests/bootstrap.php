@@ -23,6 +23,7 @@ require_once __DIR__ . '/Elements/ShipbackTrait.php';
 require_once __DIR__ . '/Elements/ItemTrait.php';
 require_once __DIR__ . '/Elements/WarehouseTrait.php';
 require_once __DIR__ . '/Elements/ReturnedItemTrait.php';
+require_once __DIR__ . '/Elements/CompanyTrait.php';
 
 require_once __DIR__ . '/Elements/Nested/BaseNestedTest.php';
 require_once __DIR__ . '/Elements/Mocker/BaseMockerTest.php';
