@@ -18,7 +18,7 @@ final class OrderTest extends BaseApiTest
 
     public function testCanSaveNewOrder()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $order = self::createDefault();
 

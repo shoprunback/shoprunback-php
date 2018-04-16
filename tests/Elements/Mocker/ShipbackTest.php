@@ -14,7 +14,7 @@ final class ShipbackTest extends BaseMockerTest
 
     public function testGetNewShipbackBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $shipback = new Shipback();
         $shipback->rma = self::randomRma();

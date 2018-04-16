@@ -15,7 +15,7 @@ final class ProductTest extends BaseMockerTest
 
     public function testCanUpdateOneMocked()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $product = self::getElementClass()::retrieve(1);
         $product->label = self::randomString();
@@ -28,7 +28,7 @@ final class ProductTest extends BaseMockerTest
 
     public function testGetBrand()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $product = new Product();
         $this->assertNull($product->brand);
@@ -41,7 +41,7 @@ final class ProductTest extends BaseMockerTest
 
     public function testGetNewProductNewBrandDirtyKeys()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $product = new Product();
         $product->label = self::randomString();
@@ -60,7 +60,7 @@ final class ProductTest extends BaseMockerTest
 
     public function testGetNewProductExistingBrandDirtyKeys()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $product = new Product();
         $product->label = self::randomString();
@@ -74,7 +74,7 @@ final class ProductTest extends BaseMockerTest
 
     public function testGetExistingProductUpdatedBrandDirtyKeys()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $product = self::getElementClass()::retrieve(1);
         $product->brand->name = BrandTest::randomString();
@@ -85,7 +85,7 @@ final class ProductTest extends BaseMockerTest
 
     public function testGetChangedProductBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $product = self::getElementClass()::retrieve(1);
 
@@ -97,7 +97,7 @@ final class ProductTest extends BaseMockerTest
 
     public function testGetNewProductBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $product = new Product();
 
@@ -114,7 +114,7 @@ final class ProductTest extends BaseMockerTest
 
     public function testGetNewProductNewBrandBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $brand = new Brand();
         $brand->name = BrandTest::randomString();
@@ -130,7 +130,7 @@ final class ProductTest extends BaseMockerTest
 
     public function testGetNewProductRetrievedBrandBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $brand = Brand::retrieve(1);
 
@@ -144,7 +144,7 @@ final class ProductTest extends BaseMockerTest
 
     public function testGetRetrievedProductNewBrandBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $brand = new Brand();
         $brand->name = BrandTest::randomString();

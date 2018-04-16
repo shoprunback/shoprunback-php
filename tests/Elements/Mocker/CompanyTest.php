@@ -13,7 +13,7 @@ final class CompanyTest extends BaseMockerTest
 
     public function testCanUpdateOneMocked()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $company = static::getElementClass()::retrieve(1);
         $company->name = self::randomString();
@@ -26,7 +26,7 @@ final class CompanyTest extends BaseMockerTest
 
     public function testGetChangedCompanyBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $company = static::getElementClass()::retrieve(1);
 
@@ -38,7 +38,7 @@ final class CompanyTest extends BaseMockerTest
 
     public function testGetNewCompanyBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $company = new Company();
 

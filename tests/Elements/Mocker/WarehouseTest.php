@@ -13,7 +13,7 @@ final class WarehouseTest extends BaseMockerTest
 
     public function testGetChangedWarehouseBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $warehouse = Warehouse::retrieve(1);
 
@@ -25,7 +25,7 @@ final class WarehouseTest extends BaseMockerTest
 
     public function testGetNewWarehouseBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $warehouse = new Warehouse();
 

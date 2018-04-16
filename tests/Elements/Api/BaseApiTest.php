@@ -8,6 +8,11 @@ use \Shoprunback\RestClient;
 
 abstract class BaseApiTest extends BaseElementTest
 {
+    public static function disableTesting()
+    {
+        RestClient::getClient()->disableTesting();
+    }
+
     public function testNewObjectIsNotPersisted()
     {
         $elementClass = static::getElementClass();
@@ -25,7 +30,7 @@ abstract class BaseApiTest extends BaseElementTest
 
     public function testObjectFromApiIsPersisted()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $object = static::createDefault();
         $this->assertFalse($object->isPersisted());
@@ -38,7 +43,7 @@ abstract class BaseApiTest extends BaseElementTest
 
     public function testCanFetchAll()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         if (static::getElementClass()::canGetAll()) {
             $this->assertGreaterThan(0, static::getElementClass()::all()->count);
@@ -49,7 +54,7 @@ abstract class BaseApiTest extends BaseElementTest
 
     public function testCanIterate()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         if (static::getElementClass()::canGetAll()) {
             $elements = static::getElementClass()::all();
@@ -74,7 +79,7 @@ abstract class BaseApiTest extends BaseElementTest
      */
     public function testExceptionOnWrongIteration()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         if (static::getElementClass()::canGetAll()) {
             $elements = static::getElementClass()::all();
@@ -89,7 +94,7 @@ abstract class BaseApiTest extends BaseElementTest
      */
     public function testCannotRetrieveUnknown()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         if (static::getElementClass()::canRetrieve()) {
             static::getElementClass()::retrieve(self::randomString());
@@ -100,7 +105,7 @@ abstract class BaseApiTest extends BaseElementTest
 
     public function testCanRetrieve()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         if (static::getElementClass()::canGetAll()) {
             $object = static::getElementClass()::all()[0];
@@ -116,7 +121,7 @@ abstract class BaseApiTest extends BaseElementTest
 
     public function testCanRetrieveByReference()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         if (static::getElementClass()::canGetAll()) {
             $elementClass = static::getElementClass();
@@ -140,7 +145,7 @@ abstract class BaseApiTest extends BaseElementTest
      */
     public function testCanDelete()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         if (static::getElementClass()::canDelete()) {
             $object = static::createDefault();

@@ -19,7 +19,7 @@ final class AccountTest extends BaseApiTest
 
     public function testCanUpdate()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $account = static::getElementClass()::getOwn();
         $accountId = $account->id;
@@ -34,7 +34,7 @@ final class AccountTest extends BaseApiTest
 
     public function testCanRetrieve()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $account = static::getElementClass()::getOwn();
 
@@ -45,7 +45,7 @@ final class AccountTest extends BaseApiTest
 
     public function testObjectFromApiIsPersisted()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $account = static::createDefault();
         $this->assertFalse($account->isPersisted());

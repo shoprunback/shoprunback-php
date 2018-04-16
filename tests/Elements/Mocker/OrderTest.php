@@ -13,7 +13,7 @@ final class OrderTest extends BaseMockerTest
 
     public function testGetNewOrderBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $order = new Order();
 
@@ -32,7 +32,7 @@ final class OrderTest extends BaseMockerTest
 
     public function testHasItems()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $order = self::createDefault();
         $this->assertEquals(count($order->items), 2);

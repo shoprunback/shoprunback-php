@@ -14,7 +14,7 @@ final class ProductTest extends BaseApiTest
 
     public function testCanSaveNewProduct()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $product = self::createDefault();
 
@@ -30,7 +30,7 @@ final class ProductTest extends BaseApiTest
 
     public function testCanUpdate()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $product = Product::all()[0];
         $productId = $product->id;
@@ -45,7 +45,7 @@ final class ProductTest extends BaseApiTest
 
     public function testGetExistingProductExistingBrandDirtyKeys()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $product = Product::all()[0];
         $product->brand = Brand::all()[1];
@@ -56,7 +56,7 @@ final class ProductTest extends BaseApiTest
 
     public function testGetExistingProductNewBrandDirtyKeys()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $product = Product::all()[0];
         $brand = new Brand();
@@ -71,7 +71,7 @@ final class ProductTest extends BaseApiTest
 
     public function testGetExistingProductExistingUpdatedBrandDirtyKeys()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $product = Product::all()[0];
         $product->brand = Brand::all()[1];
@@ -83,7 +83,7 @@ final class ProductTest extends BaseApiTest
 
     public function testGetRetrievedProductRetrievedBrandBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::disableTesting();
 
         $product = Product::all()[0];
         $product->brand = Brand::all()[1];
@@ -95,7 +95,7 @@ final class ProductTest extends BaseApiTest
 
     public function testGetRetrievedProductChangeRetrievedBrandBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::disableTesting();
 
         $product = Product::all()[0];
         $product->brand = Brand::all()[1];

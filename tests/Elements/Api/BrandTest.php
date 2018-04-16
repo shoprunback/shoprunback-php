@@ -14,7 +14,7 @@ final class BrandTest extends BaseApiTest
 
     public function testCanSaveNewBrand()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $brand = self::createDefault();
 
@@ -30,7 +30,7 @@ final class BrandTest extends BaseApiTest
 
     public function testCanUpdate()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $brand = Brand::all()[0];
         $brandId = $brand->id;

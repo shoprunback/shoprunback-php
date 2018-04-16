@@ -14,7 +14,7 @@ final class WarehouseTest extends BaseApiTest
 
     public function testCanSaveNewWarehouse()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $warehouse = self::createDefault();
 
