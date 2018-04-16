@@ -110,4 +110,9 @@ trait OrderTrait
         $this->expectOutputString($order . ': {"order_number":' . $orderNumber . ',"ordered_at":' . $orderedAt . '}' . "\n");
         $order->printElementBody();
     }
+
+    public function testGetBaseEndpoint ()
+    {
+        $this->assertSame(static::getElementClass()::getBaseEndpoint(), 'orders');
+    }
 }

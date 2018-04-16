@@ -130,7 +130,7 @@ abstract class Element
 
     public static function getBaseEndpoint()
     {
-        return '';
+        return Inflector::pluralize(static::getElementName());
     }
 
     public static function indexEndpoint($page = 1) {

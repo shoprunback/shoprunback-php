@@ -27,10 +27,6 @@ class Product extends Element
         return ['brand'];
     }
 
-    public static function getBaseEndpoint() {
-        return 'products';
-    }
-
     public function getAllAttributes()
     {
         return get_object_vars($this);

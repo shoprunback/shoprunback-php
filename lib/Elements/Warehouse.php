@@ -25,11 +25,6 @@ class Warehouse extends Element
         return get_object_vars($this);
     }
 
-    public static function getBaseEndpoint()
-    {
-        return 'warehouses';
-    }
-
     public function getApiAttributesKeys()
     {
         return [

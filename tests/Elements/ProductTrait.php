@@ -86,4 +86,9 @@ trait ProductTrait
         $this->expectOutputString($product . ': {"label":' . $label . ',"reference":' . $reference . '}' . "\n");
         $product->printElementBody();
     }
+
+    public function testGetBaseEndpoint ()
+    {
+        $this->assertSame(static::getElementClass()::getBaseEndpoint(), 'products');
+    }
 }

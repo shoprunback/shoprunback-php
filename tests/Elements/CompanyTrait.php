@@ -80,4 +80,9 @@ trait CompanyTrait
         $this->expectOutputString($company . ': {"name":' . $name . ',"slug":' . $slug . ',"address1":' . $address1 . ',"zipcode":' . $zipcode . '}' . "\n");
         $company->printElementBody();
     }
+
+    public function testGetBaseEndpoint ()
+    {
+        $this->assertSame(static::getElementClass()::getBaseEndpoint(), 'company');
+    }
 }

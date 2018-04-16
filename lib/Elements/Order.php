@@ -27,11 +27,6 @@ class Order extends Element
         return get_object_vars($this);
     }
 
-    public static function getBaseEndpoint()
-    {
-        return 'orders';
-    }
-
     public static function getReferenceAttribute()
     {
         return 'order_number';
