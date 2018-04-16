@@ -15,6 +15,6 @@ class Error extends Exception
         parent::__construct($message);
         $this->httpStatus = $httpStatus;
 
-        Logger::error($this->message, $this->httpStatus);
+        Logger::error('Error ' . $this->httpStatus . ': ' . $this->message);
     }
 }

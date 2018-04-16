@@ -2,18 +2,20 @@
 
 namespace Shoprunback\Elements;
 
-class Customer extends Element
+class Warehouse extends Element
 {
-    private $address;
+    use Retrieve;
+    use All;
+    use Create;
 
     public function __toString()
     {
-        return $this->display($this->first_name . ' ' . $this->last_name);
+        return $this->display($this->name);
     }
 
     public static function getBelongsTo()
     {
-        return ['order', 'shipback'];
+        return [];
     }
 
     public static function getAcceptNestedAttributes()
@@ -23,7 +25,7 @@ class Customer extends Element
 
     public static function canOnlyBeNested()
     {
-        return true;
+        return false;
     }
 
     public function getAllAttributes()

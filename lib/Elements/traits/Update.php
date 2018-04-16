@@ -16,7 +16,7 @@ trait Update
     {
         $restClient = RestClient::getClient();
         $data = $this->getElementBody();
-        $response = $restClient->request(self::updateEndpoint($this->id), \Shoprunback\RestClient::PUT, $data);
+        $response = $restClient->request(self::updateEndpoint($this->id), RestClient::PUT, $data);
         $this->copyValues($this->newFromMixed($response->getBody()));
     }
 }

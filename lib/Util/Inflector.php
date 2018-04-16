@@ -19,6 +19,11 @@ abstract class Inflector
         return $string;
     }
 
+    public static function getFullClassName($string)
+    {
+        return self::ELEMENTS_NAMESPACE . self::classify($string);
+    }
+
     public static function pluralize($className)
     {
         if (substr($className, -1) == 'y') {

@@ -19,6 +19,12 @@ require_once __DIR__ . '/Elements/ProductTrait.php';
 require_once __DIR__ . '/Elements/OrderTrait.php';
 require_once __DIR__ . '/Elements/AddressTrait.php';
 require_once __DIR__ . '/Elements/CustomerTrait.php';
+require_once __DIR__ . '/Elements/ShipbackTrait.php';
+require_once __DIR__ . '/Elements/ItemTrait.php';
+require_once __DIR__ . '/Elements/WarehouseTrait.php';
+require_once __DIR__ . '/Elements/ReturnedItemTrait.php';
+
+require_once __DIR__ . '/Elements/Nested/BaseNestedTest.php';
 require_once __DIR__ . '/Elements/Mocker/BaseMockerTest.php';
 require_once __DIR__ . '/Elements/Api/BaseApiTest.php';
 
@@ -30,3 +36,8 @@ require_once __DIR__ . '/Elements/Api/BaseApiTest.php';
 // Will fail BrandTest
 // require_once __DIR__ . '/Elements/Mocker/BrandTest.php';
 // require_once __DIR__ . '/Elements/Api/BrandTest.php';
+
+// Needed to test ShipbackTest
+// Will fail OrderTest
+// require_once __DIR__ . '/Elements/Mocker/OrderTest.php';
+// require_once __DIR__ . '/Elements/Api/OrderTest.php';

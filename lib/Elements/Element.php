@@ -40,7 +40,7 @@ abstract class Element implements NestedAttributes
     {
         if (Inflector::isKnownElement($key)) {
             $class = Inflector::classify($key);
-            $fullClass = Inflector::ELEMENTS_NAMESPACE . $class;
+            $fullClass = Inflector::getFullClassName($key);
             $getter = 'get' . $class;
 
             if (empty($this->$getter())) {
@@ -210,6 +210,14 @@ abstract class Element implements NestedAttributes
             if (is_null($this->$key)) {
                 return $this->checkIfDirty($key);
             }
+            $keyClass = Inflector::getFullClassName($key);
+            if (
+                !in_array($key, static::getBelongsTo())
+                && in_array(static::getElementName(), $keyClass::getBelongsTo())
+                && property_exists($this, $key . '_id')
+            ) {
+                return false;
+            }
 
             return $this->$key->isDirty() || (!$this->$key::canOnlyBeNested() && $this->checkIfDirty($key . '_id'));
         } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) {
@@ -246,14 +254,8 @@ abstract class Element implements NestedAttributes
     {
         // #TODO manage belongsTo and belongsToOptional
         foreach (static::getBelongsTo() as $parent) {
-            if (!property_exists($this, $parent) || empty($this->$parent)) {
+            if (!property_exists($this, $parent) || is_null($this->$parent)) {
                 continue;
-            }
-
-            $parentId = $parent . '_id';
-
-            if (property_exists($this->$parent, 'id') && !empty($this->$parent->id) && !$this->isKeyDirty($parent)) {
-                $this->$parentId = $this->$parent->id;
             }
 
             if (!$this->$parent->isPersisted()) {
@@ -263,11 +265,16 @@ abstract class Element implements NestedAttributes
             } elseif ($this->$parent->isDirty() && $save) {
                 $this->$parent->save();
             }
+
+            if (property_exists($this->$parent, 'id') && !empty($this->$parent->id)) {
+                $parentId = $parent . '_id';
+                $this->$parentId = $this->$parent->id;
+            }
         }
 
         $data = new \stdClass();
         foreach ($this->getAllAttributes() as $key => $value) {
-            if ($key == 'id' || $data == '_origValues') continue;
+            if ($key == 'id' || $key == '_origValues') continue;
 
             if (is_null($value) && $this->isKeyDirty($key)) {
                 $data->$key = $value;
@@ -298,6 +305,9 @@ abstract class Element implements NestedAttributes
                 $data->$key = self::getChildren($key, $value);
             }
         }
+
+        unset($data->id);
+        unset($data->_origValues);
 
         return $data;
     }
