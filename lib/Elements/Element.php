@@ -313,7 +313,6 @@ abstract class Element
                 && in_array(static::getElementName(), $keyClass::getBelongsTo())
                 && property_exists($this, $key . '_id')
                 && !$keyClass::canOnlyBeNested()
-
             ) {
                 return false;
             }
