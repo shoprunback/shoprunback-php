@@ -11,7 +11,6 @@ abstract class BaseMockerTest extends BaseElementTest
     public function testCanFetchOneMocked()
     {
         RestClient::getClient()->enableTesting();
-        $object = static::getElementClass()::retrieve(1);
         $this->checkIfHasNeededValues(static::getElementClass()::retrieve(1));
     }
 
