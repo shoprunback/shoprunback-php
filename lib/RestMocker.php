@@ -15,6 +15,11 @@ class RestMocker
     {
         RestClient::verifyMethod($method);
 
+        $explodedEndpoint = explode('?', $endpoint);
+        if (count($explodedEndpoint) > 1) {
+            $endpoint = $explodedEndpoint[0];
+        }
+
         $action = strtolower($method);
         return self::$action($endpoint, $body);
     }

@@ -2,27 +2,17 @@
 
 namespace Shoprunback\Resources;
 
+use Shoprunback\ResourceManager;
 use Shoprunback\RestClient;
 use Shoprunback\Util\Inflector;
 
 trait All
 {
-    #TODO paginated resources
     public static function all($page = 1)
     {
         $restClient = RestClient::getClient();
-        $response = $restClient->request(self::indexEndpoint(), \Shoprunback\RestClient::GET);
+        $response = $restClient->request(self::indexEndpoint($page), \Shoprunback\RestClient::GET);
 
-        $responseBody = $response->getBody();
-        if (isset($responseBody->pagination)) {
-            $responseBody = $responseBody->products;
-        }
-
-        $instances = [];
-        foreach ($responseBody as $resource) {
-            $instances[] = self::newFromMixed($resource);
-        }
-
-        return $instances;
+        return new ResourceManager($response->getBody(), get_called_class());
     }
 }

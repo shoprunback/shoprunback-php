@@ -6,8 +6,6 @@ namespace Tests;
 
 use PHPUnit\Framework\TestCase;
 
-use Shoprunback\Shoprunback;
-
 abstract class BaseTest extends TestCase
 {
     public function setUp()

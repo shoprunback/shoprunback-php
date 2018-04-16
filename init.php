@@ -5,6 +5,8 @@ require dirname(__FILE__) . '/lib/Shoprunback.php';
 require dirname(__FILE__) . '/lib/RestClient.php';
 require dirname(__FILE__) . '/lib/RestResponse.php';
 require dirname(__FILE__) . '/lib/RestMocker.php';
+require dirname(__FILE__) . '/lib/ResourceIterator.php';
+require dirname(__FILE__) . '/lib/ResourceManager.php';
 
 // Load resources
 require dirname(__FILE__) . '/lib/Resources/traits/Retrieve.php';
@@ -31,3 +33,4 @@ require dirname(__FILE__) . '/lib/Error/Error.php';
 require dirname(__FILE__) . '/lib/Error/UnknownApiToken.php';
 require dirname(__FILE__) . '/lib/Error/NotFoundError.php';
 require dirname(__FILE__) . '/lib/Error/RestClientError.php';
+require dirname(__FILE__) . '/lib/Error/ResourceNumberDoesntExists.php';

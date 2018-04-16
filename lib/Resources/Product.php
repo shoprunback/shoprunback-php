@@ -10,9 +10,9 @@ class Product extends Resource
     use Create;
     use Delete;
 
-    public function display()
+    public function __toString()
     {
-        return $this->label;
+        return $this->display($this->label);
     }
 
     public static function getBelongsTo()
