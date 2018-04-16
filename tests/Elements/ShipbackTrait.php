@@ -123,4 +123,9 @@ trait ShipbackTrait
         $modes = ['postal', 'pickup', 'dropoff', 'direct'];
         return $modes[array_rand($modes, 1)];
     }
+
+    public function testGetBaseEndpoint ()
+    {
+        $this->assertSame(static::getElementClass()::getBaseEndpoint(), 'shipbacks');
+    }
 }

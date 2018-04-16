@@ -13,7 +13,7 @@ final class BrandTest extends BaseMockerTest
 
     public function testCanUpdateOneMocked()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $brand = Brand::retrieve(1);
         $brand->name = self::randomString();
@@ -26,7 +26,7 @@ final class BrandTest extends BaseMockerTest
 
     public function testGetChangedBrandBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $brand = Brand::retrieve(1);
 
@@ -38,7 +38,7 @@ final class BrandTest extends BaseMockerTest
 
     public function testGetNewBrandBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $brand = new Brand();
 

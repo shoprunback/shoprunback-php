@@ -60,4 +60,9 @@ trait BrandTrait
         $this->expectOutputString($brand . ': {"name":' . $name . ',"reference":' . $reference . '}' . "\n");
         $brand->printElementBody();
     }
+
+    public function testGetBaseEndpoint ()
+    {
+        $this->assertSame(static::getElementClass()::getBaseEndpoint(), 'brands');
+    }
 }

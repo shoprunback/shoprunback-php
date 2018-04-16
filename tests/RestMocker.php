@@ -1,6 +1,6 @@
 <?php
 
-namespace Shoprunback;
+namespace Tests;
 
 use Shoprunback\Error\Error;
 use Shoprunback\Error\UnknownApiToken;

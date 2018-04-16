@@ -19,7 +19,7 @@ final class CompanyTest extends BaseApiTest
 
     public function testCanUpdate()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $company = Company::getOwn();
         $companyId = $company->id;
@@ -34,7 +34,7 @@ final class CompanyTest extends BaseApiTest
 
     public function testCanRetrieve()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $company = Company::getOwn();
 
@@ -45,7 +45,7 @@ final class CompanyTest extends BaseApiTest
 
     public function testObjectFromApiIsPersisted()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $company = static::createDefault();
         $this->assertFalse($company->isPersisted());
@@ -54,9 +54,9 @@ final class CompanyTest extends BaseApiTest
         $this->assertTrue($company->isPersisted());
     }
 
-    public function testCanNotRetrieveUnknown()
+    public function testCannotRetrieveUnknown()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $retrievedCompany = static::getElementClass()::retrieve(self::randomString());
         $ownCompany = static::getElementClass()::getOwn();

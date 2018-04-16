@@ -19,31 +19,53 @@ class Company extends Element
         return ['account'];
     }
 
-    public static function getAcceptNestedAttributes()
-    {
-        return [];
-    }
-
-    public static function canOnlyBeNested()
-    {
-        return false;
-    }
-
     public function getAllAttributes()
     {
         return get_object_vars($this);
     }
 
-    public static function ownEndpoint() {
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'name',
+            'slug',
+            'address1',
+            'address2',
+            'zipcode',
+            'state',
+            'country_code',
+            'contact_email',
+            'website_url',
+            'phone_number',
+            'logo_url',
+            'reasons'
+        ];
+    }
+
+    public static function getBaseEndpoint()
+    {
         return 'company';
     }
 
-    public static function updateEndpoint($id) {
+    public static function ownEndpoint()
+    {
         return 'company';
     }
 
-    public static function showEndpoint($id) {
+    public static function updateEndpoint($id)
+    {
+        return 'company';
+    }
+
+    public static function showEndpoint($id)
+    {
         return 'companies/' . $id;
+    }
+
+    public static function getReferenceAttribute()
+    {
+        return 'id';
     }
 
     public static function getOwn()

@@ -16,36 +16,50 @@ class Account extends Element
         return $this->display($this->first_name . ' ' . $this->last_name);
     }
 
-    public static function getBelongsTo()
-    {
-        return [];
-    }
-
-    public static function getAcceptNestedAttributes()
-    {
-        return [];
-    }
-
-    public static function canOnlyBeNested()
-    {
-        return false;
-    }
-
     public function getAllAttributes()
     {
         return get_object_vars($this);
     }
 
-    public static function ownEndpoint() {
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'first_name',
+            'last_name',
+            'email',
+            'company_id',
+            'created_at',
+            'owner',
+            'pending',
+            'manager',
+            'auth_token'
+        ];
+    }
+
+    public static function getBaseEndpoint()
+    {
         return 'me';
     }
 
-    public static function updateEndpoint($id) {
+    public static function ownEndpoint()
+    {
         return 'me';
     }
 
-    public static function showEndpoint($id) {
+    public static function updateEndpoint($id)
+    {
+        return 'me';
+    }
+
+    public static function showEndpoint($id)
+    {
         return 'users/' . $id;
+    }
+
+    public static function getReferenceAttribute()
+    {
+        return 'id';
     }
 
     public static function getOwn()

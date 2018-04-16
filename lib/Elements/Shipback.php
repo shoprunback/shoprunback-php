@@ -24,19 +24,41 @@ class Shipback extends Element
         return ['order'];
     }
 
-    public static function getAcceptNestedAttributes()
+    public static function getAcceptedNestedElements()
     {
         return ['returnedItems', 'customer', 'company'];
-    }
-
-    public static function canOnlyBeNested()
-    {
-        return false;
     }
 
     public function getAllAttributes()
     {
         return get_object_vars($this);
+    }
+
+    public static function getReferenceAttribute()
+    {
+        return 'id';
+    }
+
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'rma',
+            'mode',
+            'weight_in_grams',
+            'computed_weight_in_grams',
+            'created_at',
+            'public_url',
+            'returned_items',
+            'metadata',
+            'order_id',
+            'order',
+            'company_id',
+            'company',
+            'customer',
+            'size',
+            'quotes'
+        ];
     }
 
     public function setOrder($order)

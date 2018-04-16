@@ -13,7 +13,7 @@ final class AccountTest extends BaseMockerTest
 
     public function testCanUpdateOneMocked()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $account = static::getElementClass()::retrieve(1);
         $account->first_name = self::randomString();
@@ -26,7 +26,7 @@ final class AccountTest extends BaseMockerTest
 
     public function testGetChangedAccountBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $account = static::getElementClass()::retrieve(1);
 
@@ -38,7 +38,7 @@ final class AccountTest extends BaseMockerTest
 
     public function testGetNewAccountBody()
     {
-        RestClient::getClient()->enableTesting();
+        static::enableTesting();
 
         $account = new Account();
 

@@ -13,12 +13,7 @@ class Item extends Element
 
     public static function getBelongsTo()
     {
-        return ['order'];
-    }
-
-    public static function getAcceptNestedAttributes()
-    {
-        return [];
+        return ['order', 'product'];
     }
 
     public static function canOnlyBeNested()
@@ -29,6 +24,21 @@ class Item extends Element
     public function getAllAttributes()
     {
         return get_object_vars($this);
+    }
+
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'label',
+            'reference',
+            'barcode',
+            'price_cents',
+            'currency',
+            'created_at',
+            'product_id',
+            'product'
+        ];
     }
 
     public function setProduct($product)

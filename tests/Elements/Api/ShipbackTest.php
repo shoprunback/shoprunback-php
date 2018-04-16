@@ -17,7 +17,7 @@ final class ShipbackTest extends BaseApiTest
 
     public function testCanSaveNewShipback()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $newOrder = OrderTest::createDefault();
         $newOrder->save();
@@ -32,7 +32,7 @@ final class ShipbackTest extends BaseApiTest
 
     public function testCanUpdate()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $shipback = Shipback::all()[0];
         $shipbackId = $shipback->id;
@@ -47,7 +47,7 @@ final class ShipbackTest extends BaseApiTest
 
     public function testObjectFromApiIsPersisted()
     {
-        RestClient::getClient()->disableTesting();
+        static::disableTesting();
 
         $shipback = new Shipback();
         $this->assertFalse($shipback->isPersisted());

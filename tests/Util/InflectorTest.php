@@ -1,6 +1,8 @@
 <?php
 
-namespace Tests\Elements;
+namespace Tests\Util;
+
+require_once dirname(__FILE__) . '/../../init.php';
 
 use \Tests\BaseTest;
 
@@ -77,4 +79,44 @@ final class InflectorTest extends BaseTest
 
         $this->assertEquals($inflectedArrayBrand->_origValues, $inflectedObjectBrand->_origValues);
     }
+
+    public function testGetClassElement()
+    {
+        $brand = new Brand();
+        $this->assertSame(Inflector::getClass($brand), 'Shoprunback\Elements\Brand');
+        $this->assertSame(Inflector::getClass(get_class($brand)), 'Shoprunback\Elements\Brand');
+    }
+
+    public function testGetClassChild()
+    {
+        $brandChild = new BrandChild('');
+        $this->assertSame(Inflector::getClass($brandChild), 'Shoprunback\Elements\Brand');
+        $this->assertSame(Inflector::getClass('Tests\Util\BrandChild'), 'Shoprunback\Elements\Brand');
+    }
+
+    public function testGetClassGrandChild()
+    {
+        $brandChildChild = new BrandChildChild();
+        $this->assertSame(Inflector::getClass($brandChildChild), 'Shoprunback\Elements\Brand');
+        $this->assertSame(Inflector::getClass('Tests\Util\BrandChildChild'), 'Shoprunback\Elements\Brand');
+    }
+
+    /**
+     * @expectedException \Shoprunback\Error\UnknownElement
+     */
+    public function testGetClassUnknown()
+    {
+        $stdClass = new \stdClass();
+        Inflector::getClass($stdClass);
+    }
+}
+
+// To test getClass
+class BrandChild extends \Shoprunback\Elements\Brand
+{
+    public function __construct($params){}
+}
+class BrandChildChild extends BrandChild
+{
+    public function __construct(){}
 }

@@ -3,6 +3,7 @@
 namespace Shoprunback\Util;
 
 use Shoprunback\Util\Container;
+use Shoprunback\Error\UnknownElement;
 
 abstract class Inflector
 {
@@ -19,9 +20,14 @@ abstract class Inflector
         return $string;
     }
 
+    private static function removeNamespaceFromString($string)
+    {
+        return str_replace(self::ELEMENTS_NAMESPACE, '', $string);
+    }
+
     public static function getFullClassName($string)
     {
-        return self::ELEMENTS_NAMESPACE . self::classify($string);
+        return self::ELEMENTS_NAMESPACE . self::classify(self::removeNamespaceFromString($string));
     }
 
     public static function pluralize($className)
@@ -42,7 +48,7 @@ abstract class Inflector
     }
 
     public static function isKnownElement($className) {
-        return class_exists(self::ELEMENTS_NAMESPACE . $className);
+        return class_exists(self::ELEMENTS_NAMESPACE . self::removeNamespaceFromString($className));
     }
 
     public static function constantize($mixed, $inflectedClassName)
@@ -103,5 +109,47 @@ abstract class Inflector
         }
 
         return $valueToAdd;
+    }
+
+    public static function getClass($class)
+    {
+        if (is_object($class)) {
+            // Check if the object is a child (direct or not) of Element to use getElementName
+            // Then it checks if it is a direct child of Element
+            if (is_a($class, self::ELEMENTS_NAMESPACE . 'Element') && self::isKnownElement(get_class($class))) {
+                return get_class($class);
+            }
+
+            // Check if it has a parent class which is not abstract
+            if ($parentClass = get_parent_class($class)) {
+                try {
+                    $className = static::getClass($parentClass);
+                    return $className;
+                } catch (UnknownElement $e) {
+                    return $e;
+                }
+            }
+
+            throw new UnknownElement('Unknown element ' . get_class($class));
+        }
+
+        if (self::isKnownElement($class)) {
+            return self::getFullClassName($class);
+        }
+
+        // FALSE checks if the class is not abstract so we can instantiate it
+        if (class_exists($class, FALSE)) {
+            $object = new \ReflectionClass($class);
+            if ($object->getParentClass()) {
+                try {
+                    $className = static::getClass($object->getParentClass()->getName());
+                    return $className;
+                } catch (UnknownElement $e) {
+                    return $e;
+                }
+            }
+        }
+
+        throw new UnknownElement('Unknown element ' . $class);
     }
 }

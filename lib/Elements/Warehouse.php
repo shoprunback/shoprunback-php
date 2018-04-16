@@ -15,24 +15,24 @@ class Warehouse extends Element
         return $this->display($this->name);
     }
 
-    public static function getBelongsTo()
-    {
-        return [];
-    }
-
-    public static function getAcceptNestedAttributes()
+    public static function getAcceptedNestedElements()
     {
         return ['address'];
-    }
-
-    public static function canOnlyBeNested()
-    {
-        return false;
     }
 
     public function getAllAttributes()
     {
         return get_object_vars($this);
+    }
+
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'name',
+            'reference',
+            'address'
+        ];
     }
 
     public function setAddress($address)

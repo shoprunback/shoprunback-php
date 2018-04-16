@@ -65,4 +65,9 @@ trait WarehouseTrait
         $this->expectOutputString($warehouse . ': {"name":' . $name . ',"reference":' . $reference . '}' . "\n");
         $warehouse->printElementBody();
     }
+
+    public function testGetBaseEndpoint ()
+    {
+        $this->assertSame(static::getElementClass()::getBaseEndpoint(), 'warehouses');
+    }
 }

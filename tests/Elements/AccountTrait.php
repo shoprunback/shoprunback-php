@@ -80,4 +80,9 @@ trait AccountTrait
         $this->expectOutputString($account . ': {"first_name":' . $first_name . ',"last_name":' . $last_name . ',"email":' . $email . ',"owner":' . $owner . '}' . "\n");
         $account->printElementBody();
     }
+
+    public function testGetBaseEndpoint ()
+    {
+        $this->assertSame(static::getElementClass()::getBaseEndpoint(), 'me');
+    }
 }

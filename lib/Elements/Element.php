@@ -8,9 +8,10 @@ use Shoprunback\Util\Inflector;
 use Shoprunback\Util\Logger;
 use Shoprunback\Error\NotFoundError;
 use Shoprunback\Error\RestClientError;
-use Shoprunback\Elements\NestedAttributes;
+use Shoprunback\Error\ElementCannotBeUpdated;
+use Shoprunback\Error\ElementCannotBeCreated;
 
-abstract class Element implements NestedAttributes
+abstract class Element
 {
     public $id;
 
@@ -18,11 +19,25 @@ abstract class Element implements NestedAttributes
     {
         $this->id = $id;
         $this->_origValues = new \stdClass();
+
+        if ($this->id != '') {
+            $this->loadOriginal();
+        }
     }
 
     public function __set($key, $value)
     {
-        if ($this->belongsTo($key)) {
+        if (
+            is_object($value)
+            && isset($value->id)
+            && (
+                $this->belongsTo($key)
+                || (
+                    in_array($key, static::getAcceptedNestedElements())
+                    && Inflector::isKnownElement($key)
+                )
+            )
+        ) {
             $attributeId = $key . '_id';
             $this->$attributeId = $value->id;
         }
@@ -69,6 +84,35 @@ abstract class Element implements NestedAttributes
 
     abstract public function getAllAttributes();
 
+    abstract public function getApiAttributesKeys();
+
+    public function getAllNestedElements()
+    {
+        $nestedElements = [];
+        foreach ($this->getAllAttributes() as $key => $element) {
+            if (Inflector::isKnownElement(Inflector::getClass($element))) {
+                $nestedElements[] = $element;
+            }
+        }
+
+        return $nestedElements;
+    }
+
+    public static function getBelongsTo()
+    {
+        return [];
+    }
+
+    public static function getAcceptedNestedElements()
+    {
+        return [];
+    }
+
+    public static function canOnlyBeNested()
+    {
+        return false;
+    }
+
     public function belongsTo($key)
     {
         return in_array($key, static::getBelongsTo());
@@ -76,7 +120,7 @@ abstract class Element implements NestedAttributes
 
     public function acceptNestedAttribute($key)
     {
-        return in_array($key, static::getAcceptNestedAttributes());
+        return in_array($key, static::getAcceptedNestedElements());
     }
 
     public function display($elementString)
@@ -84,9 +128,13 @@ abstract class Element implements NestedAttributes
         return $elementString . ' (' . $this->id . ')';
     }
 
+    public static function getBaseEndpoint()
+    {
+        return Inflector::pluralize(static::getElementName());
+    }
+
     public static function indexEndpoint($page = 1) {
-        $className = explode('\\', get_called_class());
-        $endpoint = Inflector::pluralize(end($className));
+        $endpoint = static::getBaseEndpoint();
 
         if ($page > 1) {
             $endpoint .= '?page=' . $page;
@@ -111,12 +159,43 @@ abstract class Element implements NestedAttributes
         return self::indexEndpoint() . '/' . $id;
     }
 
+    public function loadOriginal()
+    {
+        if (!$this->isPersisted()) {
+            $restClient = RestClient::getClient();
+
+            try {
+                if (isset($this->id) && $this->id != '') {
+                    $response = $restClient->request(static::showEndpoint($this->id), \Shoprunback\RestClient::GET);
+                } elseif ($this->getReference() != '') {
+                    $response = $restClient->request(static::showEndpoint($this->getReference()), \Shoprunback\RestClient::GET);
+                } else {
+                    return;
+                }
+            } catch(RestClientError $e) {
+                if ($e->response->getCode() == 404) {
+                    return;
+                } else {
+                    throw $e;
+                }
+            }
+
+            $originalObject = static::newFromMixed($response->getBody());
+            unset($originalObject->_origValues);
+            $this->_origValues = clone $originalObject;
+        }
+    }
+
     public function refresh()
     {
         $restClient = RestClient::getClient();
 
         try {
-            $response = $restClient->request(static::showEndpoint($this->id), \Shoprunback\RestClient::GET);
+            if (isset($this->id) && !empty($this->id)) {
+                $response = $restClient->request(static::showEndpoint($this->id), \Shoprunback\RestClient::GET);
+            } else {
+                $response = $restClient->request(static::showEndpoint($this->getReference()), \Shoprunback\RestClient::GET);
+            }
         } catch(RestClientError $e) {
             self::logCurrentClass(json_encode($e));
             if ($e->response->getCode() == 404) {
@@ -126,22 +205,24 @@ abstract class Element implements NestedAttributes
             }
         }
 
-        $this->copyValues($this->newFromMixed($response->getBody()));
+        $this->copyValues(static::newFromMixed($response->getBody()));
     }
 
     public function save()
     {
+        $this->loadOriginal();
+
         if ($this->isPersisted()) {
             if (static::canUpdate()) {
                 $this->put();
             } else {
-                throw new ElementCannotBeUpdated(get_called_class() . ' cannot be updated');
+                $this->refresh();
             }
         } else {
             if (static::canCreate()) {
                 $this->post();
             } else {
-                throw new ElementCannotBeCreated(get_called_class() . ' cannot be created');
+                throw new ElementCannotBeCreated(Inflector::getClass($this) . ' cannot be created');
             }
         }
     }
@@ -151,7 +232,7 @@ abstract class Element implements NestedAttributes
         $restClient = RestClient::getClient();
         $data = $this->getElementBody();
         $response = $restClient->request(static::createEndpoint(), \Shoprunback\RestClient::POST, $data);
-        $this->copyValues($this->newFromMixed($response->getBody()));
+        $this->copyValues(static::newFromMixed($response->getBody()));
     }
 
     public function printElementBody()
@@ -193,9 +274,21 @@ abstract class Element implements NestedAttributes
         return $dirtyKeys;
     }
 
+    public function getApiAttributes()
+    {
+        $attributes = [];
+        foreach ($this->getApiAttributesKeys() as $key) {
+            if (property_exists($this, $key) || isset($this->$key) || $this->$key != null) {
+                $attributes[$key] = $this->$key;
+            }
+        }
+
+        return $attributes;
+    }
+
     public function isDirty()
     {
-        foreach ($this->getAllAttributes() as $key => $value) {
+        foreach ($this->getApiAttributes() as $key => $value) {
             if ($this->isKeyDirty($key)) {
                 return true;
             }
@@ -216,15 +309,16 @@ abstract class Element implements NestedAttributes
             }
             $keyClass = Inflector::getFullClassName($key);
             if (
-                !in_array($key, static::getBelongsTo())
+                !$this->belongsTo($key)
                 && in_array(static::getElementName(), $keyClass::getBelongsTo())
                 && property_exists($this, $key . '_id')
+                && !$keyClass::canOnlyBeNested()
             ) {
                 return false;
             }
 
-            return $this->$key->isDirty() || (!$this->$key::canOnlyBeNested() && $this->checkIfDirty($key . '_id'));
-        } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) {
+            return $this->$key->isDirty() || (!$keyClass::canOnlyBeNested() && $this->checkIfDirty($key . '_id'));
+        } elseif (Inflector::isKnownElement(Inflector::classify($key)) && Inflector::isPluralClassName(Inflector::classify($key), $key)) {
             foreach ($this->$key as $value) {
                 if ($value->isDirty()) {
                     return true;
@@ -250,8 +344,9 @@ abstract class Element implements NestedAttributes
 
     public function checkIfDirty($key)
     {
-        return (!property_exists($this->_origValues, $key) && !is_null($this->$key))
-                || (isset($this->$key) && $this->$key != $this->_origValues->$key);
+        return is_null($this->_origValues)
+            || (!property_exists($this->_origValues, $key) && !is_null($this->$key))
+            || (isset($this->$key) && $this->$key != $this->_origValues->$key);
     }
 
     public function getElementBody($save = true)
@@ -263,7 +358,7 @@ abstract class Element implements NestedAttributes
             }
 
             if (!$this->$parent->isPersisted()) {
-                if (!in_array($parent, static::getAcceptNestedAttributes()) && $save) {
+                if (!in_array($parent, static::getAcceptedNestedElements()) && $save) {
                     $this->$parent->save();
                 }
             } elseif ($this->$parent->isDirty() && $save) {
@@ -271,14 +366,14 @@ abstract class Element implements NestedAttributes
             }
 
             if (property_exists($this->$parent, 'id') && !empty($this->$parent->id)) {
-                $parentId = $parent . '_id';
-                $this->$parentId = $this->$parent->id;
+                $parentForeignKey = $parent . '_id';
+                $this->$parentForeignKey = $this->$parent->id;
             }
         }
 
         $data = new \stdClass();
-        foreach ($this->getAllAttributes() as $key => $value) {
-            if ($key == 'id' || $key == '_origValues') continue;
+        foreach ($this->getApiAttributes() as $key => $value) {
+            if ($key == '_origValues') continue;
 
             if (is_null($value) && $this->isKeyDirty($key)) {
                 $data->$key = $value;
@@ -286,11 +381,13 @@ abstract class Element implements NestedAttributes
             }
 
             $keyPreged = preg_replace('/_id$/', '', $key);
+            $keyClass = Inflector::getFullClassName($key);
 
             if (
                 $this->isKeyDirty($key)
                 && (
                     !isset($this->{$key . '_id'})
+                    || $keyClass::canOnlyBeNested()
                     || (
                         !$save
                         && $value->isDirty()
@@ -300,7 +397,7 @@ abstract class Element implements NestedAttributes
                     $keyPreged == $key
                     || (
                         Inflector::isKnownElement($keyPreged)
-                        && property_exists($this, $keyPreged)
+                        && (property_exists($this, $keyPreged) || !is_null($this->$keyPreged))
                         && property_exists($this->$keyPreged, 'id')
                         && !empty($this->$keyPreged->id)
                     )
@@ -310,7 +407,19 @@ abstract class Element implements NestedAttributes
             }
         }
 
-        unset($data->id);
+        if (
+            !$this->isPersisted()
+            || (
+                !is_null($this->_origValues)
+                && $this->id !== $this->_origValues->id
+            )
+            || (
+                isset($data->id)
+                && is_null($data->id)
+            )
+        ) {
+            unset($data->id);
+        }
         unset($data->_origValues);
 
         return $data;
@@ -320,7 +429,7 @@ abstract class Element implements NestedAttributes
     {
         if (Inflector::isKnownElement($key)) { // If it is a element
             return $value->getElementBody();
-        } elseif (Inflector::isPluralClassName($key, rtrim($key, 's'))) { // If it is an array of elements
+        } elseif (Inflector::isKnownElement(Inflector::classify($key)) && Inflector::isPluralClassName(Inflector::classify($key), $key)) { // If it is an array of elements
             $arrayOfElements = [];
 
             foreach ($value as $k => $element) {
@@ -335,7 +444,7 @@ abstract class Element implements NestedAttributes
 
     public static function newFromMixed($mixed)
     {
-        $element = Inflector::constantize($mixed, get_called_class());
+        $element = Inflector::constantize($mixed, Inflector::getClass(get_called_class()));
         foreach ($element as $key => $value) {
             if (is_object($value) && Inflector::isKnownElement($key)) {
                 $class = get_class($value);
@@ -354,6 +463,13 @@ abstract class Element implements NestedAttributes
                     $setter = 'set' . Inflector::classify($value::getElementName());
                     $value->copyValues($value);
                     $this->$setter($value);
+                } elseif (is_array($value) && !empty($value) && $value[0] instanceof Element) {
+                    $nestedElements = [];
+                    foreach ($value as $key => $element) {
+                        $element->copyValues($element);
+                        $nestedElements[] = $element;
+                    }
+                    $this->$key = $nestedElements;
                 } else {
                     $this->$key = $value;
                 }
@@ -371,7 +487,7 @@ abstract class Element implements NestedAttributes
 
     protected static function logCurrentClass($message)
     {
-        $calledClassNameExploded = explode('\\', get_called_class());
+        $calledClassNameExploded = explode('\\', Inflector::getClass(get_called_class()));
         Logger::info(end($calledClassNameExploded) . ': ' . $message);
     }
 
@@ -380,9 +496,18 @@ abstract class Element implements NestedAttributes
         return $this->_origValues;
     }
 
+    public static function getReferenceAttribute() {
+        return 'reference';
+    }
+
+    public function getReference() {
+        $reference = $this->getReferenceAttribute();
+        return $this->$reference;
+    }
+
     public static function getElementName()
     {
-        $className = get_called_class();
+        $className = Inflector::getClass(get_called_class());
         $explode = explode('\\', $className);
         return strtolower(end($explode));
     }
@@ -394,26 +519,26 @@ abstract class Element implements NestedAttributes
 
     public static function canRetrieve()
     {
-        return method_exists(get_called_class(), 'retrieve');
+        return method_exists(Inflector::getClass(get_called_class()), 'retrieve');
     }
 
     public static function canCreate()
     {
-        return method_exists(get_called_class(), 'create');
+        return method_exists(Inflector::getClass(get_called_class()), 'create');
     }
 
     public static function canDelete()
     {
-        return method_exists(get_called_class(), 'delete');
+        return method_exists(Inflector::getClass(get_called_class()), 'delete');
     }
 
     public static function canUpdate()
     {
-        return method_exists(get_called_class(), 'update');
+        return method_exists(Inflector::getClass(get_called_class()), 'update');
     }
 
     public static function canGetAll()
     {
-        return method_exists(get_called_class(), 'all');
+        return method_exists(Inflector::getClass(get_called_class()), 'all');
     }
 }

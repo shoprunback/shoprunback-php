@@ -17,24 +17,33 @@ class Order extends Element
         return $this->display($this->order_number);
     }
 
-    public static function getBelongsTo()
-    {
-        return [];
-    }
-
-    public static function getAcceptNestedAttributes()
+    public static function getAcceptedNestedElements()
     {
         return ['items', 'customer'];
-    }
-
-    public static function canOnlyBeNested()
-    {
-        return false;
     }
 
     public function getAllAttributes()
     {
         return get_object_vars($this);
+    }
+
+    public static function getReferenceAttribute()
+    {
+        return 'order_number';
+    }
+
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'order_number',
+            'ordered_at',
+            'customer',
+            'metadata',
+            'items',
+            'created_at',
+            'shipback_id'
+        ];
     }
 
     public function setShipback($shipback)

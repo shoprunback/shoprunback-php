@@ -22,19 +22,36 @@ class Product extends Element
         return ['brand'];
     }
 
-    public static function getAcceptNestedAttributes()
+    public static function getAcceptedNestedElements()
     {
         return ['brand'];
-    }
-
-    public static function canOnlyBeNested()
-    {
-        return false;
     }
 
     public function getAllAttributes()
     {
         return get_object_vars($this);
+    }
+
+    public function getApiAttributesKeys()
+    {
+        return [
+            'id',
+            'label',
+            'reference',
+            'ean',
+            'weight_grams',
+            'width_mm',
+            'length_mm',
+            'height_mm',
+            'brand_id',
+            'brand',
+            'picture_file_base64',
+            'picture_file_url',
+            'created_at',
+            'updated_at',
+            'picture_url',
+            'metadata'
+        ];
     }
 
     public function setBrand($brand)
