@@ -43,3 +43,8 @@ require_once __DIR__ . '/Elements/Api/BaseApiTest.php';
 // Will fail OrderTest
 // require_once __DIR__ . '/Elements/Mocker/OrderTest.php';
 // require_once __DIR__ . '/Elements/Api/OrderTest.php';
+
+// Needed to test OrderTest
+// Will fail ProductTest
+// require_once __DIR__ . '/Elements/Mocker/ProductTest.php';
+// require_once __DIR__ . '/Elements/Api/ProductTest.php';

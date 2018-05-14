@@ -13,7 +13,12 @@ class Item extends Element
 
     public static function getBelongsTo()
     {
-        return ['order', 'product'];
+        return ['order'];
+    }
+
+    public static function getAcceptedNestedElements()
+    {
+        return ['product'];
     }
 
     public static function canOnlyBeNested()
