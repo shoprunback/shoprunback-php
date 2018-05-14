@@ -48,7 +48,12 @@ final class ProductTest extends BaseApiTest
         static::disableTesting();
 
         $product = Product::all()[0];
-        $product->brand = Brand::all()[1];
+        $retrievedBrand = Brand::all()[0];
+        if ($product->brand_id == $retrievedBrand->id) {
+            $product->brand = Brand::all()[1];
+        } else {
+            $product->brand = $retrievedBrand;
+        }
 
         $this->assertEquals($product->getDirtyKeys(), ['brand_id']);
         $this->assertEquals($product->brand->getDirtyKeys(), []);

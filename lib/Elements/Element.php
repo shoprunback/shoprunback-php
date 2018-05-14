@@ -33,7 +33,7 @@ abstract class Element
             && (
                 $this->belongsTo($key)
                 || (
-                    in_array($key, static::getAcceptedNestedElements())
+                    $this->acceptNestedAttribute($key)
                     && Inflector::isKnownElement($key)
                 )
             )
@@ -387,6 +387,7 @@ abstract class Element
                 $this->isKeyDirty($key)
                 && (
                     !isset($this->{$key . '_id'})
+                    || empty($this->{$key . '_id'})
                     || $keyClass::canOnlyBeNested()
                     || (
                         !$save
