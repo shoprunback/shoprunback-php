@@ -29,11 +29,16 @@ class RestClient
         $this->testing = Shoprunback::isTesting();
     }
 
+    public static function resetClient() {
+        self::$_client = new RestClient();
+        return self::getClient();
+    }
+
     public static function getClient() {
-        if(is_null(self::$_client))
-        {
+        if (is_null(self::$_client)) {
             self::$_client = new RestClient();
         }
+
         return self::$_client;
     }
 
@@ -60,6 +65,16 @@ class RestClient
     public function setApiBaseUrl($url)
     {
         $this->apiBaseUrl = $url;
+    }
+
+    public function useSandboxEnvironment()
+    {
+        $this->setApiBaseUrl('https://sandbox.dashboard.shoprunback.com');
+    }
+
+    public function useProductionEnvironment()
+    {
+        $this->setApiBaseUrl('https://dashboard.shoprunback.com');
     }
 
     public function getToken()
