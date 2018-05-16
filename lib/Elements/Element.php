@@ -90,12 +90,23 @@ abstract class Element
     {
         $nestedElements = [];
         foreach ($this->getAllAttributes() as $key => $element) {
-            if (Inflector::isKnownElement(Inflector::getClass($element))) {
+            if ($key != '_origValues' && self::isKnownElement($element)) {
                 $nestedElements[] = $element;
             }
         }
 
         return $nestedElements;
+    }
+
+    public static function isKnownElement($element)
+    {
+        try {
+            if (Inflector::isKnownElement(Inflector::tryToGetClass($element))) {
+                return true;
+            }
+        } catch (\Shoprunback\Error\Error $e) {
+            return false;
+        }
     }
 
     public static function getBelongsTo()
@@ -222,7 +233,7 @@ abstract class Element
             if (static::canCreate()) {
                 $this->post();
             } else {
-                throw new ElementCannotBeCreated(Inflector::getClass($this) . ' cannot be created');
+                throw new ElementCannotBeCreated(Inflector::tryToGetClass($this) . ' cannot be created');
             }
         }
     }
@@ -445,7 +456,7 @@ abstract class Element
 
     public static function newFromMixed($mixed)
     {
-        $element = Inflector::constantize($mixed, Inflector::getClass(get_called_class()));
+        $element = Inflector::constantize($mixed, Inflector::tryToGetClass(get_called_class()));
         foreach ($element as $key => $value) {
             if (is_object($value) && Inflector::isKnownElement($key)) {
                 $class = get_class($value);
@@ -488,7 +499,7 @@ abstract class Element
 
     protected static function logCurrentClass($message)
     {
-        $calledClassNameExploded = explode('\\', Inflector::getClass(get_called_class()));
+        $calledClassNameExploded = explode('\\', Inflector::tryToGetClass(get_called_class()));
         Logger::info(end($calledClassNameExploded) . ': ' . $message);
     }
 
@@ -508,7 +519,7 @@ abstract class Element
 
     public static function getElementName()
     {
-        $className = Inflector::getClass(get_called_class());
+        $className = Inflector::tryToGetClass(get_called_class());
         $explode = explode('\\', $className);
         return strtolower(end($explode));
     }
@@ -520,26 +531,26 @@ abstract class Element
 
     public static function canRetrieve()
     {
-        return method_exists(Inflector::getClass(get_called_class()), 'retrieve');
+        return method_exists(Inflector::tryToGetClass(get_called_class()), 'retrieve');
     }
 
     public static function canCreate()
     {
-        return method_exists(Inflector::getClass(get_called_class()), 'create');
+        return method_exists(Inflector::tryToGetClass(get_called_class()), 'create');
     }
 
     public static function canDelete()
     {
-        return method_exists(Inflector::getClass(get_called_class()), 'delete');
+        return method_exists(Inflector::tryToGetClass(get_called_class()), 'delete');
     }
 
     public static function canUpdate()
     {
-        return method_exists(Inflector::getClass(get_called_class()), 'update');
+        return method_exists(Inflector::tryToGetClass(get_called_class()), 'update');
     }
 
     public static function canGetAll()
     {
-        return method_exists(Inflector::getClass(get_called_class()), 'all');
+        return method_exists(Inflector::tryToGetClass(get_called_class()), 'all');
     }
 }
