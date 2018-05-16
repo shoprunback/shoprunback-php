@@ -10,6 +10,9 @@
         <testsuite name="shoprunback">
             <directory>tests/ShoprunbackTest.php</directory>
         </testsuite>
+        <testsuite name="restClient">
+            <directory>tests/RestClientTest.php</directory>
+        </testsuite>
         <testsuite name="nested">
             <directory suffix="Test.php">tests/Elements/Nested</directory>
         </testsuite>
