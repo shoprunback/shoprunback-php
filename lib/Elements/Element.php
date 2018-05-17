@@ -34,7 +34,7 @@ abstract class Element
                 $this->belongsTo($key)
                 || (
                     $this->acceptNestedAttribute($key)
-                    && Inflector::isKnownElement($key)
+                    && self::isKnownElement($key)
                 )
             )
         ) {
@@ -42,7 +42,7 @@ abstract class Element
             $this->$attributeId = $value->id;
         }
 
-        if (Inflector::isKnownElement($key)) {
+        if (self::isKnownElement($key)) {
             $class = Inflector::classify($key);
             $setter = 'set' . $class;
             $this->$setter($value);
@@ -53,7 +53,7 @@ abstract class Element
 
     public function __get($key)
     {
-        if (Inflector::isKnownElement($key)) {
+        if (self::isKnownElement($key)) {
             $class = Inflector::classify($key);
             $fullClass = Inflector::getFullClassName($key);
             $getter = 'get' . $class;
@@ -260,10 +260,10 @@ abstract class Element
                 && $this->isKeyDirty($key)
             ) {
                 $dirtyKeys[] = $key;
-            } elseif (!Inflector::isKnownElement($key)) {
+            } elseif (!self::isKnownElement($key)) {
                 $keyPreged = preg_replace('/_id$/', '', $key);
 
-                if ($keyPreged != $key && Inflector::isKnownElement($keyPreged) && $this->$keyPreged->id != $value) {
+                if ($keyPreged != $key && self::isKnownElement($keyPreged) && $this->$keyPreged->id != $value) {
                     if (!empty($this->$keyPreged->id) && $this->$keyPreged->id != $this->_origValues->$key) {
                         $dirtyKeys[] = $key;
                     }
@@ -277,7 +277,7 @@ abstract class Element
 
             // If nested element is a different one, but an unchanged one
             $keyToUnset = array_search($key, $dirtyKeys);
-            if ($keyToUnset && Inflector::isKnownElement($key) && !$value->isDirty()) {
+            if ($keyToUnset && self::isKnownElement($key) && !$value->isDirty()) {
                 unset($dirtyKeys[$keyToUnset]);
             }
         }
@@ -314,7 +314,7 @@ abstract class Element
             return false;
         }
 
-        if (Inflector::isKnownElement($key)) {
+        if (self::isKnownElement($key)) {
             if (is_null($this->$key)) {
                 return $this->checkIfDirty($key);
             }
@@ -329,7 +329,7 @@ abstract class Element
             }
 
             return $this->$key->isDirty() || (!$keyClass::canOnlyBeNested() && $this->checkIfDirty($key . '_id'));
-        } elseif (Inflector::isKnownElement(Inflector::classify($key)) && Inflector::isPluralClassName(Inflector::classify($key), $key)) {
+        } elseif (self::isKnownElement(Inflector::classify($key)) && Inflector::isPluralClassName(Inflector::classify($key), $key)) {
             foreach ($this->$key as $value) {
                 if ($value->isDirty()) {
                     return true;
@@ -342,7 +342,7 @@ abstract class Element
         $keyPreged = preg_replace('/_id$/', '', $key);
         if (
             $keyPreged != $key
-            && Inflector::isKnownElement($keyPreged)
+            && self::isKnownElement($keyPreged)
             && isset($this->$keyPreged->id)
             && !empty($this->$keyPreged->id)
             && $this->$key != $this->$keyPreged->id
@@ -408,7 +408,7 @@ abstract class Element
                 && (
                     $keyPreged == $key
                     || (
-                        Inflector::isKnownElement($keyPreged)
+                        self::isKnownElement($keyPreged)
                         && (property_exists($this, $keyPreged) || !is_null($this->$keyPreged))
                         && property_exists($this->$keyPreged, 'id')
                         && !empty($this->$keyPreged->id)
@@ -439,9 +439,9 @@ abstract class Element
 
     private function getChildren($key, $value)
     {
-        if (Inflector::isKnownElement($key)) { // If it is a element
+        if (self::isKnownElement($key)) { // If it is a element
             return $value->getElementBody();
-        } elseif (Inflector::isKnownElement(Inflector::classify($key)) && Inflector::isPluralClassName(Inflector::classify($key), $key)) { // If it is an array of elements
+        } elseif (self::isKnownElement(Inflector::classify($key)) && Inflector::isPluralClassName(Inflector::classify($key), $key)) { // If it is an array of elements
             $arrayOfElements = [];
 
             foreach ($value as $k => $element) {
@@ -458,7 +458,7 @@ abstract class Element
     {
         $element = Inflector::constantize($mixed, Inflector::tryToGetClass(get_called_class()));
         foreach ($element as $key => $value) {
-            if (is_object($value) && Inflector::isKnownElement($key)) {
+            if (is_object($value) && self::isKnownElement($key)) {
                 $class = get_class($value);
                 $element->$key = $class::newFromMixed($value);
             }
