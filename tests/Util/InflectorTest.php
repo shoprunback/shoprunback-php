@@ -83,22 +83,22 @@ final class InflectorTest extends BaseTest
     public function testGetClassElement()
     {
         $brand = new Brand();
-        $this->assertSame(Inflector::getClass($brand), 'Shoprunback\Elements\Brand');
-        $this->assertSame(Inflector::getClass(get_class($brand)), 'Shoprunback\Elements\Brand');
+        $this->assertSame(Inflector::tryToGetClass($brand), 'Shoprunback\Elements\Brand');
+        $this->assertSame(Inflector::tryToGetClass(get_class($brand)), 'Shoprunback\Elements\Brand');
     }
 
     public function testGetClassChild()
     {
         $brandChild = new BrandChild('');
-        $this->assertSame(Inflector::getClass($brandChild), 'Shoprunback\Elements\Brand');
-        $this->assertSame(Inflector::getClass('Tests\Util\BrandChild'), 'Shoprunback\Elements\Brand');
+        $this->assertSame(Inflector::tryToGetClass($brandChild), 'Shoprunback\Elements\Brand');
+        $this->assertSame(Inflector::tryToGetClass('Tests\Util\BrandChild'), 'Shoprunback\Elements\Brand');
     }
 
     public function testGetClassGrandChild()
     {
         $brandChildChild = new BrandChildChild();
-        $this->assertSame(Inflector::getClass($brandChildChild), 'Shoprunback\Elements\Brand');
-        $this->assertSame(Inflector::getClass('Tests\Util\BrandChildChild'), 'Shoprunback\Elements\Brand');
+        $this->assertSame(Inflector::tryToGetClass($brandChildChild), 'Shoprunback\Elements\Brand');
+        $this->assertSame(Inflector::tryToGetClass('Tests\Util\BrandChildChild'), 'Shoprunback\Elements\Brand');
     }
 
     /**
@@ -107,11 +107,11 @@ final class InflectorTest extends BaseTest
     public function testGetClassUnknown()
     {
         $stdClass = new \stdClass();
-        Inflector::getClass($stdClass);
+        Inflector::tryToGetClass($stdClass);
     }
 }
 
-// To test getClass
+// To test tryToGetClass
 class BrandChild extends \Shoprunback\Elements\Brand
 {
     public function __construct($params){}

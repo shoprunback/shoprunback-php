@@ -13,6 +13,18 @@ trait ProductTrait
         return 'Shoprunback\Elements\Product';
     }
 
+    public static function retrieveNewBrand($product)
+    {
+        $retrievedBrand = Brand::all()[0];
+        if ($product->brand_id == $retrievedBrand->id) {
+            $product->brand = Brand::all()[1];
+        } else {
+            $product->brand = $retrievedBrand;
+        }
+
+        return $product;
+    }
+
     public static function createDefault()
     {
         $label = self::randomString();
