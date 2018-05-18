@@ -4,6 +4,16 @@ To use, simply put the whole folder into your libraries folder and require the i
 
 Next, you can call all the objects by calling the objects with their namespace (or by using `use`). Sample: ```use Shoprunback\\Elements\\User;```
 
+## Local development
+
+To use your **local URL as the URL to make your API calls** and to **automatically use your own token**, you need to set 2 environment vars:
+
+`SHOPRUNBACK_URL` that can be equal to 'http://localhost:3000'
+
+`SHOPRUNBACK_TOKEN` that must contain your own ShopRunBack API token. **DO NOT SHARE IT OR PUSH IT ON GITHUB**
+
+## Testing
+
 To run tests, go in your command line, then go to the root folder and execute this line:
 
 ```phpunit```
