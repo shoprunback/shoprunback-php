@@ -111,7 +111,17 @@ abstract class Inflector
         return $valueToAdd;
     }
 
-    public static function getClass($class)
+    public static function tryToGetClass($class)
+    {
+        try {
+            $className = static::getClass($class);
+            return $className;
+        } catch (UnknownElement $e) {
+            return $e;
+        }
+    }
+
+    private static function getClass($class)
     {
         if (is_object($class)) {
             // Check if the object is a child (direct or not) of Element to use getElementName
@@ -122,15 +132,18 @@ abstract class Inflector
 
             // Check if it has a parent class which is not abstract
             if ($parentClass = get_parent_class($class)) {
-                try {
-                    $className = static::getClass($parentClass);
-                    return $className;
-                } catch (UnknownElement $e) {
-                    return $e;
-                }
+                return static::tryToGetClass($parentClass);
             }
 
             throw new UnknownElement('Unknown element ' . get_class($class));
+        }
+
+        if (is_array($class)) {
+            if (empty($class)) {
+                throw new UnknownElement('Unknown element ' . $class);
+            }
+
+            return static::tryToGetClass($class[0]);
         }
 
         if (self::isKnownElement($class)) {
@@ -141,12 +154,7 @@ abstract class Inflector
         if (class_exists($class, FALSE)) {
             $object = new \ReflectionClass($class);
             if ($object->getParentClass()) {
-                try {
-                    $className = static::getClass($object->getParentClass()->getName());
-                    return $className;
-                } catch (UnknownElement $e) {
-                    return $e;
-                }
+                return static::tryToGetClass($object->getParentClass()->getName());
             }
         }
 
