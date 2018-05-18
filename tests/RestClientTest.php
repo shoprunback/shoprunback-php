@@ -18,6 +18,16 @@ final class RestClientTest extends BaseTest
         \Shoprunback\RestClient::getClient()->resetClient();
     }
 
+    public function testGetProductionURL()
+    {
+        $this->assertSame(\Shoprunback\RestClient::getProductionUrl(), 'https://dashboard.shoprunback.com');
+    }
+
+    public function testGetSandboxURL()
+    {
+        $this->assertSame(\Shoprunback\RestClient::getSandboxUrl(), 'https://sandbox.dashboard.shoprunback.com');
+    }
+
     public function testSetBaseApiUrl()
     {
         $restClient = \Shoprunback\RestClient::getClient();

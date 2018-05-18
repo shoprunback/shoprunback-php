@@ -24,8 +24,8 @@ class RestClient
 
     private function __construct()
     {
-        $this->setApiBaseUrl(getenv('SHOPRUNBACK_URL'));
-        $this->setToken(getenv('SHOPRUNBACK_TOKEN'));
+        $this->setApiBaseUrl(self::getProductionURL()); // To automatically set the local var if it exists or the production URL
+        $this->setToken($this->getToken()); // To automatically set the local var if it exists or the current token used
         $this->testing = Shoprunback::isTesting();
     }
 
@@ -64,7 +64,12 @@ class RestClient
 
     public function setApiBaseUrl($url)
     {
-        $this->apiBaseUrl = $url;
+        // Must not set the local var if testing the functions
+        if (getenv('SHOPRUNBACK_URL') && !$this->isTesting()) {
+            $this->apiBaseUrl = getenv('SHOPRUNBACK_URL');
+        } else {
+            $this->apiBaseUrl = $url;
+        }
     }
 
     public function useSandboxEnvironment()
@@ -77,6 +82,16 @@ class RestClient
         $this->setApiBaseUrl('https://dashboard.shoprunback.com');
     }
 
+    public static function getSandboxUrl()
+    {
+        return 'https://sandbox.dashboard.shoprunback.com';
+    }
+
+    public static function getProductionUrl()
+    {
+        return 'https://dashboard.shoprunback.com';
+    }
+
     public function getToken()
     {
         return $this->token;
@@ -84,7 +99,12 @@ class RestClient
 
     public function setToken($token)
     {
-        $this->token = $token;
+        // Must not set the local var if testing the functions
+        if (getenv('SHOPRUNBACK_TOKEN') && !$this->isTesting()) {
+            $this->token = getenv('SHOPRUNBACK_TOKEN');
+        } else {
+            $this->token = $token;
+        }
     }
 
     public function getApiFullUrl()
