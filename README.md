@@ -6,7 +6,7 @@ The ShopRunBack PHP library is designed to be a PHP overlay for the ShopRunBack 
 
 Download the library, move it to your library folder and add this line in your `init.php` file.
 
-`require dirname(__FILE__) . '/path_to_the_shoprunback-lib/init.php';`
+`require dirname(__FILE__) . 'lib/shoprunback-php/init.php';`
 
 You can now use the PHP library.
 
