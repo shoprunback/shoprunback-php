@@ -1,38 +1,32 @@
-# PHP library to ease the usage of the API of ShopRunBack
+# PHP library for the ShopRunBack API
 
-To use, simply put the whole folder into your libraries folder and require the init.php file.
+## Install
 
-Next, you can call all the objects by calling the objects with their namespace (or by using `use`). Sample: ```use Shoprunback\\Elements\\User;```
+Download the library and move it to your library folder. Add the correct require in your init.php file. You can now use the PHP library.
 
-## Local development
+## Usage
 
-To use your **local URL as the URL to make your API calls** and to **automatically use your own token**, you need to set 2 environment vars:
+In order to work with the different shoprunback elements, you will need to to call each object using their namespace, or with the keyword `use` (example: ```use Shoprunback\\Elements\\User;```)
 
-`SHOPRUNBACK_URL` that can be equal to 'http://localhost:3000'
+### Local development
 
-`SHOPRUNBACK_TOKEN` that must contain your own ShopRunBack API token. **DO NOT SHARE IT OR PUSH IT ON GITHUB**
+The library comes with 2 environments preloaded (Sandbox and Production). To use it locally, simply set 2 environment variables:
 
-## Testing
+- `SHOPRUNBACK_URL` : You local URL (ie: 'http://localhost:3000')
+- `SHOPRUNBACK_TOKEN` that must contain your own ShopRunBack API token. **DO NOT SHARE IT OR PUSH IT ON GITHUB**
 
-To run tests, go in your command line, then go to the root folder and execute this line:
+### Testing
 
-```phpunit```
+To run tests, open your terminal, go to your project's root directory and run the command ```phpunit```
 
-If you want to run a precise test:
+If you want to run a precise test, you need to specify the path to the test file like so ```phpunit path/to/FileTest.php```
 
-```phpunit path/to/FileTest.php```
-
-If you want to run your tests on a local environment, copy the ```phpunit.xml``` into a new file, set your custom vars and run:
-
-```phpunit -c my_phpunit_file.xml```
+If you want to run your tests on a local environment, copy the ```phpunit.xml``` into a new file, set your custom vars and run ```phpunit -c my_phpunit_file.xml```
 
 # PHP Versions Compability
 
-Doc: https://www.sitepoint.com/quick-intro-phpcompatibility-standard-for-phpcs-are-you-php7-ready/
-
-To test if the code respect writing standards and is compatible with various PHP versions, run
+To test your code compatibility across older and newer PHP versions, run this command
 
 ```vendor/bin/phpcs --ignore=/vendor/ --standard=PHPCompatibility --extensions=php --runtime-set testVersion <version_to_check> <path_to_test>```
 
-## Example:
-```vendor/bin/phpcs --ignore=/vendor/ --standard=PHPCompatibility --extensions=php --runtime-set testVersion 7.2 ./tests/```
+[More information on PHP compatibility](https://www.sitepoint.com/quick-intro-phpcompatibility-standard-for-phpcs-are-you-php7-ready/)
