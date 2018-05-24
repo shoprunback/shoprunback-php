@@ -1,38 +1,19 @@
-# PHP library to ease the usage of the API of ShopRunBack
+# PHP library for the ShopRunBack API
 
-To use, simply put the whole folder into your libraries folder and require the init.php file.
+The ShopRunBack PHP library is designed to be a PHP overlay for the ShopRunBack API. For more information on how the library works, visit the [documentation](https://shoprunback.github.io/documentation/php.html).
 
-Next, you can call all the objects by calling the objects with their namespace (or by using `use`). Sample: ```use Shoprunback\\Elements\\User;```
+## Install
 
-## Local development
+Download the library, move it to your library folder and add this line in your `init.php` file.
 
-To use your **local URL as the URL to make your API calls** and to **automatically use your own token**, you need to set 2 environment vars:
+`require dirname(__FILE__) . '/lib/shoprunback-php/init.php';`
 
-`SHOPRUNBACK_URL` that can be equal to 'http://localhost:3000'
+You can now use the PHP library.
 
-`SHOPRUNBACK_TOKEN` that must contain your own ShopRunBack API token. **DO NOT SHARE IT OR PUSH IT ON GITHUB**
+## Usage
 
-## Testing
+Before using the library you must set your token with the RestClient.
 
-To run tests, go in your command line, then go to the root folder and execute this line:
+`\Shoprunback\RestClient::getClient()->setToken('yourApiToken');`
 
-```phpunit```
-
-If you want to run a precise test:
-
-```phpunit path/to/FileTest.php```
-
-If you want to run your tests on a local environment, copy the ```phpunit.xml``` into a new file, set your custom vars and run:
-
-```phpunit -c my_phpunit_file.xml```
-
-# PHP Versions Compability
-
-Doc: https://www.sitepoint.com/quick-intro-phpcompatibility-standard-for-phpcs-are-you-php7-ready/
-
-To test if the code respect writing standards and is compatible with various PHP versions, run
-
-```vendor/bin/phpcs --ignore=/vendor/ --standard=PHPCompatibility --extensions=php --runtime-set testVersion <version_to_check> <path_to_test>```
-
-## Example:
-```vendor/bin/phpcs --ignore=/vendor/ --standard=PHPCompatibility --extensions=php --runtime-set testVersion 7.2 ./tests/```
+In order to work with the different ShopRunBack elements, you will need to to call each object using their namespace, or with the keyword `use` (example: `use Shoprunback\\Elements\\User;`)
