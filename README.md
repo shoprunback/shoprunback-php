@@ -17,11 +17,3 @@ Before using the library you must set your token with the RestClient.
 `\Shoprunback\RestClient::getClient()->setToken('yourApiToken');`
 
 In order to work with the different ShopRunBack elements, you will need to to call each object using their namespace, or with the keyword `use` (example: `use Shoprunback\\Elements\\User;`)
-
-## PHP Versions Compability
-
-To test your code compatibility across older and newer PHP versions, run this command
-
-`vendor/bin/phpcs --ignore=/vendor/ --standard=PHPCompatibility --extensions=php --runtime-set testVersion <version_to_check> <path_to_test>`
-
-[More information on PHP compatibility](https://www.sitepoint.com/quick-intro-phpcompatibility-standard-for-phpcs-are-you-php7-ready/)
