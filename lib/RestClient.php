@@ -14,6 +14,7 @@ class RestClient
     private $apiBaseUrl;
     private $token;
     private $testing;
+    private $customHeaders = [];
 
     const GET = 'GET';
     const PUT = 'PUT';
@@ -107,6 +108,29 @@ class RestClient
         }
     }
 
+    public function getCustomHeaders()
+    {
+        return $this->customHeaders;
+    }
+
+    public function setCustomHeaders($customHeaders)
+    {
+        if (is_array($customHeaders)) {
+            $newCustomHeaders = [];
+            foreach ($customHeaders as $customHeader) {
+                if (
+                    strpos($customHeader, 'Content-Type') === false
+                    && strpos($customHeader, 'Authorization') === false
+                    && strpos($customHeader, 'Using-SRB-PHP-Library') === false
+                ) {
+                    $newCustomHeaders[] = $customHeader;
+                }
+            }
+
+            $this->customHeaders = $newCustomHeaders;
+        }
+    }
+
     public function getApiFullUrl()
     {
         return $this->getApiBaseUrl() . '/api/v1/';
@@ -128,12 +152,15 @@ class RestClient
         return $this->getApiFullUrl() . $endpoint;
     }
 
-    private function getHeaders() {
-        return [
-            'Content-Type: application/json',
-            'Authorization: Token token=' . $this->getToken(),
-            'Using-SRB-PHP-Library: true'
-        ];
+    public function getHeaders() {
+        return array_merge(
+            $this->getCustomHeaders(),
+            [
+                'Content-Type: application/json',
+                'Authorization: Token token=' . $this->getToken(),
+                'Using-SRB-PHP-Library: true',
+            ]
+        );
     }
 
     private static function validMethod($method)
