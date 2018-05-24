@@ -121,7 +121,7 @@ class RestClient
                 if (
                     strpos($customHeader, 'Content-Type') === false
                     && strpos($customHeader, 'Authorization') === false
-                    && strpos($customHeader, 'Using-SRB-PHP-Library') === false
+                    && strpos($customHeader, 'Shoprunback-PHP') === false
                 ) {
                     $newCustomHeaders[] = $customHeader;
                 }
@@ -158,7 +158,7 @@ class RestClient
             [
                 'Content-Type: application/json',
                 'Authorization: Token token=' . $this->getToken(),
-                'Using-SRB-PHP-Library: true',
+                'Shoprunback-PHP: ' . \Shoprunback\Shoprunback::VERSION,
             ]
         );
     }

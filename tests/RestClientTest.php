@@ -71,7 +71,7 @@ final class RestClientTest extends BaseTest
             [
                 'Content-Type: application/json',
                 'Authorization: Token token=' . $restClient->getToken(),
-                'Using-SRB-PHP-Library: true',
+                'Shoprunback-PHP: ' . \Shoprunback\Shoprunback::VERSION
             ]
         );
     }
@@ -89,7 +89,7 @@ final class RestClientTest extends BaseTest
                 'custom-field: custom-value',
                 'Content-Type: application/json',
                 'Authorization: Token token=' . $restClient->getToken(),
-                'Using-SRB-PHP-Library: true'
+                'Shoprunback-PHP: ' . \Shoprunback\Shoprunback::VERSION
             ]
         );
     }
@@ -106,7 +106,7 @@ final class RestClientTest extends BaseTest
             [
                 'Content-Type: application/json',
                 'Authorization: Token token=' . $restClient->getToken(),
-                'Using-SRB-PHP-Library: true'
+                'Shoprunback-PHP: ' . \Shoprunback\Shoprunback::VERSION
             ]
         );
     }
