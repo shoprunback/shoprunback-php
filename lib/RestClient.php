@@ -129,9 +129,11 @@ class RestClient
     }
 
     private function getHeaders() {
-        $headers = ['Content-Type: application/json'];
-        $headers[] = 'Authorization: Token token=' . $this->getToken();
-        return $headers;
+        return [
+            'Content-Type: application/json',
+            'Authorization: Token token=' . $this->getToken(),
+            'Using-SRB-PHP-Library: true'
+        ];
     }
 
     private static function validMethod($method)
