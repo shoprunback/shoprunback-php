@@ -61,4 +61,53 @@ final class RestClientTest extends BaseTest
         $this->assertSame($restClient->getApiBaseUrl(), 'https://dashboard.shoprunback.com');
         $this->assertSame($restClient->getApiFullUrl(), 'https://dashboard.shoprunback.com/api/v1/');
     }
+
+    public function testGetHeaders()
+    {
+        $restClient = \Shoprunback\RestClient::getClient();
+
+        $this->assertSame(
+            $restClient->getHeaders(),
+            [
+                'Content-Type: application/json',
+                'Authorization: Token token=' . $restClient->getToken(),
+                'Shoprunback-PHP: ' . \Shoprunback\Shoprunback::VERSION
+            ]
+        );
+    }
+
+    public function testCustomHeaders()
+    {
+        $restClient = \Shoprunback\RestClient::getClient();
+
+        $restClient->setCustomHeaders(['custom-field: custom-value']);
+
+        $this->assertSame($restClient->getCustomHeaders(), ['custom-field: custom-value']);
+        $this->assertSame(
+            $restClient->getHeaders(),
+            [
+                'custom-field: custom-value',
+                'Content-Type: application/json',
+                'Authorization: Token token=' . $restClient->getToken(),
+                'Shoprunback-PHP: ' . \Shoprunback\Shoprunback::VERSION
+            ]
+        );
+    }
+
+    public function testCustomHeadersTryingToOverwriteDefault()
+    {
+        $restClient = \Shoprunback\RestClient::getClient();
+
+        $restClient->setCustomHeaders(['Content-Type: type']);
+
+        $this->assertSame($restClient->getCustomHeaders(), []);
+        $this->assertSame(
+            $restClient->getHeaders(),
+            [
+                'Content-Type: application/json',
+                'Authorization: Token token=' . $restClient->getToken(),
+                'Shoprunback-PHP: ' . \Shoprunback\Shoprunback::VERSION
+            ]
+        );
+    }
 }

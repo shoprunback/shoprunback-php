@@ -14,6 +14,7 @@ class RestClient
     private $apiBaseUrl;
     private $token;
     private $testing;
+    private $customHeaders = [];
 
     const GET = 'GET';
     const PUT = 'PUT';
@@ -29,12 +30,14 @@ class RestClient
         $this->testing = Shoprunback::isTesting();
     }
 
-    public static function resetClient() {
+    public static function resetClient()
+    {
         self::$_client = new RestClient();
         return self::getClient();
     }
 
-    public static function getClient() {
+    public static function getClient()
+    {
         if (is_null(self::$_client)) {
             self::$_client = new RestClient();
         }
@@ -107,6 +110,29 @@ class RestClient
         }
     }
 
+    public function getCustomHeaders()
+    {
+        return $this->customHeaders;
+    }
+
+    public function setCustomHeaders($customHeaders)
+    {
+        if (is_array($customHeaders)) {
+            $newCustomHeaders = [];
+            foreach ($customHeaders as $customHeader) {
+                if (
+                    strpos($customHeader, 'Content-Type') === false
+                    && strpos($customHeader, 'Authorization') === false
+                    && strpos($customHeader, 'Shoprunback-PHP') === false
+                ) {
+                    $newCustomHeaders[] = $customHeader;
+                }
+            }
+
+            $this->customHeaders = $newCustomHeaders;
+        }
+    }
+
     public function getApiFullUrl()
     {
         return $this->getApiBaseUrl() . '/api/v1/';
@@ -128,10 +154,16 @@ class RestClient
         return $this->getApiFullUrl() . $endpoint;
     }
 
-    private function getHeaders() {
-        $headers = ['Content-Type: application/json'];
-        $headers[] = 'Authorization: Token token=' . $this->getToken();
-        return $headers;
+    public function getHeaders()
+    {
+        return array_merge(
+            $this->getCustomHeaders(),
+            [
+                'Content-Type: application/json',
+                'Authorization: Token token=' . $this->getToken(),
+                'Shoprunback-PHP: ' . \Shoprunback\Shoprunback::VERSION,
+            ]
+        );
     }
 
     private static function validMethod($method)
