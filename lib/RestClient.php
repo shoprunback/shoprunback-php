@@ -30,12 +30,14 @@ class RestClient
         $this->testing = Shoprunback::isTesting();
     }
 
-    public static function resetClient() {
+    public static function resetClient()
+    {
         self::$_client = new RestClient();
         return self::getClient();
     }
 
-    public static function getClient() {
+    public static function getClient()
+    {
         if (is_null(self::$_client)) {
             self::$_client = new RestClient();
         }
@@ -152,7 +154,8 @@ class RestClient
         return $this->getApiFullUrl() . $endpoint;
     }
 
-    public function getHeaders() {
+    public function getHeaders()
+    {
         return array_merge(
             $this->getCustomHeaders(),
             [
