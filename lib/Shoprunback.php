@@ -7,7 +7,7 @@ use Shoprunback\Elements\User;
 
 class Shoprunback
 {
-    const VERSION = '0.1.0';
+    const VERSION = '0.1.1';
 
     public static function isTesting()
     {
