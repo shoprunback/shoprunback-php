@@ -139,8 +139,8 @@ abstract class Inflector
         }
 
         if (is_array($class)) {
-            if (empty($class)) {
-                throw new UnknownElement('Unknown element ' . $class);
+            if (empty($class) || !isset($class[0])) {
+                throw new UnknownElement('Unknown element');
             }
 
             return static::tryToGetClass($class[0]);

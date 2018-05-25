@@ -91,7 +91,7 @@ abstract class Element
         $nestedElements = [];
         foreach ($this->getAllAttributes() as $key => $element) {
             if ($key != '_origValues' && self::isKnownElement($element)) {
-                $nestedElements[] = $element;
+                $nestedElements[$key] = $element;
             }
         }
 
