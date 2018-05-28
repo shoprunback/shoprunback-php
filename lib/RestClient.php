@@ -120,11 +120,16 @@ class RestClient
         if (is_array($customHeaders)) {
             $newCustomHeaders = [];
             foreach ($customHeaders as $customHeader) {
-                if (
-                    strpos($customHeader, 'Content-Type') === false
-                    && strpos($customHeader, 'Authorization') === false
-                    && strpos($customHeader, 'Shoprunback-PHP') === false
-                ) {
+                $isReserved = false;
+
+                foreach (self::getReservedHeaders() as $value) {
+                    if (strpos($customHeader, $value) !== false) {
+                        $isReserved = true;
+                        break;
+                    }
+                }
+
+                if (!$isReserved) {
                     $newCustomHeaders[] = $customHeader;
                 }
             }
@@ -154,16 +159,27 @@ class RestClient
         return $this->getApiFullUrl() . $endpoint;
     }
 
+    private static function getReservedHeaders()
+    {
+        return [
+            'Content-Type',
+            'Authorization',
+            'Shoprunback-PHP'
+        ];
+    }
+
+    private function getBaseHeaders()
+    {
+        return [
+            'Content-Type: application/json',
+            'Authorization: Token token=' . $this->getToken(),
+            'Shoprunback-PHP: ' . \Shoprunback\Shoprunback::VERSION
+        ];
+    }
+
     public function getHeaders()
     {
-        return array_merge(
-            $this->getCustomHeaders(),
-            [
-                'Content-Type: application/json',
-                'Authorization: Token token=' . $this->getToken(),
-                'Shoprunback-PHP: ' . \Shoprunback\Shoprunback::VERSION,
-            ]
-        );
+        return array_merge($this->getCustomHeaders(), $this->getBaseHeaders());
     }
 
     private static function validMethod($method)
