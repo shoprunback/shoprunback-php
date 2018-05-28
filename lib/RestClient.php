@@ -118,23 +118,16 @@ class RestClient
     public function setCustomHeaders($customHeaders)
     {
         if (is_array($customHeaders)) {
-            $newCustomHeaders = [];
-            foreach ($customHeaders as $customHeader) {
-                $isReserved = false;
-
-                foreach (self::getReservedHeaders() as $value) {
-                    if (strpos($customHeader, $value) !== false) {
-                        $isReserved = true;
-                        break;
+            foreach (self::getReservedHeaders() as $header) {
+                $countCustomHeaders = count($customHeaders);
+                for ($i = 0; $i < $countCustomHeaders; $i++) {
+                    if (strpos($customHeaders[$i], $header) !== false) {
+                        unset($customHeaders[$i]);
                     }
-                }
-
-                if (!$isReserved) {
-                    $newCustomHeaders[] = $customHeader;
                 }
             }
 
-            $this->customHeaders = $newCustomHeaders;
+            $this->customHeaders = $customHeaders;
         }
     }
 
