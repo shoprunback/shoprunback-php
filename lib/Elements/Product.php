@@ -17,6 +17,20 @@ class Product extends Element
         return $this->display($this->label);
     }
 
+    public static function setAttributesFromMixedInElement($mixed)
+    {
+        $element = parent::setAttributesFromMixedInElement($mixed);
+
+        // To have both picture_file_url and picture_url
+        if (isset($element->picture_file_url) && !is_null($element->picture_file_url) && (!isset($element->picture_url) || is_null($element->picture_url))) {
+            $element->picture_url = $element->picture_file_url;
+        } elseif (isset($element->picture_url) && !is_null($element->picture_url) && (!isset($element->picture_file_url) || is_null($element->picture_file_url))) {
+            $element->picture_file_url = $element->picture_url;
+        }
+
+        return $element;
+    }
+
     public static function getBelongsTo()
     {
         return ['brand'];
