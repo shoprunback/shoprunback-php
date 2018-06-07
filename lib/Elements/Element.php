@@ -454,7 +454,7 @@ abstract class Element
         return $value;
     }
 
-    public static function newFromMixed($mixed)
+    public static function setAttributesFromMixedInElement($mixed)
     {
         $element = Inflector::constantize($mixed, Inflector::tryToGetClass(get_called_class()));
         foreach ($element as $key => $value) {
@@ -463,6 +463,13 @@ abstract class Element
                 $element->$key = $class::newFromMixed($value);
             }
         }
+
+        return $element;
+    }
+
+    public static function newFromMixed($mixed)
+    {
+        $element = static::setAttributesFromMixedInElement($mixed);
         $element->copyValues($element);
         return $element;
     }
