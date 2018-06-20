@@ -118,18 +118,16 @@ class RestClient
     public function setCustomHeaders($customHeaders)
     {
         if (is_array($customHeaders)) {
-            $newCustomHeaders = [];
-            foreach ($customHeaders as $customHeader) {
-                if (
-                    strpos($customHeader, 'Content-Type') === false
-                    && strpos($customHeader, 'Authorization') === false
-                    && strpos($customHeader, 'Shoprunback-PHP') === false
-                ) {
-                    $newCustomHeaders[] = $customHeader;
+            foreach (self::getReservedHeaders() as $header) {
+                $countCustomHeaders = count($customHeaders);
+                for ($i = 0; $i < $countCustomHeaders; $i++) {
+                    if (strpos($customHeaders[$i], $header) !== false) {
+                        unset($customHeaders[$i]);
+                    }
                 }
             }
 
-            $this->customHeaders = $newCustomHeaders;
+            $this->customHeaders = $customHeaders;
         }
     }
 
@@ -154,16 +152,27 @@ class RestClient
         return $this->getApiFullUrl() . $endpoint;
     }
 
+    private static function getReservedHeaders()
+    {
+        return [
+            'Content-Type',
+            'Authorization',
+            'Shoprunback-PHP'
+        ];
+    }
+
+    private function getBaseHeaders()
+    {
+        return [
+            'Content-Type: application/json',
+            'Authorization: Token token=' . $this->getToken(),
+            'Shoprunback-PHP: ' . \Shoprunback\Shoprunback::VERSION
+        ];
+    }
+
     public function getHeaders()
     {
-        return array_merge(
-            $this->getCustomHeaders(),
-            [
-                'Content-Type: application/json',
-                'Authorization: Token token=' . $this->getToken(),
-                'Shoprunback-PHP: ' . \Shoprunback\Shoprunback::VERSION,
-            ]
-        );
+        return array_merge($this->getCustomHeaders(), $this->getBaseHeaders());
     }
 
     private static function validMethod($method)
