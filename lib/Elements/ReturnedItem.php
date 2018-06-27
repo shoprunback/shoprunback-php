@@ -36,7 +36,9 @@ class ReturnedItem extends Element
         return [
             'id',
             'item_id',
-            'reason_code'
+            'reason_code',
+            'modifiable',
+            'tag_list'
         ];
     }
 

@@ -41,6 +41,7 @@ class Item extends Element
             'price_cents',
             'currency',
             'created_at',
+            'tag_list',
             'product_id',
             'product'
         ];
