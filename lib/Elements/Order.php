@@ -38,6 +38,7 @@ class Order extends Element
             'id',
             'order_number',
             'ordered_at',
+            'tag_list',
             'customer',
             'metadata',
             'items',
