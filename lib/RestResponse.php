@@ -60,6 +60,4 @@ class RestResponse
     {
         return $this->code >= 200 && $this->code < 300;
     }
-
-
 }

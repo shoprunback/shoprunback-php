@@ -30,9 +30,9 @@ require_once __DIR__ . '/Elements/Nested/BaseNestedTest.php';
 require_once __DIR__ . '/Elements/Mocker/BaseMockerTest.php';
 require_once __DIR__ . '/Elements/Api/BaseApiTest.php';
 
-// --------------------------------------------------------------------------------------
-// FOR THE FOLOWING, SOME LOADS ARE REQUIRED FOR SOME ISOLATED TESTS BUT WILL FAIL OTHERS
-// --------------------------------------------------------------------------------------
+// -----------------------------------------------------------------------------------
+// FOR THE FOLOWING, SOME LOADS ARE REQUIRED TO DO ISOLATED TESTS BUT WILL FAIL OTHERS
+// -----------------------------------------------------------------------------------
 
 // Needed to test ProductTest
 // Will fail BrandTest

@@ -362,7 +362,6 @@ abstract class Element
 
     public function getElementBody($save = true)
     {
-        // #TODO manage belongsTo and belongsToOptional
         foreach (static::getBelongsTo() as $parent) {
             if (!property_exists($this, $parent) || is_null($this->$parent)) {
                 continue;
@@ -533,7 +532,7 @@ abstract class Element
 
     public static function getAllElementKey()
     {
-        return static::getElementName() . 's';
+        return Inflector::pluralize(static::getElementName());
     }
 
     public static function canRetrieve()

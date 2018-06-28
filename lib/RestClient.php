@@ -77,12 +77,12 @@ class RestClient
 
     public function useSandboxEnvironment()
     {
-        $this->setApiBaseUrl('https://sandbox.dashboard.shoprunback.com');
+        $this->setApiBaseUrl(self::getSandboxUrl());
     }
 
     public function useProductionEnvironment()
     {
-        $this->setApiBaseUrl('https://dashboard.shoprunback.com');
+        $this->setApiBaseUrl(self::getProductionUrl());
     }
 
     public static function getSandboxUrl()

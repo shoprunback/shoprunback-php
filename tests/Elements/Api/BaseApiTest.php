@@ -71,7 +71,6 @@ abstract class BaseApiTest extends BaseElementTest
         } else {
             $this->assertTrue(true);
         }
-
     }
 
     /**
@@ -113,7 +112,6 @@ abstract class BaseApiTest extends BaseElementTest
             $retrievedObject = static::getElementClass()::retrieve($object->id);
 
             $this->assertSame($object->id, $retrievedObject->id);
-
         } else {
             $this->assertTrue(method_exists($this, 'testCanRetrieve'));
         }
