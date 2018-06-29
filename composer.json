@@ -1,0 +1,23 @@
+{
+  "name": "shoprunback-php",
+  "description": "PHP library for the ShopRunBack API",
+  "authors": [
+    {
+      "name": "Paul Girardin"
+    },
+    {
+      "name": "Léo Martin"
+    },
+    {
+      "name": "Julien Malherbe"
+    }
+  ],
+  "version": "1.0.0",
+  "prefer-stable" : true,
+  "require-dev": {
+    "squizlabs/php_codesniffer": "^2.2 || ^3.0.2",
+    "wimg/php-compatibility": "*",
+    "phpunit/phpunit": "^6.5",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.4.1"
+  }
+}
