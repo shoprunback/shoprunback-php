@@ -3,9 +3,13 @@
   "description": "PHP library for the ShopRunBack API",
   "authors": [
     {
-      "name": "Paul Girardin",
-      "email": "paul@shoprunback.com",
-      "role": "Developer"
+      "name": "Paul Girardin"
+    },
+    {
+      "name": "Léo Martin"
+    },
+    {
+      "name": "Julien Malherbe"
     }
   ],
   "version": "1.0.0",
