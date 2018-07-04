@@ -106,4 +106,17 @@ final class ProductTest extends BaseApiTest
         $this->assertEquals(count(get_object_vars($elementBody)), 1);
         $this->assertTrue(property_exists($elementBody, 'name'));
     }
+
+    public function testDeleteImage()
+    {
+        static::disableTesting();
+        $product = self::createDefault();
+        $product->picture_file_base64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQAAAAA3bvkkAAAAAnRSTlMAAHaTzTgAAAAKSURBVHgBY2AAAAACAAFzdQEYAAAAAElFTkSuQmCC';
+        $product->save();
+
+        $this->assertTrue(!!(Product::retrieve($product->id)->picture_file_url));
+
+        Product::deleteImageCall($product->id);
+        $this->assertTrue(Product::retrieve($product->id)->picture_file_url === 'https://s3.amazonaws.com/srb-public/missing.png');
+    }
 }

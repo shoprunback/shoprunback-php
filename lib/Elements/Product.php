@@ -68,6 +68,23 @@ class Product extends Element
         ];
     }
 
+    public function deleteImage()
+    {
+        if (!!($this->id)) $this->refresh();
+        self::deleteImage($this->id);
+        $this->refresh();
+    }
+
+    static public function deleteImageCall($productId)
+    {
+        \Shoprunback\RestClient::getClient()->request(self::deleteImageEndpoint($productId), \Shoprunback\RestClient::DELETE);
+    }
+
+    static public function deleteImageEndpoint($productId)
+    {
+        return self::deleteEndPoint($productId) . '/image';
+    }
+
     public function setBrand($brand)
     {
         $this->brand = $brand;
