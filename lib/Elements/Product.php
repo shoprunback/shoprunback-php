@@ -70,7 +70,6 @@ class Product extends Element
 
     public function deleteImage()
     {
-        if (!!($this->id)) $this->refresh();
         self::deleteImage($this->id);
         $this->refresh();
     }
