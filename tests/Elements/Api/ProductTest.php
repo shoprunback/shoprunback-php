@@ -107,7 +107,7 @@ final class ProductTest extends BaseApiTest
         $this->assertTrue(property_exists($elementBody, 'name'));
     }
 
-    public function testDeleteImageFileBase64()
+    public function testDeleteImageCallFileBase64()
     {
         static::disableTesting();
 
@@ -121,7 +121,7 @@ final class ProductTest extends BaseApiTest
         $this->assertTrue(Product::retrieve($product->id)->picture_file_url === 'https://s3.amazonaws.com/srb-public/missing.png');
     }
 
-    public function testDeleteImageFileUrl()
+    public function testDeleteImageCallFileUrl()
     {
         static::disableTesting();
 
@@ -132,6 +132,20 @@ final class ProductTest extends BaseApiTest
         $this->assertFalse(Product::retrieve($product->id)->picture_file_url === 'https://s3.amazonaws.com/srb-public/missing.png');
 
         Product::deleteImageCall($product->id);
+        $this->assertTrue(Product::retrieve($product->id)->picture_file_url === 'https://s3.amazonaws.com/srb-public/missing.png');
+    }
+
+    public function testDeleteImage()
+    {
+        static::disableTesting();
+
+        $product = self::createDefault();
+        $product->picture_file_base64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQAAAAA3bvkkAAAAAnRSTlMAAHaTzTgAAAAKSURBVHgBY2AAAAACAAFzdQEYAAAAAElFTkSuQmCC';
+        $product->save();
+
+        $this->assertFalse(Product::retrieve($product->id)->picture_file_url === 'https://s3.amazonaws.com/srb-public/missing.png');
+
+        $product->deleteImage();
         $this->assertTrue(Product::retrieve($product->id)->picture_file_url === 'https://s3.amazonaws.com/srb-public/missing.png');
     }
 }
