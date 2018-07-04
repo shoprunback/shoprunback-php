@@ -14,9 +14,8 @@ trait Delete
 
     public function remove()
     {
-        $restClient = RestClient::getClient();
         $this->refresh();
         self::logCurrentClass('Log of the object before its removal: ' . json_encode($this->_origValues));
-        $response = $restClient->request(self::deleteEndpoint($this->id), \Shoprunback\RestClient::DELETE);
+        RestClient::getClient()->request(self::deleteEndpoint($this->id), \Shoprunback\RestClient::DELETE);
     }
 }

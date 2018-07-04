@@ -106,4 +106,32 @@ final class ProductTest extends BaseApiTest
         $this->assertEquals(count(get_object_vars($elementBody)), 1);
         $this->assertTrue(property_exists($elementBody, 'name'));
     }
+
+    public function testDeleteImageFileBase64()
+    {
+        static::disableTesting();
+
+        $product = self::createDefault();
+        $product->picture_file_base64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQAAAAA3bvkkAAAAAnRSTlMAAHaTzTgAAAAKSURBVHgBY2AAAAACAAFzdQEYAAAAAElFTkSuQmCC';
+        $product->save();
+
+        $this->assertFalse(Product::retrieve($product->id)->picture_file_url === 'https://s3.amazonaws.com/srb-public/missing.png');
+
+        Product::deleteImageCall($product->id);
+        $this->assertTrue(Product::retrieve($product->id)->picture_file_url === 'https://s3.amazonaws.com/srb-public/missing.png');
+    }
+
+    public function testDeleteImageFileUrl()
+    {
+        static::disableTesting();
+
+        $product = self::createDefault();
+        $product->picture_file_url = 'http://1001startups.fr/wp-content/uploads/2016/05/SRB-Logo-primaire-couleurs.jpg';
+        $product->save();
+
+        $this->assertFalse(Product::retrieve($product->id)->picture_file_url === 'https://s3.amazonaws.com/srb-public/missing.png');
+
+        Product::deleteImageCall($product->id);
+        $this->assertTrue(Product::retrieve($product->id)->picture_file_url === 'https://s3.amazonaws.com/srb-public/missing.png');
+    }
 }
