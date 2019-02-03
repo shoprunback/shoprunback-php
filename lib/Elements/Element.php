@@ -144,7 +144,8 @@ abstract class Element
         return Inflector::pluralize(static::getElementName());
     }
 
-    public static function indexEndpoint($page = 1) {
+    public static function indexEndpoint($page = 1)
+    {
         $endpoint = static::getBaseEndpoint();
 
         if ($page > 1) {
@@ -154,24 +155,32 @@ abstract class Element
         return $endpoint;
     }
 
-    public static function showEndpoint($id) {
+    public static function showEndpoint($id)
+    {
         return self::indexEndpoint() . '/' . $id;
     }
 
-    public static function createEndpoint() {
+    public static function createEndpoint()
+    {
         return self::indexEndpoint();
     }
 
-    public static function updateEndpoint($id) {
+    public static function updateEndpoint($id)
+    {
         return self::indexEndpoint() . '/' . $id;
     }
 
-    public static function deleteEndpoint($id) {
+    public static function deleteEndpoint($id)
+    {
         return self::indexEndpoint() . '/' . $id;
     }
 
     public function loadOriginal()
     {
+        if (get_class($this) != 'SRBOrder' && method_exists($this, 'getIdColumnName') && $this->getMapId()) {
+            return $this;
+        }
+
         if (!$this->isPersisted()) {
             $restClient = RestClient::getClient();
 
@@ -183,7 +192,7 @@ abstract class Element
                 } else {
                     return;
                 }
-            } catch(RestClientError $e) {
+            } catch (RestClientError $e) {
                 if ($e->response->getCode() == 404) {
                     return;
                 } else {
@@ -191,6 +200,7 @@ abstract class Element
                 }
             }
 
+            
             $originalObject = static::newFromMixed($response->getBody());
             unset($originalObject->_origValues);
             $this->_origValues = clone $originalObject;
@@ -207,7 +217,7 @@ abstract class Element
             } else {
                 $response = $restClient->request(static::showEndpoint($this->getReference()), \Shoprunback\RestClient::GET);
             }
-        } catch(RestClientError $e) {
+        } catch (RestClientError $e) {
             self::logCurrentClass(json_encode($e));
             if ($e->response->getCode() == 404) {
                 throw new NotFoundError('Not found');
@@ -383,7 +393,9 @@ abstract class Element
 
         $data = new \stdClass();
         foreach ($this->getApiAttributes() as $key => $value) {
-            if ($key == '_origValues') continue;
+            if ($key == '_origValues') {
+                continue;
+            }
 
             if (is_null($value) && $this->isKeyDirty($key)) {
                 $data->$key = $value;
@@ -514,11 +526,13 @@ abstract class Element
         return $this->_origValues;
     }
 
-    public static function getReferenceAttribute() {
+    public static function getReferenceAttribute()
+    {
         return 'reference';
     }
 
-    public function getReference() {
+    public function getReference()
+    {
         $reference = $this->getReferenceAttribute();
         return $this->$reference;
     }
