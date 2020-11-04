@@ -11,6 +11,7 @@ class Product extends Element
     use Delete;
 
     private $brand;
+    private $spare_parts;
 
     public function __toString()
     {
@@ -38,7 +39,7 @@ class Product extends Element
 
     public static function getAcceptedNestedElements()
     {
-        return ['brand'];
+        return ['brand','spare_parts'];
     }
 
     public function getAllAttributes()
@@ -64,7 +65,8 @@ class Product extends Element
             'created_at',
             'updated_at',
             'picture_url',
-            'metadata'
+            'metadata',
+            'spare_parts'
         ];
     }
 
@@ -74,12 +76,12 @@ class Product extends Element
         $this->refresh();
     }
 
-    static public function deleteImageCall($productId)
+    public static function deleteImageCall($productId)
     {
         \Shoprunback\RestClient::getClient()->request(self::deleteImageEndpoint($productId), \Shoprunback\RestClient::DELETE);
     }
 
-    static public function deleteImageEndpoint($productId)
+    public static function deleteImageEndpoint($productId)
     {
         return self::deleteEndPoint($productId) . '/image';
     }
