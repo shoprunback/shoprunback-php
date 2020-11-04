@@ -4,6 +4,7 @@ namespace Tests\Elements;
 
 use \Shoprunback\Elements\Product;
 use \Shoprunback\Elements\Brand;
+use \Shoprunback\Elements\SparePart;
 use \Shoprunback\RestClient;
 
 trait ProductTrait
@@ -37,8 +38,10 @@ trait ProductTrait
 
         if (RestClient::getClient()->isTesting()) {
             $product->brand = Brand::retrieve(1);
+            $product->spare_parts = SparePart::retrieve(1);
         } else {
             $product->brand = Brand::all()[0];
+            $product->spare_parts = SparePart::retrieve(1);
         }
 
         return $product;
@@ -99,7 +102,7 @@ trait ProductTrait
         $product->printElementBody();
     }
 
-    public function testGetBaseEndpoint ()
+    public function testGetBaseEndpoint()
     {
         $this->assertSame(static::getElementClass()::getBaseEndpoint(), 'products');
     }
