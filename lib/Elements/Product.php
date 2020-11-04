@@ -2,6 +2,8 @@
 
 namespace Shoprunback\Elements;
 
+use Shoprunback\Error\ElementCannotBeCreated;
+
 class Product extends Element
 {
     use Retrieve;
@@ -66,7 +68,7 @@ class Product extends Element
             'updated_at',
             'picture_url',
             'metadata',
-            'spare_parts'
+            'spare_parts',
         ];
     }
 
@@ -94,5 +96,61 @@ class Product extends Element
     public function getBrand()
     {
         return $this->brand;
+    }
+
+    //Override save
+    public function save()
+    {
+        $this->loadOriginal();
+
+        if ($this->isPersisted()) {
+            if (static::canUpdate()) {
+                $spare_parts = $this->getElementBody(false)->spare_parts;
+                $productId = $this->id;
+                if ($spare_parts !== []) {
+                    foreach ($spare_parts as $part) {
+                        self::createSparePart($productId, $part);
+                    }
+                }
+                $this->put();
+            } else {
+                $this->refresh();
+            }
+        } else {
+            if (static::canCreate()) {
+                $this->post();
+            } else {
+                throw new ElementCannotBeCreated(Inflector::tryToGetClass($this) . ' cannot be created');
+            }
+        }
+    }
+
+    public function createSparePart($productId, $sparePart)
+    {
+        try {
+            $sparePart->save();
+            $body = ["spare_part_id" => $sparePart->id];
+            \Shoprunback\RestClient::getClient()->request(self::createSparePartEndpoint($productId), 'POST', $body);
+        } catch (\Throwable $th) {
+            throw new ElementCannotBeCreated('Reference is not available!');
+        }
+    }
+
+    public function createSparePartEndpoint($productId)
+    {
+        return $this->getBaseEndpoint()."/".$productId."/parts";
+    }
+
+    public function getSpareParts()
+    {
+        $productId = $this->id;
+        $res = \Shoprunback\RestClient::getClient()->request($this->getBaseEndpoint()."/".$productId."/parts", \Shoprunback\RestClient::GET);
+        return $res->getBody();
+    }
+
+    public function removeSpareParts($sparePartId)
+    {
+        $productId = $this->id;
+        return \Shoprunback\RestClient::getClient()->request($this->getBaseEndpoint()."/".$productId."/parts/".$sparePartId, \Shoprunback\RestClient::DELETE);
     }
 }
