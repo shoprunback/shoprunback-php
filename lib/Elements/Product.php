@@ -107,7 +107,7 @@ class Product extends Element
             if (static::canUpdate()) {
                 $spare_parts = $this->getElementBody(false)->spare_parts;
                 $productId = $this->id;
-                if ($spare_parts !== []) {
+                if (is_array($spare_parts) && !empty($spare_parts)) {
                     foreach ($spare_parts as $part) {
                         self::createSparePart($productId, $part);
                     }
