@@ -248,7 +248,7 @@ abstract class Element
         }
     }
 
-    private function post()
+    public function post()
     {
         $restClient = RestClient::getClient();
         $data = $this->getElementBody();
