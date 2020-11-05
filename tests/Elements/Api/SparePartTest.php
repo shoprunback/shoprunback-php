@@ -15,17 +15,12 @@ final class SparePartTest extends BaseApiTest
     public function testCanSaveNewSparePart()
     {
         static::disableTesting();
-
-        $sparePart = self::createDefault();
-
-        $name = $sparePart->name;
-        $reference = $sparePart->reference;
-
+        $sparePart = self::createDefault(); 
+        $sparePartBefore = $sparePart;
         $sparePart->save();
-
         $this->assertNotNull($sparePart->id);
-        $this->assertSame($sparePart->name, $name);
-        $this->assertSame($sparePart->reference, $reference);
+        $this->assertSame($sparePart->name, $sparePartBefore->name);
+        $this->assertSame($sparePart->reference, $sparePartBefore->reference);
     }
 
     public function testCanUpdate()
