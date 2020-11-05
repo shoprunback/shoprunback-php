@@ -13,7 +13,6 @@ class Product extends Element
     use Delete;
 
     private $brand;
-    private $spare_parts;
 
     public function __toString()
     {
@@ -102,38 +101,48 @@ class Product extends Element
     public function save()
     {
         $this->loadOriginal();
-
+        $body = $this->getElementBody(false);
+        $spareParts = [];
+        if (isset($body->spare_parts)) {
+            $spareParts = $body->spare_parts;
+        }
         if ($this->isPersisted()) {
             if (static::canUpdate()) {
-                $spare_parts = $this->getElementBody(false)->spare_parts;
-                $productId = $this->id;
-                if (is_array($spare_parts) && !empty($spare_parts)) {
-                    foreach ($spare_parts as $part) {
-                        self::createSparePart($productId, $part);
-                    }
-                }
                 $this->put();
+                $this->addSparePartToProduct($spareParts);
             } else {
                 $this->refresh();
             }
         } else {
             if (static::canCreate()) {
                 $this->post();
+                $this->addSparePartToProduct($spareParts);
             } else {
                 throw new ElementCannotBeCreated(Inflector::tryToGetClass($this) . ' cannot be created');
             }
         }
     }
 
+    public function addSparePartToProduct($spareParts)
+    {
+        $productId = $this->id;
+        if (is_array($spareParts) && !empty($spareParts)) {
+            foreach ($spareParts as $part) {
+                try {
+                    self::createSparePart($productId, $part);
+                } catch (\Throwable $th) {
+                }
+            }
+        }
+        
+        $this->setSpareParts($this->getSpareParts()->spare_parts);
+    }
+
     public function createSparePart($productId, $sparePart)
     {
-        try {
-            $sparePart->save();
-            $body = ["spare_part_id" => $sparePart->id];
-            \Shoprunback\RestClient::getClient()->request(self::createSparePartEndpoint($productId), 'POST', $body);
-        } catch (\Throwable $th) {
-            throw new ElementCannotBeCreated('Reference is not available!');
-        }
+        $sparePart->save();
+        $body = ["spare_part_id" => $sparePart->id];
+        \Shoprunback\RestClient::getClient()->request(self::createSparePartEndpoint($productId), 'POST', $body);
     }
 
     public function createSparePartEndpoint($productId)
@@ -152,5 +161,10 @@ class Product extends Element
     {
         $productId = $this->id;
         return \Shoprunback\RestClient::getClient()->request($this->getBaseEndpoint()."/".$productId."/parts/".$sparePartId, \Shoprunback\RestClient::DELETE);
+    }
+
+    public function setSpareParts($spare_parts)
+    {
+        $this->spare_parts = $spare_parts;
     }
 }
