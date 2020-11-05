@@ -3,8 +3,8 @@
     colors="auto"
     >
     <php>
-        <env name="SHOPRUNBACK_URL" value="https://sandbox.dashboard.shoprunback.com"/>
-        <env name="SHOPRUNBACK_TOKEN" value="1yHRJJFgzU4McVsuicLNbtm5sPpYeEW2eCpt5-awiWRx7218wg"/>
+        <env name="SHOPRUNBACK_URL" value="https://staging.dashboard.shoprunback.com"/>
+        <env name="SHOPRUNBACK_TOKEN" value="BnnuvaVbKm9WhFnwERpLVxaJZeSAZLYidvc6sWqfzzCqhzynRA"/>
     </php>
     <testsuites>
         <testsuite name="shoprunback">

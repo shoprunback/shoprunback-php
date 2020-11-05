@@ -28,6 +28,7 @@ require dirname(__FILE__) . '/lib/Elements/ReturnedItem.php';
 require dirname(__FILE__) . '/lib/Elements/Warehouse.php';
 require dirname(__FILE__) . '/lib/Elements/Company.php';
 require dirname(__FILE__) . '/lib/Elements/Account.php';
+require dirname(__FILE__) . '/lib/Elements/SparePart.php';
 
 // Load Utils
 require dirname(__FILE__) . '/lib/Util/Container.php';

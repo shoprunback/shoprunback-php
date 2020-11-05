@@ -1,0 +1,10 @@
+{
+	"id": "dfa71609-e540-4a7b-b314-d7ca914b31e0",
+	"reference": "part-ref-xyz",
+	"name": "A user friendly spare part name",
+	"description": "A longer description for your spare part",
+	"picture_url": "string",
+	"metadata": {
+		"additionalProp1": {}
+	}
+}
