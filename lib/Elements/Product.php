@@ -40,7 +40,7 @@ class Product extends Element
 
     public static function getAcceptedNestedElements()
     {
-        return ['brand','spare_parts'];
+        return ['brand','spare_parts','bulk'];
     }
 
     public function getAllAttributes()
@@ -68,6 +68,7 @@ class Product extends Element
             'picture_url',
             'metadata',
             'spare_parts',
+            'bulk'
         ];
     }
 
@@ -103,13 +104,19 @@ class Product extends Element
         $this->loadOriginal();
         $body = $this->getElementBody(false);
         $spareParts = [];
+        $sparePartbulks =[];
         if (isset($body->spare_parts)) {
             $spareParts = $body->spare_parts;
         }
         if ($this->isPersisted()) {
             if (static::canUpdate()) {
-                $this->put();
-                $this->addSparePartToProduct($spareParts);
+                if(isset($body->bulk)){
+                    $sparePartbulks = $body->bulk;
+                    return $this->addBulkToProduct($sparePartbulks);
+                }else{
+                    $this->put();
+                    $this->addSparePartToProduct($spareParts);
+                }
             } else {
                 $this->refresh();
             }
@@ -123,6 +130,11 @@ class Product extends Element
         }
     }
 
+    public function addBulkToProduct($sparePartbulks)
+    {
+        $productId = $this->id;
+        return self::createBulk($productId,$sparePartbulks);
+    }
     public function addSparePartToProduct($spareParts)
     {
         $productId = $this->id;
@@ -166,5 +178,16 @@ class Product extends Element
     public function setSpareParts($spare_parts)
     {
         $this->spare_parts = $spare_parts;
+    }
+
+    public function createBulk($productId, $sparePartbulks)
+    {
+        $body = ["bulk" => $sparePartbulks];
+        return \Shoprunback\RestClient::getClient()->request(self::createBulkEndpoint($productId), 'POST', $body);
+    }
+
+    public function createBulkEndpoint($productId)
+    {
+        return $this->getBaseEndpoint()."/".$productId."/parts/bulk";
     }
 }
