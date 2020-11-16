@@ -40,7 +40,7 @@ class Product extends Element
 
     public static function getAcceptedNestedElements()
     {
-        return ['brand','spare_parts','bulk'];
+        return ['brand','spare_parts'];
     }
 
     public function getAllAttributes()
@@ -67,8 +67,7 @@ class Product extends Element
             'updated_at',
             'picture_url',
             'metadata',
-            'spare_parts',
-            'bulk'
+            'spare_parts'
         ];
     }
 
@@ -104,19 +103,14 @@ class Product extends Element
         $this->loadOriginal();
         $body = $this->getElementBody(false);
         $spareParts = [];
-        $sparePartbulks =[];
+
         if (isset($body->spare_parts)) {
             $spareParts = $body->spare_parts;
         }
         if ($this->isPersisted()) {
             if (static::canUpdate()) {
-                if(isset($body->bulk)){
-                    $sparePartbulks = $body->bulk;
-                    return $this->addBulkToProduct($sparePartbulks);
-                }else{
-                    $this->put();
-                    $this->addSparePartToProduct($spareParts);
-                }
+                $this->put();
+                $this->addSparePartToProduct($spareParts);
             } else {
                 $this->refresh();
             }
@@ -130,36 +124,24 @@ class Product extends Element
         }
     }
 
-    public function addBulkToProduct($sparePartbulks)
-    {
-        $productId = $this->id;
-        return self::createBulk($productId,$sparePartbulks);
-    }
     public function addSparePartToProduct($spareParts)
     {
         $productId = $this->id;
         if (is_array($spareParts) && !empty($spareParts)) {
-            foreach ($spareParts as $part) {
-                try {
-                    self::createSparePart($productId, $part);
-                } catch (\Throwable $th) {
-                }
-            }
+            self::createSparePart($productId, $spareParts);
         }
-        
         $this->setSpareParts($this->getSpareParts()->spare_parts);
     }
 
-    public function createSparePart($productId, $sparePart)
+    public function createSparePart($productId, $spareParts)
     {
-        $sparePart->save();
-        $body = ["spare_part_id" => $sparePart->id];
+        $body = ["bulk" => $spareParts];
         \Shoprunback\RestClient::getClient()->request(self::createSparePartEndpoint($productId), 'POST', $body);
     }
 
     public function createSparePartEndpoint($productId)
     {
-        return $this->getBaseEndpoint()."/".$productId."/parts";
+        return $this->getBaseEndpoint()."/".$productId."/parts/bulk";
     }
 
     public function getSpareParts()
@@ -180,14 +162,4 @@ class Product extends Element
         $this->spare_parts = $spare_parts;
     }
 
-    public function createBulk($productId, $sparePartbulks)
-    {
-        $body = ["bulk" => $sparePartbulks];
-        return \Shoprunback\RestClient::getClient()->request(self::createBulkEndpoint($productId), 'POST', $body);
-    }
-
-    public function createBulkEndpoint($productId)
-    {
-        return $this->getBaseEndpoint()."/".$productId."/parts/bulk";
-    }
 }
